@@ -1,0 +1,30 @@
+{
+  "name": "mansion-espiritus",
+  "description": "Evita que el infierno se desate en la tierra. Un escape room para Google Assis basado en el juego de cartas de Mallory Mansion.",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "test": "mocha --require ./test/common.js --require source-map-support/register 'test/*.spec.js' test/**/*.spec.js",
+    "tdd": "npm-watch test",
+    "walkthrough": "node app/walkthrough/walkthrough.js",
+    "walkthrough:watch": "npm-watch walkthrough"
+  },
+  "dependencies": {
+    "actions-on-google": "^2.12.0",
+    "firebase-admin": "^8.6.1",
+    "firebase-functions": "^2.2.0",
+    "https-proxy-agent": "^3.0.0",
+    "pluralize": "^7.0.0",
+    "scure": "1.4.3",
+    "scure-dialogflow": "1.4.6"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-plugin-promise": "^4.0.1"
+  },
+  "private": true
+}
