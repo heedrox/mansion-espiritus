@@ -13,24 +13,8 @@ const syns = {
     'sotano': synsSotano,
   },
   items: {
-    'mesa-e1': ['mesa', 'mesa principal', 'mesa de la entrada', 'mesilla', 'mesilla de la entrada'],
-    'llave-e2': ['llave', 'llave encima de la mesa'],
-    'cajon-e1': ['cajón', 'cajonera', 'cajón abierto', 'cajón cerrado'],
-    'espejo-e1': ['espejo', 'espejito', 'pequeño espejo', 'pequeño espejito'],
-    'anomalia-l1': [],
-    'anomalia-l2': [],
-    'laser-l2': ['láser', 'aparato', 'rayo de luz', 'rayo'],
-    'mesa-e2': ['mesa', 'mesa principal', 'mesa de la entrada', 'mesilla', 'mesilla de la entrada'],
-    'caja-e2': ['caja', 'puzle', 'puzzle', 'juego', 'mastermind', 'teclado', 'juguete', 'teclado', 'teclado de la caja'],
-    'cajon-e2': ['cajón', 'cajonera', 'cajón abierto'],
-    'papel-e2': ['papel', 'escrito', 'papel escrito por niña', 'hoja de papel', 'hoja'],
-    'linterna-e1': ['linterna azul', 'linterna', 'luz azul', 'azul'],
-    'estanteria-l2': ['estantería', 'librería'],
-    'libro-l2': ['libros', 'diario', 'libros', 'diarios', 'diario de laboratorio'],
-    'conversaciones-c2': ['conversaciones', 'ruidos', 'grabaciones', 'grabación'],
-    'ordenador-c2': ['ordenador', 'computador', 'ordenadora', 'computadora', 'letras', 'números', 'pantalla', 'número de canal', 'canal', 'gran ordenador'],
-    'ordenador-c1': ['ordenador', 'computador', 'ordenadora', 'computadora', 'pantalla', 'número de canal', 'canal', 'gran ordenador'],
-    'grabacion-c1': ['grabaciones', 'grabación', 'conversaciones', 'conversacion', 'gente hablando', 'palabras'],
+    'artilugio-dorm': ['artilugio','artilugio con palancas', 'palancas', 'puerta', 'puerta del infierno', 'infierno', 'inframundo', 'puerta del inframundo', 'puerta infierno', 'puerta inframundo', 'muerte', 'otra dimensión', 'puerta a otra dimensión', 'puerta de la dimensión', 'artilugio del infierno', 'artilugio infernal', 'puerta infernal', 'espíritus', 'otros espíritus'],
+    'mural-recib': ['mural', 'mural en la pared', 'mural de la pared', 'cuadro', 'cuadro en pared', 'colores']
   },
 };
 

@@ -1,6 +1,6 @@
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
-const { OPEN_BOX_AUDIO, HELLO, LASER_ON_AUDIO, GRABACION_AUDIO, ENDING_AUDIO } = require('./audios-es');
+const { DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL } = require('./audios-es');
 
 const OSES_SPELL = 'O<break strength="weak"/>S<break strength="weak"/>E<break strength="weak"/>S';
 
@@ -69,108 +69,20 @@ exports.data = {
     'sotano': ['dormitorio'],
   },
   items: [
-    anItem('mesa-e1', 'Mesa', syns.items['mesa-e1'], [
-      aCondDesc('!unlocked:cajon-e1', 'Es una mesa que tiene un cajón. Parece que el cajón está cerrado. Necesita una llave.'),
-      aCondDesc('!picked:laser-e1', 'La mesa tiene un cajón, que ya hemos abierto. Parece que dentro de éste hay algo...'),
-      aCondDesc('picked:laser-e1', 'La mesa tiene un cajón, que ya hemos abierto.'),
-    ], 'entrada', false),
-    anItem('cajon-e1', 'Cajón', syns.items['cajon-e1'], [
-      aCondDesc('!unlocked:cajon-e1', 'El cajón está cerrado.'),
-      aCondDesc('!picked:puntero-e1', 'Dentro del cajón veo un puntero láser portátil.'),
-      aCondDesc('picked:puntero-e1', 'El cajón de la mesa está abierto, pero ya no tiene nada dentro.'),
-    ], 'entrada', false),
-    anItem('anomalia-l1', 'Anomalía', syns.items['anomalia-l1'],
-      'Es la brecha en el espacio tiempo, de tinte verdoso, que se encuentra flotando en el aire en medio del laboratorio. Es lo suficientemente grande como permitirme ver que hay algo al otro lado; creo que lo puedo cruzar.', 'laboratorio', false),
-    anItem('anomalia-l2', 'Anomalía del otro lado', syns.items['anomalia-l2'],
-      'Es la brecha en el espacio tiempo, de tinte verdoso, que se encuentra flotando en el aire en medio del laboratorio. ', 'laboratorio-other', false),
-    anItem('laser-l2', 'Láser', syns.items['laser-l2'], [
-      aCondDesc('!unlocked:laser-l2', 'Es un aparato enorme. Está apagado.'),
-      aCondDesc('unlocked:laser-l2', 'Está encendido. Un rayo de luz azul recorre el laboratorio y atraviesa la anomalía.'),
-    ], 'laboratorio-other', false),
-    anItem('estanteria-l2', 'estantería', syns.items['estanteria-l2'],
-      'Es una estantería. Lo más destacable es un libro que pone "Diario del laboratorio".', 'laboratorio-other', false),
-    anItem('libro-l2', 'libro', syns.items['libro-l2'], 'Es el diario del laboratorio.', 'laboratorio-other', false),
-    anItem('mesa-e2', 'Mesa', syns.items['mesa-e2'], 'Es la mesa en la entrada del complejo del otro lado. Tiene una caja encima. También tiene un cajón, y éste, por suerte, está abierto.', 'entrada-other', false),
-    anItem('cajon-e2', 'Cajon', syns.items['cajon-e2'], 'Tiene un papel dentro con escritura que parece de una niña pequeña.', 'entrada-other', false),
-    anItem('papel-e2', 'Papel', syns.items['papel-e2'], 'En el papel está escrito lo siguiente: Papá, te he escondido algo dentro del juego que me regalaste. ¡Tienes que intentar adivinar la combinación en la menor cantidad posible de intentos! ¡Recuerda que los números no pueden repetirse!.', 'entrada-other', false),
-    anItem('caja-e2', 'Caja', syns.items['caja-e2'], 'Más que una caja de seguridad parece un juego. La caja es digital, y tiene un teclado para introducir un código de 3 dígitos. Creo que alguien ha encerrado algo que nos puede interesar dentro de esta caja. ', 'entrada-other', false),
-    anItem('llave-e2', 'Llave', syns.items['llave-e2'], [
-      aCondDesc('!picked:llave-e2', '¿De qué llave me hablas?'),
-      aCondDesc('picked:llave-e2', 'Es la llave de la mesa de la entrada. Si abre el cajón del otro lado, quizás...'),
-    ], 'entrada-other', false),
-    anItem('linterna-e1', 'Linterna azul', syns.items['linterna-e1'], [
-      aCondDesc('!picked:linterna-e1', '¿De qué linterna me hablas?'),
-      aCondDesc('picked:linterna-e1', 'Es una linterna que emite un color rojo muy intenso. '),
-    ], 'entrada', false),
-    anItem('conversaciones-c2', 'Conversaciones', syns.items['conversaciones-c2'], 'Oigo conversaciones ligeramente al revés, son indescifrables. Sin embargo en el ordenador veo algo.', 'comunicaciones-other', false),
-    anItem('ordenador-c2', 'Ordenador', syns.items['ordenador-c2'], '<speak>En el ordenador veo, en mayúsculas, las siguientes letras: ' + OSES_SPELL + '</speak>', 'comunicaciones-other', false),
-    anItem('ordenador-c1', 'Ordenador', syns.items['ordenador-c1'], 'El ordenador está apagado. Para encenderlo hay que introducir el número de canal.', 'comunicaciones', false),
-    anItem('grabacion-c1', 'Grabación', syns.items['grabacion-c1'], 'Una grabación', false),
+    anItem('artilugio-dorm', 'Artilugio', syns.items['artilugio-dorm'], DESCRIPCION_INFIERNO, 'dormitorio', false),
+    anItem('mural-recib', 'Mural', syns.items['mural-recib'], DESCRIPCION_MURAL, 'recibidor', false),
+
+
   ],
   usages: [
-    anUsage('cajon-e1', [
-      aConditionalResponse([
-        aCondDescUsage(false, '!unlocked:cajon-e1', 'Para abrir el cajón creo que necesitamos una llave.'),
-        aCondDescUsage(false, '!picked:puntero-e1', 'Ya hemos abierto el cajón. Se ve un puntero láser portátil dentro.'),
-        aCondDescUsage(false, 'picked:puntero-e1', 'Ya hemos abierto el cajón, y está vacío.'),
-      ]),
-    ], false),
-    anUsage('anomalia-l1', 'xxx', false),
-    anUsage('anomalia-l2', 'zzzz', false),
-    anUsage(['llave-e2', 'cajon-e2'], ['El cajón ya está abierto. No hace falta usar la llave aquí. '], false),
-    anUsage('papel-e2', ['En el papel está escrito lo siguiente: Papá, te he dejado la llave del cajón dentro del juego que me regalaste. ¡Tienes que intentar adivinar la combinación en la menor cantidad posible de intentos! ¡Recuerda que los números no pueden repetirse!.'], false),
-    anUsage('cajon-e2', ['El cajón ya está abierto, no hace falta abrirlo más. Quizás te interese leer el papel que hay dentro.'], false),
-    anUsage('caja-e2', [
-      aConditionalResponse([
-        aCondDescUsage(false, '!picked:llave-e2', anExpectAnswerAction('¿Qué código quieres introducir? Dime un número de 3 cifras y lo pongo en la caja.', 'mastermind-e2')),
-        aCondDescUsage(false, 'picked:llave-e2', 'Ya he abierto el juego. No necesito más. '),
-      ])
-    ], false),
-    anUsage(['llave-e2', 'cajon-e1'], [aPickingAction('Dentro hay una linterna. Parece que emite color rojo. Me la llevo.', 'linterna-e1')], true),
-    anUsage('libro-l2', [
-      'Es el diario del laboratorio. En las primeras páginas dice algo así como: "Lo que hicimos está mal. No debimos intentar jugar a ser dioses. Hemos rasgado el tejido de la creación, y ahora, debemos pagar las consecuencias". Parece que hay más',
-      'En las siguientes páginas dice: "Creemos que hay alguien al otro lado. Les mandaremos un mensaje a través de nuestros sistemas de comunicaciones con lo que hemos aprendido. No nos queda más tiempo, tenemos que irnos. Temo por mi hija.".',
-      'Casi en las últimas páginas se lee: "Lo que hay al otro lado parece un universo similar al nuestro. Creemos que algunas dimensiones se mueven en dirección ligeramente diferente, algunas parece que casi al revés. Eso hace, por ejemplo, que los números, los lean al revés que nosotros."',
-      'En la contraportada se lee un código de 6 cifras, sin embargo los primeros 2 dígitos no se ven bien. Los últimos cuatro son 1 0 1 5.',
-    ], false),
-    anUsage('ordenador-c2', [
-      '<speak>El ordenador ya está encendido y no puedo interactuar con él. Parece que está emitiendo en un canal predefinido. Pone en mayúsculas 4 letras: ' + OSES_SPELL + '</speak>',
-      '<speak>Parece que ya está emitiendo conversaciones en un canal predefinido. El canal tiene 4 letras: ' + OSES_SPELL + '</speak>',
-      '<speak>¿Qué puede significar el canal ' + OSES_SPELL + '? En mayúsculas.</speak>',
-      '<speak>El canal debería ser un número, y sin embargo, son 4 letras, ¿o no? ' + OSES_SPELL + '</speak>',
-      '<speak>Esto parece el mundo del revés. Deberían ser números y sin embargo son 4 letras. ' + OSES_SPELL + '</speak>'
-    ], false),
-    anUsage('ordenador-c1', [anExpectAnswerAction('Parece que son 4 cifras. ¿Qué canal quieres escuchar?', 'ordenador-canal-c1')], false),
-    anUsage('grabacion-c1', [
-      aConditionalResponse([
-        aCondDescUsage(false, '!unlocked:lock-conversacion-c1', '¿Qué conversaciones? No oigo nada. El ordenador de comunicaciones está apagado.'),
-        aCondDescUsage(false, 'unlocked:lock-conversacion-c1', GRABACION_AUDIO),
-      ]),
-    ], false),
-    anUsage('laser-l2', [
-      aConditionalResponse([
-        aCondDescUsage(false, '!unlocked:laser-l2', anExpectAnswerAction('Para encenderse necesita un código de 6 cifras. ¿Cuál pongo?', 'laser-codigo-l2')),
-        aCondDescUsage(false, 'unlocked:laser-l2', 'El láser ya está encendido, y emite una potente luz azul hacia la anomalía.'),
-      ])
-    ], false),
-    anUsage(['linterna-e1', 'laser-l2'], ['La luz azul del láser con la luz roja de la linterna, hacen una luz violeta.']),
-    anUsage(['linterna-e1', 'anomalia-l2'], [
-      aConditionalResponse([
-        aCondDescUsage(false, '!unlocked:laser-l2', 'La luz roja de la linterna con la luz verde de la anomalía hacen una luz amarilla. No es suficiente para cerrarla.'),
-        aCondDescUsage(false, 'unlocked:laser-l2', theEndingScene(ENDING_AUDIO)),
-      ])
-    ], false),
-    anUsage(['linterna-e1', 'anomalia-l1'], [
-      aConditionalResponse([
-        aCondDescUsage(false, '!unlocked:laser-l2', 'La luz roja de la linterna con la luz verde de la anomalía hacen una luz amarilla. No es suficiente para cerrarla.'),
-        aCondDescUsage(false, 'unlocked:laser-l2', theEndingScene(ENDING_AUDIO)),
-      ])
-    ], false),
+    anUsage('artilugio-dorm', [
+        aConditionalResponse([
+          aCondDescUsage(false,'!unlocked:killed-spirit-fire', 'No puedo yo solo, son 2 palancas en cada extremo, así que te necesito, pero no puedes entrar, ya que detecto espíritus en otras habitaciones de esta mansión. Antes debemos deshacernos de ellos.'),
+          aCondDescUsage(false,'!unlocked:killed-spirit-wolf', 'No puedo yo solo, son 2 palancas en cada extremo, así que te necesito, pero no puedes entrar, ya que detecto espíritus en otras habitaciones de esta mansión. Antes debemos deshacernos de ellos.'),
+          aCondDescUsage(false,'unlocked:killed-spirit-wolf', 'AHORA UNLOCKEAR NO SE QUE ')
+        ])], false)
   ],
   answers: [
-    anAnswer('mastermind-e2', '269', aPickingAction(OPEN_BOX_AUDIO, 'llave-e2'), 'xxxxx'),
-    anAnswer('ordenador-canal-c1', '5350', anUnlockingAction(GRABACION_AUDIO, 'lock-grabacion-c1'), 'Introduzco el canal {userAnswer} pero no se oye nada. Creo que no es el correcto.'),
-    anAnswer('laser-codigo-l2', '211015', anUnlockingAction(LASER_ON_AUDIO, 'laser-l2'), 'No, con el código {userAnswer} el láser no se enciende.'),
   ],
   commandSyns: [
     aCommandSyn(Commands.WALK, 'anomalia-l1', Commands.USE),

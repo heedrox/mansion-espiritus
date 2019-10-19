@@ -13,6 +13,37 @@
     "walkthrough": "node app/walkthrough/walkthrough.js",
     "walkthrough:watch": "npm-watch walkthrough"
   },
+  "watch": {
+    "walkthrough": {
+      "patterns": [
+        ".",
+        "walkthrough",
+        "intents",
+        "lib",
+        "scure"
+      ],
+      "extensions": "js",
+      "quiet": true,
+      "legacyWatch": true,
+      "delay": 1000,
+      "inherit": true
+    },
+    "test": {
+      "patterns": [
+        ".",
+        "app",
+        "data",
+        "intents",
+        "lib",
+        "scure"
+      ],
+      "extensions": "js",
+      "quiet": true,
+      "legacyWatch": true,
+      "delay": 1000,
+      "inherit": true
+    }
+  },
   "dependencies": {
     "actions-on-google": "^2.12.0",
     "firebase-admin": "^8.6.1",
@@ -24,7 +55,8 @@
   },
   "devDependencies": {
     "eslint": "^5.12.0",
-    "eslint-plugin-promise": "^4.0.1"
+    "eslint-plugin-promise": "^4.0.1",
+    "npm-watch": "^0.6.0"
   },
   "private": true
 }

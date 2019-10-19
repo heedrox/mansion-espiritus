@@ -6,6 +6,11 @@ const commands = [
   c('_welcome', ''),
   c('look', ''),
   c('walk', ''),
+  c('walk', 'dormitorio'),
+  c('look', 'artilugio'),
+  c('use', 'palancas'),
+  c('walk', 'recibidor'),
+  c('look', 'mural'),
 ];
 
 try {
