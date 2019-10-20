@@ -17,7 +17,7 @@ const syns = {
     'mural-recib': ['mural', 'mural en la pared', 'mural de la pared', 'cuadro', 'cuadro en pared', 'colores'],
     'estanteria-recib': ['estantería', 'biblioteca', 'libros', 'libreria'],
     'libro-espiritus-recib': ['libro sobre espíritus', 'lectura de espíritus', 'libro sobre los espíritus','libro con espíritus', 'el de los espíritus '],
-    'libro-colores-recib': ['libro sobre colores', 'libro del arte de colores', 'libro sobre los colores', 'el arte de los colores'],
+    'libro-colores-recib': ['libro sobre colores', 'libro del arte de colores',  'libro de arte de colores', 'libro sobre los colores', 'el arte de los colores'],
   },
 };
 

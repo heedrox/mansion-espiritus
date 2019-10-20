@@ -12,6 +12,8 @@ const commands = [
   c('walk', 'recibidor'),
   c('look', 'mural'),
   c('look', 'estantería'),
+  c('look', 'libro del arte de los colores'),
+  c('use', '', 'sigue leyendo'),
 ];
 
 try {

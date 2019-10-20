@@ -1,3 +1,4 @@
+const { intentMapper } = require('../intents/intent-mapper');
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
 const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL } = require('./audios-es');
@@ -84,16 +85,21 @@ exports.data = {
           aCondDescUsage(false,'!unlocked:killed-spirit-fire', 'No puedo yo solo, son 2 palancas en cada extremo, así que te necesito, pero no puedes entrar, ya que detecto espíritus en otras habitaciones de esta mansión. Antes debemos deshacernos de ellos.'),
           aCondDescUsage(false,'!unlocked:killed-spirit-wolf', 'No puedo yo solo, son 2 palancas en cada extremo, así que te necesito, pero no puedes entrar, ya que detecto espíritus en otras habitaciones de esta mansión. Antes debemos deshacernos de ellos.'),
           aCondDescUsage(false,'unlocked:killed-spirit-wolf', 'AHORA UNLOCKEAR NO SE QUE ')
-        ])], false)
+        ])], false),
+    anUsage('libro-colores-recib', [
+      'Es un libro de Isaac Newton, en el que hace un estudio sobre los colores del arco iris, y su orden de aparición. El libro tiene más páginas.',
+      'El color rojo es el primero. Luego están el naranja, el amarillo y el verde. ',
+      'Los últimos tres son el cian, el azul y el violeta. ',
+    ], false),
+
   ],
   answers: [
   ],
+  intentMapper,
+  directSentences: {
+    'sigue-leyendo': ['sigue leyendo', 'lee más', 'continúa', 'continua', 'continúa leyendo', 'continua leyendo']
+  },
   commandSyns: [
-    aCommandSyn(Commands.WALK, 'anomalia-l1', Commands.USE),
-    aCommandSyn(Commands.PICKUP, 'anomalia-l1', Commands.USE),
-    aCommandSyn(Commands.PICKUP, 'papel-e2', Commands.USE),
-    aCommandSyn(Commands.PICKUP, 'cajon-e2', Commands.USE),
-    aCommandSyn(Commands.LOOK, 'libro-l2', Commands.USE),
-    aCommandSyn(Commands.LOOK, 'grabacion-c1', Commands.USE),
+    aCommandSyn(Commands.LOOK, 'libro-colores-recib', Commands.USE),
   ]
 };
