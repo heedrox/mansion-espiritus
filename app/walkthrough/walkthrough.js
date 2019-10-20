@@ -21,6 +21,9 @@ const commands = [
   c('use', 'candado'),
   c('answer', '', '2489'),
   c('answer', '', '6143'),
+  c('look', 'mural'),
+  c('use', 'candado'),
+  c('answer', '', '3416'),
 ];
 
 try {

@@ -1,4 +1,5 @@
 const { intentMapper } = require('../intents/intent-mapper');
+const { answerArconCode } = require('../plugins/answer-arcon-code');
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
 const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO } = require('./audios-es');
@@ -105,7 +106,7 @@ exports.data = {
 
   ],
   answers: [
-    anAnswer('code-arcon-recib', '3416', aPickingAction(OPEN_ARCON_AUDIO, 'escudo-recib'), 'No, ese número no abre el baúl.'),
+    anAnswer('code-arcon-recib', '3416', aPickingAction(OPEN_ARCON_AUDIO, 'escudo-recib'), pluginExtension(answerArconCode)),
   ],
   intentMapper,
   directSentences: {

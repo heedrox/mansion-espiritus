@@ -55,3 +55,9 @@ exports.DOOR_AUDIOS = [
   '<audio src="https://actions.google.com/sounds/v1/doors/wood_door_open_close.ogg"/>',
   '<audio srs="https://actions.google.com/sounds/v1/doors/wood_door_open.ogg"/>'
 ];
+
+exports.OPEN_ARCON_AUDIO = '<audio src="https://actions.google.com/sounds/v1/doors/wood_rattle.ogg" soundLevel="-5dB"/>' +
+  '<prosody pitch="+2st" rate="medium" volume="x-loud">¡Bingo!</prosody>' +
+  '<break time="500ms"></break>' +
+  'El bául se abre. Hay un escudo con el dibujo de un lobo salvaje en su interior.' +
+  '<emphasis level="reduced">Me lo llevo.</emphasis>';
