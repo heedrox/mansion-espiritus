@@ -104,8 +104,44 @@ exports.FIRE_KILL_AUDIO = '<par>' +
   '</par>' +
   'El espíritu de fuego se desintegra. ¡Bien hecho!';
 
-exports.CLOSE_HELL_AUDIO = ' <speak>  <par>   <media begin="2s" soundLevel="-15dB" end="thetext.end-3s" fadeOutDur="6s">      <audio src="https://actions.google.com/sounds/v1/horror/monster_alien_growl_pained.ogg"></audio>      </media>    <media end="thetext.end-3s"  fadeOutDur="6s">      <audio src="https://actions.google.com/sounds/v1/horror/ambient_hum_pitched.ogg"></audio>    </media>    <media begin="3s" xml:id="thetext" >  Ven, rápido, ya puedes entrar, no hay peligro.      ' +
-  '  <break time="1s"/>' +
-  '  <audio src="https://actions.google.com/sounds/v1/doors/opening_closing_heavy_door.ogg"  clipBegin="3s" clipEnd="6s"/>' +
-  '   ¡Ven, estoy aquí!' +
-  '<break time="3s"/>      Vamos a tirar de las palancas y cerremos la puerta al infierno. Yo de esta y tú de aquella.  Un poco más.      <break time="1s"/>      ¡Bien! Lo logramos.  </media>  </par>  <par>    <media end="earthtext.end" fadeOutDur="4s">       <audio src="https://mansion-espiritus-lkgoxs.firebaseapp.com/sounds/earthquake-v2.mp3"/>    </media>    <media begin="2s" xml:id="earthtext">    Un momento, ¿qué está pasando?      <break time="1500ms"/>    ¡Un terremoto! Cuidado, se está abriendo una grieta en el suelo.    </media>  </par>    <audio src="https://actions.google.com/sounds/v1/impacts/crash_impact_sweetener.ogg"/>  ¿Te encuentras bien? Veo que acabas de caerte por la grieta al sótano que está bajo el dormitorio.  Espera, que ahora bajo yo también.</speak>';
+exports.CLOSE_HELL_AUDIO = ' <speak>' +
+  '  <par>' +
+  '   <media begin="2s" soundLevel="-15dB" end="thetext.end-3s" fadeOutDur="6s">' +
+  '      <audio src="https://actions.google.com/sounds/v1/horror/monster_alien_growl_pained.ogg"></audio>' +
+  '   </media>' +
+  '   <media end="thetext.end-3s"  fadeOutDur="6s">' +
+  '      <audio src="https://actions.google.com/sounds/v1/horror/ambient_hum_pitched.ogg"></audio>' +
+  '   </media>' +
+  '   <media begin="3s" xml:id="thetext" >Ven, rápido, ya puedes entrar, no hay peligro.' +
+  '     <break time="1s"/>' +
+  '     <audio src="https://actions.google.com/sounds/v1/doors/opening_closing_heavy_door.ogg"  clipBegin="3s" clipEnd="6s"/>' +
+  '     ¡Ven, estoy aquí!' +
+  '     <break time="3s"/>' +
+  '     Vamos a tirar de las palancas y cerremos la puerta al infierno. Yo de esta y tú de aquella.  Un poco más.' +
+  '      <break time="1s"/>' +
+  '      ¡Bien! Lo logramos.' +
+  '  </media>' +
+  '  </par>' +
+  '  <par>' +
+  '    <media end="earthtext.end" fadeOutDur="4s">' +
+  '       <audio src="https://mansion-espiritus-lkgoxs.firebaseapp.com/sounds/earthquake-v2.mp3"/>' +
+  '    </media>' +
+  '    <media begin="2s" xml:id="earthtext">' +
+  '    Un momento, ¿qué está pasando?' +
+  '      <break time="1500ms"/>' +
+  '    ¡Un terremoto! Cuidado, se está abriendo una grieta en el suelo.' +
+  '    </media>' +
+  '  </par>' +
+  '    <audio src="https://actions.google.com/sounds/v1/impacts/crash_impact_sweetener.ogg"/>' +
+  '  ¿Te encuentras bien? Veo que acabas de caerte por la grieta al sótano que está bajo el dormitorio.  Espera, que ahora bajo yo también.' +
+  '  <par>' +
+  '     <media>' +
+  '       <audio src="https://actions.google.com/sounds/v1/transportation/space_craft_passing_pulse_stutter.ogg" clipBegin="1s"/>' +
+  '     </media>  ' +
+  '     <media begin="1500ms">' +
+  '       <prosody rate="fast">' +
+  '       Vaya, veo que has tenido un buen accidente. No, no te muevas. En el estado en el que estás, creo que solo te quedan 5 minutos antes de perder el conocimiento y morir. ¡Rápido! Dime qué hacemos y salgamos de aquí, para que pueda buscar ayuda.' +
+  '       </prosody>' +
+  '     </media>  ' +
+  '   </par>' +
+  '</speak>';

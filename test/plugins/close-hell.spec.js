@@ -22,4 +22,8 @@ describe('When closing hell', () => {
   it('unlocks closed-hell lock', () => {
     expect(stateIsUnlocked(data, 'closed-hell')).to.equal(true);
   });
+
+  it('resets timer to 5 mins', () => {
+    expect(scure.getLeftTimeFrom(data.startTime)).equals('5 minutos y 0 segundos');
+  });
 });
