@@ -6,7 +6,10 @@ exports.data = {
     'arcon-wrong': 'No, ese número no abre el baúl.',
     'arcon-wrong-back': 'No, ese número no abre el baúl... Pero me pregunto si las letras del mural querrán decir algo.',
     'remaining-time': '{minutes} minutos y {seconds} segundos',
-
+    'caja-fuerte-answer-3584': 'No creo que haya que ponerlo al revés. Demasiado rebuscado.',
+    'caja-fuerte-answer-6143': '¿No has oído nunca lo de que un código solo sirve una vez? Venga, dime qué hacemos ahora.',
+    'caja-fuerte-answer-3416': '¿No has oído nunca lo de que un código solo sirve una vez? Venga, dime qué hacemos ahora.',
+    'caja-fuerte-answer-default': 'No, parece que ese código no es.',
   },
   init: {
     totalMinutes: 15,

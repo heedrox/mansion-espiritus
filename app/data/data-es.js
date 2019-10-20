@@ -60,7 +60,7 @@ exports.data = {
       aCondDesc('!unlocked:closed-hell', 'En el dormitorio veo una cama grande y un artilugio cuadrado con palancas. En el centro del artilugio puedo ver el infierno.'),
       aCondDesc('unlocked:closed-hell', 'En la sala de estar puedo ver una chimenea con un cuadro encima.'),
     ]),
-    aRoom('sotano', 'sótano', syns.rooms['sotano'], 'Estoy en el centro de comunicaciones del otro lado. Desde el ordenador se pueden oir conversaciones, pero se oyen extrañas. ¿Como si estuvieran al revés?'),
+    aRoom('sotano', 'sótano', syns.rooms['sotano'], 'Esto es el sótano. En él te veo a ti, tumbado en el suelo y malherido. También veo una caja fuerte, un mueble y una puerta. Debe ser la salida.'),
   ],
   mapImage: {
     url: 'https://the-anomaly-897ce.firebaseapp.com/the-anomaly-map.jpg',
@@ -115,8 +115,10 @@ exports.data = {
     , 'cocina', false),
     anItem('cama-dormitorio', 'Cama', syns.items['cama-dormitorio'],
       'Una cama con un estampado de rosas. Cuento hasta 4 rosas en las sábanas. La cama tiene un par de almohadas, con un estampado de una rosa en cada una. '
-    , 'dormitorio', false, 'La cama se queda donde está.')
-
+    , 'dormitorio', false, 'La cama se queda donde está.'),
+    anItem('yo-sotano', 'Yo moribundo', syns.items['yo-sotano'], 'Eres tú, estás moribundo. No te muevas. Dime qué hacer y salgamos de aquí antes de que pierdas el conocimiento', 'sotano', false, 'En tu estado, mejor no moverte hasta encontrar una salida'),
+    anItem('mueble-sotano', 'Mueble', syns.items['mueble-sotano'], 'El mueble tiene dos figuras encima: un humano y un cíclope.', 'sotano', false, 'El mueble es muy pesado y no sé qué hacer con esas figuras de un humano y un cíclope de un solo ojo'),
+    anItem('caja-sotano', 'caja fuerte', syns.items['caja-sotano'], 'Una caja fuerte en el suelo. Para abrirla se necesita otro código de 4 cifras.', 'sotano', false, 'Pesa demasiado')
   ],
   usages: [
     anUsage('artilugio-dorm', [
@@ -173,9 +175,16 @@ exports.data = {
     ], false),
     anUsage('armario-cocina', [ 'En el armario cuento hasta 5 juegos de cuchillos, cucharas y tenedores.' ], false),
     anUsage('cama-dormitorio', [ 'No es el momento de una siesta.' ], false),
+    anUsage('caja-sotano', [
+      aConditionalResponse([
+        aCondDesc('!unlocked:open-caja-sotano', anExpectAnswerAction('Para abrirla, se necesita un código de 4 cifras. ¿Cuál pongo?', 'code-caja-sotano')),
+        aCondDesc('unlocked:open-caja-sotano', 'Ya abrimos esa caja y nos llevamos una llave.'),
+      ]),
+    ], false)
   ],
   answers: [
     anAnswer('code-arcon-recib', '3416', pluginExtension(pickAndUnlock('escudo-recib', 'open-arcon', OPEN_ARCON_AUDIO)), pluginExtension(answerArconCode)),
+    anAnswer('code-caja-sotano', '4853', anUnlockingAction(OPEN_CAJAFUERTE_AUDIO, 'open-caja-sotano'), pluginExtension(answerCajaFuerte)),
   ],
   intentMapper,
   directSentences: {
@@ -184,5 +193,6 @@ exports.data = {
   commandSyns: [
     aCommandSyn(Commands.LOOK, 'libro-colores-recib', Commands.USE),
     aCommandSyn(Commands.LOOK, 'libro-espiritus-recib', Commands.USE),
+    aCommandSyn(Commands.LOOK, 'caja-sotano', Commands.USE),
   ]
 };

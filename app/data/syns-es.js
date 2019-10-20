@@ -28,7 +28,10 @@ const syns = {
     'espiritu-cocina': ['espíritu', 'espíritu de fuego', 'fantasma de fuego', 'fuego'],
     'vaso-cocina': ['vaso', 'vaso lleno de agua', 'vaso con agua', 'vaso de agua', 'vaso a tope de agua', 'agua'],
     'mesa-cocina': ['mesa', 'mesa de la cocina', 'mesa con vaso de agua', 'mesa del vaso', 'mesa en la cocina', 'mesa de cocina'],
-    'armario-cocina': ['armarios', 'armario de la cocina', 'armario en la cocina', 'armario', 'cuchillos', 'cucharas', 'tenedores', 'tenedor', 'cuchillo', 'cuchara', 'cuchillos cucharas y tenedores', 'cuchillos cucharas', 'juegos de cocina', 'juegos']
+    'armario-cocina': ['armarios', 'armario de la cocina', 'armario en la cocina', 'armario', 'cuchillos', 'cucharas', 'tenedores', 'tenedor', 'cuchillo', 'cuchara', 'cuchillos cucharas y tenedores', 'cuchillos cucharas', 'juegos de cocina', 'juegos'],
+    'yo-sotano': ['tu', 'yo', 'a mi', 'mi', 'a yo', 'humano', 'humano en el suelo', 'hombre', 'persona'],
+    'mueble-sotano': ['figuras', 'mueble', 'ciclope', 'humano del mueble', 'persona del mueble', 'hombre en el mueble', 'mesa'],
+    'caja-sotano': ['caja fuerte', 'caja', 'cerradura', 'candado', 'combinación'],
   },
 };
 
