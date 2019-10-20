@@ -64,6 +64,14 @@ const commands = [
   c('walk', 'dormitorio'),
   c('walk', 'sotano'),
   c('look', 'caja'),
+  c('answer', '', '6143'),
+  c('answer', '', '3416'),
+  c('answer', '', '9999'),
+  c('answer', '', '3584'),
+  c('answer', '', '4853'),
+  c('look', 'puerta'),
+  c('use', 'puerta'),
+  c('use', ['puerta', 'llave']),
 
 ];
 

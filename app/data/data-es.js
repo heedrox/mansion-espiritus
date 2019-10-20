@@ -1,10 +1,11 @@
 const { intentMapper } = require('../intents/intent-mapper');
 const { answerArconCode } = require('../plugins/answer-arcon-code');
+const { answerCajaFuerte } = require('../plugins/answer-caja-fuerte');
 const { pickAndUnlock } = require('../plugins/pick-and-unlock');
 const { closeHell } = require('../plugins/close-hell');
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
-const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO, WOLF_AUDIO, WOLF_SHIELD_AUDIO, FIRE_AUDIO, FIRE_KILL_AUDIO, CLOSE_HELL_AUDIO } = require('./audios-es');
+const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO, WOLF_AUDIO, WOLF_SHIELD_AUDIO, FIRE_AUDIO, FIRE_KILL_AUDIO, CLOSE_HELL_AUDIO, OPEN_CAJAFUERTE_AUDIO, THE_END } = require('./audios-es');
 
 exports.data = {
   sentences: {
@@ -40,6 +41,10 @@ exports.data = {
     'final-question': '¿Qué hacemos ahora?',
     'arcon-wrong': 'No, ese número no abre el baúl.',
     'arcon-wrong-back': 'No, ese número no abre el baúl... Pero me pregunto si las letras del mural querrán decir algo.',
+    'caja-fuerte-answer-3584': 'No creo que haya que ponerlo al revés. Demasiado rebuscado.',
+    'caja-fuerte-answer-6143': '¿No has oído nunca lo de que un código solo sirve una vez? Venga, dime qué hacemos ahora.',
+    'caja-fuerte-answer-3416': '¿No has oído nunca lo de que un código solo sirve una vez? Venga, dime qué hacemos ahora.',
+    'caja-fuerte-answer-default': 'No, parece que ese código no es.',
   },
   init: {
     totalMinutes: 15,
@@ -118,7 +123,9 @@ exports.data = {
     , 'dormitorio', false, 'La cama se queda donde está.'),
     anItem('yo-sotano', 'Yo moribundo', syns.items['yo-sotano'], 'Eres tú, estás moribundo. No te muevas. Dime qué hacer y salgamos de aquí antes de que pierdas el conocimiento', 'sotano', false, 'En tu estado, mejor no moverte hasta encontrar una salida'),
     anItem('mueble-sotano', 'Mueble', syns.items['mueble-sotano'], 'El mueble tiene dos figuras encima: un humano y un cíclope.', 'sotano', false, 'El mueble es muy pesado y no sé qué hacer con esas figuras de un humano y un cíclope de un solo ojo'),
-    anItem('caja-sotano', 'caja fuerte', syns.items['caja-sotano'], 'Una caja fuerte en el suelo. Para abrirla se necesita otro código de 4 cifras.', 'sotano', false, 'Pesa demasiado')
+    anItem('caja-sotano', 'caja fuerte', syns.items['caja-sotano'], 'Una caja fuerte en el suelo. Para abrirla se necesita otro código de 4 cifras.', 'sotano', false, 'Pesa demasiado'),
+    anItem('llave-sotano', 'llave', syns.items['llave-sotano'], 'La llave que estaba en la caja fuerte.', 'sotano', false, '¿De qué llave me hablas?'),
+    anItem('puerta-sotano', 'puerta', syns.items['puerta-sotano'], 'Parece la puerta al exterior, pero está cerrada. ¡Debemos encontrar la llave!', 'sotano', false, 'La puerta está cerrada.'),
   ],
   usages: [
     anUsage('artilugio-dorm', [
@@ -175,16 +182,23 @@ exports.data = {
     ], false),
     anUsage('armario-cocina', [ 'En el armario cuento hasta 5 juegos de cuchillos, cucharas y tenedores.' ], false),
     anUsage('cama-dormitorio', [ 'No es el momento de una siesta.' ], false),
+    anUsage('puerta-sotano', [ 'La puerta está cerrada. Tenemos que encontrar la llave.' ], false),
     anUsage('caja-sotano', [
       aConditionalResponse([
         aCondDesc('!unlocked:open-caja-sotano', anExpectAnswerAction('Para abrirla, se necesita un código de 4 cifras. ¿Cuál pongo?', 'code-caja-sotano')),
         aCondDesc('unlocked:open-caja-sotano', 'Ya abrimos esa caja y nos llevamos una llave.'),
       ]),
-    ], false)
+    ], false),
+    anUsage(['llave-sotano', 'puerta-sotano'], [
+      aConditionalResponse([
+        aCondDescUsage(true, '!unlocked:open-caja-sotano', '¿De qué llave me hablas?'),
+        aCondDescUsage(true, 'unlocked:open-caja-sotano', theEndingScene(THE_END)),
+      ]),
+    ], true)
   ],
   answers: [
     anAnswer('code-arcon-recib', '3416', pluginExtension(pickAndUnlock('escudo-recib', 'open-arcon', OPEN_ARCON_AUDIO)), pluginExtension(answerArconCode)),
-    anAnswer('code-caja-sotano', '4853', anUnlockingAction(OPEN_CAJAFUERTE_AUDIO, 'open-caja-sotano'), pluginExtension(answerCajaFuerte)),
+    anAnswer('code-caja-sotano', '4853', pluginExtension(pickAndUnlock( 'llave-sotano', 'open-caja-sotano', OPEN_CAJAFUERTE_AUDIO)), pluginExtension(answerCajaFuerte)),
   ],
   intentMapper,
   directSentences: {
