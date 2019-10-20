@@ -1,5 +1,6 @@
 const { intentMapper } = require('../intents/intent-mapper');
 const { answerArconCode } = require('../plugins/answer-arcon-code');
+const { combinedAction } = require('../plugins/combined-action');
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
 const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO } = require('./audios-es');
@@ -83,7 +84,10 @@ exports.data = {
       aCondDesc('!unlocked:open-arcon', 'Un arcón cerrado, con un candado de 4 cifras.'),
       aCondDesc('unlocked:open-arcon', 'Un arcón que ya hemos abierto, pasemos a otra cosa.'),
       ], 'recibidor', false, 'Demasiado grande para llevármelo.'),
-
+    anItem('escudo-recib', 'Escudo', syns.items['escudo-recib'], [
+      aCondDesc('!unlocked:open-arcon', '¿De qué escudo me hablas?'),
+      aCondDesc('unlocked:open-arcon', 'Es el escudo que nos llevamos del arcón. Tiene un símbolo de un lobo en el centro.'),
+    ], 'recibidor', false)
   ],
   usages: [
     anUsage('artilugio-dorm', [
@@ -106,7 +110,10 @@ exports.data = {
 
   ],
   answers: [
-    anAnswer('code-arcon-recib', '3416', aPickingAction(OPEN_ARCON_AUDIO, 'escudo-recib'), pluginExtension(answerArconCode)),
+    anAnswer('code-arcon-recib', '3416', /*combinedAction([
+      anUnlockingAction('x', 'open-arcon'),
+      aPickingAction(OPEN_ARCON_AUDIO,'escudo-recib')
+      ])*/ 'xxx', pluginExtension(answerArconCode)),
   ],
   intentMapper,
   directSentences: {
