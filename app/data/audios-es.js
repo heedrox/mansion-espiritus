@@ -48,3 +48,10 @@ exports.DESCRIPCION_MURAL = '<speak>' +
   '    </media>' +
   '    </par>' +
   '</speak>';
+
+exports.DOOR_AUDIOS = [
+  '<audio src="https://actions.google.com/sounds/v1/doors/creaking_wooden_door.ogg" clipEnd="2700ms"/>',
+  '<audio src="https://actions.google.com/sounds/v1/doors/locked_doorknob_jiggle.ogg"/>',
+  '<audio src="https://actions.google.com/sounds/v1/doors/wood_door_open_close.ogg"/>',
+  '<audio srs="https://actions.google.com/sounds/v1/doors/wood_door_open.ogg"/>'
+];

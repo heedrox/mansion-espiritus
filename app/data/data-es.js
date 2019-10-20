@@ -1,6 +1,6 @@
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
-const { DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL } = require('./audios-es');
+const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL } = require('./audios-es');
 
 const OSES_SPELL = 'O<break strength="weak"/>S<break strength="weak"/>E<break strength="weak"/>S';
 
@@ -34,6 +34,7 @@ exports.data = {
     ],
     'answer-cant': '¿Perdona? No estaba esperando una respuesta. Si me estás contestando a un código, utiliza antes el objeto en cuestión.',
     'walk-nowhere': 'Desde aquí no podemos ir a ningún sitio. ¡Busca una salida!',
+    'walking-sound': DOOR_AUDIOS,
     'final-question': '¿Qué hacemos ahora?',
   },
   init: {
@@ -71,6 +72,9 @@ exports.data = {
   items: [
     anItem('artilugio-dorm', 'Artilugio', syns.items['artilugio-dorm'], DESCRIPCION_INFIERNO, 'dormitorio', false),
     anItem('mural-recib', 'Mural', syns.items['mural-recib'], DESCRIPCION_MURAL, 'recibidor', false),
+    anItem('estanteria-recib', 'Estantería', syns.items['estanteria-recib'], 'Una estantería con muchos libros. Los más relevantes son un libro sobre el arte de los colores y un libro sobre espíritus.', 'recibidor', false),
+    anItem('libro-espiritus-recib', 'Libro sobre espíritus', syns.items['libro-espiritus-recib'], 'Un libro con información sobre espíritus. Debería leerlo.', 'recibidor', false, 'No tiene sentido que me lo lleve. Puedo leerlo aquí.'),
+    anItem('libro-colores-recib', 'Libro sobre colores', syns.items['libro-colores-recib'], 'Un libro sobre el arte de colores. Debería leerlo.', 'recibidor', false, 'No tiene sentido que me lo lleve. Puedo leerlo aquí.'),
 
 
   ],

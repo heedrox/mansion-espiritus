@@ -51,7 +51,7 @@
     "https-proxy-agent": "^3.0.0",
     "pluralize": "^7.0.0",
     "scure": "1.4.3",
-    "scure-dialogflow": "1.4.6"
+    "scure-dialogflow": "1.5.0"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
