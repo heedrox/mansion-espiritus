@@ -12,8 +12,15 @@ const commands = [
   c('walk', 'recibidor'),
   c('look', 'mural'),
   c('look', 'estantería'),
+  c('use', '', 'sigue leyendo'),
   c('look', 'libro del arte de los colores'),
   c('use', '', 'sigue leyendo'),
+  c('use', '', 'sigue leyendo'),
+  c('use', '', 'sigue leyendo'),
+  c('pickup', 'arcon'),
+  c('use', 'candado'),
+  c('answer', '', '2489'),
+  c('answer', '', '6143'),
 ];
 
 try {

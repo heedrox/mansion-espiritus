@@ -1,7 +1,7 @@
 const { intentMapper } = require('../intents/intent-mapper');
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
-const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL } = require('./audios-es');
+const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO } = require('./audios-es');
 
 const OSES_SPELL = 'O<break strength="weak"/>S<break strength="weak"/>E<break strength="weak"/>S';
 
@@ -37,6 +37,8 @@ exports.data = {
     'walk-nowhere': 'Desde aquí no podemos ir a ningún sitio. ¡Busca una salida!',
     'walking-sound': DOOR_AUDIOS,
     'final-question': '¿Qué hacemos ahora?',
+    'arcon-wrong': 'No, ese número no abre el baúl.',
+    'arcon-wrong-back': 'No, ese número no abre el baúl... Pero me pregunto si las letras del mural querrán decir algo.',
   },
   init: {
     totalMinutes: 15,
@@ -76,7 +78,10 @@ exports.data = {
     anItem('estanteria-recib', 'Estantería', syns.items['estanteria-recib'], 'Una estantería con muchos libros. Los más relevantes son un libro sobre el arte de los colores y un libro sobre espíritus.', 'recibidor', false),
     anItem('libro-espiritus-recib', 'Libro sobre espíritus', syns.items['libro-espiritus-recib'], 'Un libro con información sobre espíritus. Debería leerlo.', 'recibidor', false, 'No tiene sentido que me lo lleve. Puedo leerlo aquí.'),
     anItem('libro-colores-recib', 'Libro sobre colores', syns.items['libro-colores-recib'], 'Un libro sobre el arte de colores. Debería leerlo.', 'recibidor', false, 'No tiene sentido que me lo lleve. Puedo leerlo aquí.'),
-
+    anItem('arcon-recib', 'Arcón', syns.items['arcon-recib'], [
+      aCondDesc('!unlocked:open-arcon', 'Un arcón cerrado, con un candado de 4 cifras.'),
+      aCondDesc('unlocked:open-arcon', 'Un arcón que ya hemos abierto, pasemos a otra cosa.'),
+      ], 'recibidor', false, 'Demasiado grande para llevármelo.'),
 
   ],
   usages: [
@@ -87,13 +92,20 @@ exports.data = {
           aCondDescUsage(false,'unlocked:killed-spirit-wolf', 'AHORA UNLOCKEAR NO SE QUE ')
         ])], false),
     anUsage('libro-colores-recib', [
-      'Es un libro de Isaac Newton, en el que hace un estudio sobre los colores del arco iris, y su orden de aparición. El libro tiene más páginas.',
-      'El color rojo es el primero. Luego están el naranja, el amarillo y el verde. ',
+      'Es un libro de Isaac Newton, en el que hace un estudio sobre los 7 colores del arco iris, y su orden de aparición. El libro tiene más páginas.',
+      'El color rojo es el primero, el número uno. Luego están el naranja, el amarillo y el verde. ',
       'Los últimos tres son el cian, el azul y el violeta. ',
+    ], false),
+    anUsage('arcon-recib', [
+      aConditionalResponse([
+        aCondDescUsage(false, '!unlocked:open-arcon', anExpectAnswerAction('Para abrirlo, necesitamos un código de 4 cifras. Dime un número. ¿Cuál pongo?', 'code-arcon-recib')),
+        aCondDescUsage(false, 'unlocked:open-arcon', 'El arcón ya está abierto y gracias a él, nos llevamos un escudo. Pasemos a otra cosa.'),
+      ])
     ], false),
 
   ],
   answers: [
+    anAnswer('code-arcon-recib', '3416', aPickingAction(OPEN_ARCON_AUDIO, 'escudo-recib'), 'No, ese número no abre el baúl.'),
   ],
   intentMapper,
   directSentences: {
