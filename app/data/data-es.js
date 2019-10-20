@@ -1,6 +1,6 @@
 const { intentMapper } = require('../intents/intent-mapper');
 const { answerArconCode } = require('../plugins/answer-arcon-code');
-const { combinedAction } = require('../plugins/combined-action');
+const { pickAndUnlock } = require('../plugins/pick-and-unlock');
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
 const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO } = require('./audios-es');
@@ -110,10 +110,7 @@ exports.data = {
 
   ],
   answers: [
-    anAnswer('code-arcon-recib', '3416', pluginExtension(combinedAction([
-      anUnlockingAction('x', 'open-arcon'),
-      aPickingAction(OPEN_ARCON_AUDIO,'escudo-recib')
-      ])), pluginExtension(answerArconCode)),
+    anAnswer('code-arcon-recib', '3416', pluginExtension(pickAndUnlock('escudo-recib', 'open-arcon', OPEN_ARCON_AUDIO)), pluginExtension(answerArconCode)),
   ],
   intentMapper,
   directSentences: {
