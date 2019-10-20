@@ -61,3 +61,51 @@ exports.OPEN_ARCON_AUDIO = '<audio src="https://actions.google.com/sounds/v1/doo
   '<break time="500ms"></break>' +
   'El bául se abre. Hay un escudo con el dibujo de un lobo salvaje en su interior.' +
   '<emphasis level="reduced">Me lo llevo.</emphasis>';
+
+exports.WOLF_AUDIO = '<audio src="https://actions.google.com/sounds/v1/animals/animal_bark_and_growl.ogg" clipEnd="2800ms"/>';
+
+exports.WOLF_SHIELD_AUDIO = exports.WOLF_AUDIO +
+  'El espíritu me ataca, así que preparo el escudo.' +
+  '<audio src="https://actions.google.com/sounds/v1/impacts/windshield_hit_with_bar.ogg" clipEnd="2700ms"/>' +
+  '<par>' +
+  '  <media xml:id="theaudio" fadeOutDur="5s" end="thetext.end">' +
+  '    <audio src="https://actions.google.com/sounds/v1/animals/dog_whining.ogg" clipBegin="7s" soundLevel="+25dB"/>' +
+  '  </media>' +
+  '  <media xml:id="thetext">' +
+  'Al defenderme con el escudo, el lobo ha quedado herido y huye. ' +
+  '    ¡Corre, lobo, corre!' +
+  '  </media>' +
+  '</par>';
+
+exports.FIRE_AUDIO = '<par>' +
+  '<media xml:id="fire" end="grito.end">' +
+  '  <audio src="https://actions.google.com/sounds/v1/ambiences/fire.ogg" soundLevel="+25dB"/>' +
+  '  </media>' +
+  '  <media xml:id="grito">' +
+  '  <audio src="https://actions.google.com/sounds/v1/horror/aggressive_zombie_snarls.ogg"  soundLevel="-20dB" clipEnd="2700ms"/>' +
+  '</media>' +
+  '</par>';
+
+exports.FIRE_KILL_AUDIO = '<par>' +
+  '  <media xml:id="theaudio" end="thetext.end">' +
+  '    <audio src="https://actions.google.com/sounds/v1/water/fountain_water_bubbling.ogg"/>' +
+  '  </media>' +
+  '  <media xml:id="thetext" begin="1s">' +
+  '    El agua empieza a burbujear... De repente... ' +
+  '  </media>' +
+  '</par>' +
+  '<par>' +
+  '  <media>' +
+  '    <audio src="https://actions.google.com/sounds/v1/impacts/crash.ogg"/>' +
+  '  </media>' +
+  '  <media begin="1s">' +
+  '    ¡Explota!' +
+  '  </media>' +
+  '</par>' +
+  'El espíritu de fuego se desintegra. ¡Bien hecho!';
+
+exports.CLOSE_HELL_AUDIO = ' <speak>  <par>   <media begin="2s" soundLevel="-15dB" end="thetext.end-3s" fadeOutDur="6s">      <audio src="https://actions.google.com/sounds/v1/horror/monster_alien_growl_pained.ogg"></audio>      </media>    <media end="thetext.end-3s"  fadeOutDur="6s">      <audio src="https://actions.google.com/sounds/v1/horror/ambient_hum_pitched.ogg"></audio>    </media>    <media begin="3s" xml:id="thetext" >  Ven, rápido, ya puedes entrar, no hay peligro.      ' +
+  '  <break time="1s"/>' +
+  '  <audio src="https://actions.google.com/sounds/v1/doors/opening_closing_heavy_door.ogg"  clipBegin="3s" clipEnd="6s"/>' +
+  '   ¡Ven, estoy aquí!' +
+  '<break time="3s"/>      Vamos a tirar de las palancas y cerremos la puerta al infierno. Yo de esta y tú de aquella.  Un poco más.      <break time="1s"/>      ¡Bien! Lo logramos.  </media>  </par>  <par>    <media end="earthtext.end" fadeOutDur="4s">       <audio src="https://mansion-espiritus-lkgoxs.firebaseapp.com/sounds/earthquake-v2.mp3"/>    </media>    <media begin="2s" xml:id="earthtext">    Un momento, ¿qué está pasando?      <break time="1500ms"/>    ¡Un terremoto! Cuidado, se está abriendo una grieta en el suelo.    </media>  </par>    <audio src="https://actions.google.com/sounds/v1/impacts/crash_impact_sweetener.ogg"/>  ¿Te encuentras bien? Veo que acabas de caerte por la grieta al sótano que está bajo el dormitorio.  Espera, que ahora bajo yo también.</speak>';

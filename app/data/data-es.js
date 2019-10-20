@@ -3,9 +3,7 @@ const { answerArconCode } = require('../plugins/answer-arcon-code');
 const { pickAndUnlock } = require('../plugins/pick-and-unlock');
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
-const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO } = require('./audios-es');
-
-const OSES_SPELL = 'O<break strength="weak"/>S<break strength="weak"/>E<break strength="weak"/>S';
+const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO, WOLF_AUDIO, WOLF_SHIELD_AUDIO, FIRE_AUDIO, FIRE_KILL_AUDIO, CLOSE_HELL_AUDIO } = require('./audios-es');
 
 exports.data = {
   sentences: {
@@ -50,12 +48,12 @@ exports.data = {
   rooms: [
     aRoom('recibidor', 'recibidor', syns.rooms['recibidor'], 'En el recibidor puedo ver un baúl, un mural en la pared, una estantería y una mesa.'),
     aRoom('cocina', 'cocina', syns.rooms['cocina'], [
-      aCondDesc('!unlocked:killed-spirit-fire', 'En la cocina veo un espíritu que arde y flota en el centro. El espíritu no me deja interactuar con nada.'),
-      aCondDesc('unlocked:killed-spirit-fire', 'En la cocina puedo ver una mesa y unos armarios'),
+      aCondDesc('!unlocked:killed-spirit-fire', FIRE_AUDIO + 'En la cocina veo un espíritu que arde y flota en el centro. Además, veo una mesa y un armario.'),
+      aCondDesc('unlocked:killed-spirit-fire', 'En la cocina veo una mesa y un armario.'),
     ]),
     aRoom('sala-estar', 'sala de estar', syns.rooms['sala-estar'], [
-      aCondDesc('!unlocked:killed-spirit-wolf', 'En la sala de estar veo un espíritu de un lobo que se mueve por la habitación. El espíritu no me deja interactuar con nada.'),
-      aCondDesc('unlocked:killed-spirit-wolf', 'En la sala de estar puedo ver una chimenea con un cuadro encima.'),
+      aCondDesc('!unlocked:killed-spirit-wolf', WOLF_AUDIO + 'Eso es un espíritu de un lobo que se mueve por la habitación. Además, en el salón veo una chimenea y un cuadro encima. Pero intentemos quitarnos de encima ese lobo primero.'),
+      aCondDesc('unlocked:killed-spirit-wolf', 'Este salón tiene una chimenea y un cuadro encima.'),
     ]),
     aRoom('dormitorio', 'dormitorio', syns.rooms['dormitorio'], [
       aCondDesc('!unlocked:closed-hell', 'En el dormitorio veo una cama grande y un artilugio cuadrado con palancas. En el centro del artilugio puedo ver el infierno.'),
@@ -83,31 +81,97 @@ exports.data = {
     anItem('arcon-recib', 'Arcón', syns.items['arcon-recib'], [
       aCondDesc('!unlocked:open-arcon', 'Un arcón cerrado, con un candado de 4 cifras.'),
       aCondDesc('unlocked:open-arcon', 'Un arcón que ya hemos abierto, pasemos a otra cosa.'),
-      ], 'recibidor', false, 'Demasiado grande para llevármelo.'),
+    ], 'recibidor', false, 'Demasiado grande para llevármelo.'),
     anItem('escudo-recib', 'Escudo', syns.items['escudo-recib'], [
       aCondDesc('!unlocked:open-arcon', '¿De qué escudo me hablas?'),
       aCondDesc('unlocked:open-arcon', 'Es el escudo que nos llevamos del arcón. Tiene un símbolo de un lobo en el centro.'),
-    ], 'recibidor', false)
+    ], 'recibidor', false),
+    anItem('hechizo-recib', 'Hechizo', syns.items['hechizo-recib'], [
+      aCondDesc('!picked:hechizo-recib', 'Si hay un hechizo en algún sitio, debo hallarlo primero.'),
+      aCondDesc('picked:hechizo-recib', 'Es un hechizo para bendecir agua. Hechizos. Aquí. En la vida real.')
+    ], 'recibidor', false),
+    anItem('mesa-recib', 'Mesa', syns.items['mesa-recib'], 'Una mesa cuadrada con una vela en cada esquina. Muy acogedor.', 'recibidor', false, 'Que me llevo la mesa conmigo. Sí, y qué más. O sea, no.'),
+    anItem('chimenea-sala', 'Chimenea', syns.items['chimenea-sala'], 'Una chimenea. El cuadro de encima parece interesante.', 'sala-estar', false),
+    anItem('cuadro-sala', 'Cuadro', syns.items['cuadro-sala'], 'Un cuadro con cuatro objetos, de izquierda a derecha, una vela, una rosa, una cuchara y un ojo.', 'sala-estar', false),
+    anItem('lobo-sala', 'Lobo', syns.items['lobo-sala'], [
+      aCondDesc('!unlocked:killed-spirit-wolf', WOLF_AUDIO + 'Da mucho miedo el espíritu del lobo. ¿Se te ocurre alguna forma de deshacernos de él?'),
+      aCondDesc('unlocked:killed-spirit-wolf', '¿Dónde? Yo creo que el lobo ya no está por la mansión.')
+    ], 'sala-estar', false),
+    anItem('espiritu-cocina', 'Espíritu de la cocina', syns.items['espiritu-cocina'], [
+      aCondDesc('!unlocked:killed-spirit-fire', FIRE_AUDIO + 'Da mucho miedo el espíritu de fuego. ¿Se te ocurre alguna forma de deshacernos de él?'),
+      aCondDesc('unlocked:killed-spirit-fire', 'Un charlo en el centro de la cocina es el único recordatorio de la amenaza que hemos destruido.')
+    ], 'cocina', false),
+    anItem('mesa-cocina', 'Mesa', syns.items['mesa-cocina'], [
+      aCondDesc('!unlocked:killed-spirit-fire', 'Encima de la mesa hay un vaso de agua.'),
+      aCondDesc('unlocked:killed-spirit-fire', 'La mesa está hecha un desastre tras la explosión del vaso.'),
+    ], 'cocina', false, 'Que me llevo la mesa conmigo. Quizás el agua es más interesante.'),
+    anItem('vaso-cocina', 'Vaso', syns.items['vaso-cocina'], [
+      aCondDesc('!unlocked:killed-spirit-fire', 'Un vaso lleno de agua, pero lejos de mi alcance.'),
+      aCondDesc('unlocked:killed-spirit-fire', 'El vaso ha explotado y está inservible.'),
+      ], 'cocina', false, 'Imposible coger ese vaso.'),
+    anItem('armario-cocina', 'Armario', syns.items['armario-cocina'],
+      'En el armario cuento hasta 5 juegos de cuchillos, cucharas y tenedores. '
+    , 'cocina', false),
+    anItem('cama-dormitorio', 'Cama', syns.items['cama-dormitorio'],
+      'Una cama con un estampado de rosas. Cuento hasta 4 rosas en las sábanas. La cama tiene un par de almohadas, con un estampado de una rosa en cada una. '
+    , 'dormitorio', false, 'La cama se queda donde está.')
+
   ],
   usages: [
     anUsage('artilugio-dorm', [
-        aConditionalResponse([
-          aCondDescUsage(false,'!unlocked:killed-spirit-fire', 'No puedo yo solo, son 2 palancas en cada extremo, así que te necesito, pero no puedes entrar, ya que detecto espíritus en otras habitaciones de esta mansión. Antes debemos deshacernos de ellos.'),
-          aCondDescUsage(false,'!unlocked:killed-spirit-wolf', 'No puedo yo solo, son 2 palancas en cada extremo, así que te necesito, pero no puedes entrar, ya que detecto espíritus en otras habitaciones de esta mansión. Antes debemos deshacernos de ellos.'),
-          aCondDescUsage(false,'unlocked:killed-spirit-wolf', 'AHORA UNLOCKEAR NO SE QUE ')
-        ])], false),
+      aConditionalResponse([
+        aCondDescUsage(false, '!unlocked:killed-spirit-fire', 'No puedo yo solo, son 2 palancas en cada extremo, así que te necesito, pero no puedes entrar, ya que detecto espíritus en otras habitaciones de esta mansión. Antes debemos deshacernos de ellos.'),
+        aCondDescUsage(false, '!unlocked:killed-spirit-wolf', 'No puedo yo solo, son 2 palancas en cada extremo, así que te necesito, pero no puedes entrar, ya que detecto espíritus en otras habitaciones de esta mansión. Antes debemos deshacernos de ellos.'),
+        aCondDescUsage(false, 'unlocked:killed-spirit-wolf', pluginExtension(closeHell(CLOSE_HELL_AUDIO))),
+      ])], false),
     anUsage('libro-colores-recib', [
       'Es un libro de Isaac Newton, en el que hace un estudio sobre los 7 colores del arco iris, y su orden de aparición. El libro tiene más páginas.',
       'El color rojo es el primero, el número uno. Luego están el naranja, el amarillo y el verde. ',
       'Los últimos tres son el cian, el azul y el violeta. ',
     ], false),
+    anUsage('libro-espiritus-recib', [
+      'Es un libro con información sobre los espíritus elementales. Hay más páginas.',
+      'Dice que el agua bendita permite deshacerse de espíritus de fuego. ',
+      aConditionalResponse([
+        aCondDescUsage(false, '!picked:hechizo-recib', aPickingAction('En la última página hay un hechizo para bandecir agua. Me lo llevo.', 'hechizo-recib')),
+        aCondDescUsage(false, 'picked:hechizo-recib', 'En la última página obtuve el hechizo. Venga, va, de verdad, ¿un hechizo?'),
+      ])
+    ], false),
+
     anUsage('arcon-recib', [
       aConditionalResponse([
         aCondDescUsage(false, '!unlocked:open-arcon', anExpectAnswerAction('Para abrirlo, necesitamos un código de 4 cifras. Dime un número. ¿Cuál pongo?', 'code-arcon-recib')),
         aCondDescUsage(false, 'unlocked:open-arcon', 'El arcón ya está abierto y gracias a él, nos llevamos un escudo. Pasemos a otra cosa.'),
       ])
     ], false),
-
+    anUsage('chimenea-sala', ['No puedo mover esa chimenea. Pero el cuadro, eso sí parece interesante'], false),
+    anUsage('cuadro-sala', ['Más que moverlo, creo que con mirarlo es suficiente.'], false),
+    anUsage('lobo-sala', [
+      aConditionalResponse([
+        aCondDesc('!unlocked:killed-spirit-wolf', '¿Por qué no vienes tú y lo atacas así, sin más? Pues eso, yo tampoco'),
+        aCondDesc('unlocked:killed-spirit-wolf', 'El lobo ha huido y ya no está aquí. ¿Podemos centrarnos?'),
+      ])
+    ], false),
+    anUsage(['escudo-recib', 'lobo-sala'], [anUnlockingAction(WOLF_SHIELD_AUDIO, 'killed-spirit-wolf')], true),
+    anUsage('espiritu-cocina', [
+      aConditionalResponse([
+        aCondDesc('!unlocked:killed-spirit-fire', '¿Por qué no vienes tú y lo atacas así, sin más? Pues eso, yo tampoco'),
+        aCondDesc('unlocked:killed-spirit-fire', 'Ya hemos eliminado el espíritu, con agua bendita, ¿lo recuerdas?'),
+      ])
+    ], false),
+    anUsage('vaso-cocina', 'El vaso está lleno de agua, no se puede hacer nada más con él', false),
+    anUsage('mesa-cocina', 'La mesa no se puede mover.', false),
+    anUsage(['vaso-cocina', 'hechizo-recib'], [
+      anUnlockingAction(FIRE_KILL_AUDIO, 'killed-spirit-fire')
+    ], true),
+    anUsage(['vaso-cocina', 'espiritu-cocina'], [
+      aConditionalResponse([
+        aCondDesc('!unlocked:killed-spirit-fire', FIRE_AUDIO + 'Uy, sí, ¿qué crees que podemos hacerle con agua? Yo no le enfadaría más.'),
+        aCondDesc('unlocked:killed-spirit-fire', 'El espíritu de fuego se desintegró y ya no está aquí. Tu alzheimer me preocupa. '),
+      ]),
+    ], false),
+    anUsage('armario-cocina', [ 'En el armario cuento hasta 5 juegos de cuchillos, cucharas y tenedores.' ], false),
+    anUsage('cama-dormitorio', [ 'No es el momento de una siesta.' ], false),
   ],
   answers: [
     anAnswer('code-arcon-recib', '3416', pluginExtension(pickAndUnlock('escudo-recib', 'open-arcon', OPEN_ARCON_AUDIO)), pluginExtension(answerArconCode)),
@@ -118,5 +182,6 @@ exports.data = {
   },
   commandSyns: [
     aCommandSyn(Commands.LOOK, 'libro-colores-recib', Commands.USE),
+    aCommandSyn(Commands.LOOK, 'libro-espiritus-recib', Commands.USE),
   ]
 };
