@@ -110,10 +110,10 @@ exports.data = {
 
   ],
   answers: [
-    anAnswer('code-arcon-recib', '3416', /*combinedAction([
+    anAnswer('code-arcon-recib', '3416', pluginExtension(combinedAction([
       anUnlockingAction('x', 'open-arcon'),
       aPickingAction(OPEN_ARCON_AUDIO,'escudo-recib')
-      ])*/ 'xxx', pluginExtension(answerArconCode)),
+      ])), pluginExtension(answerArconCode)),
   ],
   intentMapper,
   directSentences: {
