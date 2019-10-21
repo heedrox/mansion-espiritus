@@ -12,7 +12,7 @@ exports.data = {
     'caja-fuerte-answer-default': 'No, parece que ese código no es.',
   },
   init: {
-    totalMinutes: 15,
+    totalMinutes: 20,
   },
   items: [
     anItem('escudo-recib', 'Escudo', [ 'escudito' ], [

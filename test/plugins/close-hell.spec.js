@@ -24,6 +24,6 @@ describe('When closing hell', () => {
   });
 
   it('resets timer to 5 mins', () => {
-    expect(scure.getLeftTimeFrom(data.startTime)).equals('5 minutos y 0 segundos');
+    expect(scure.getLeftTimeFrom(data.startTime)).equals('10 minutos y 0 segundos');
   });
 });
