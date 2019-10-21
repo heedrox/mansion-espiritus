@@ -149,11 +149,11 @@ exports.OPEN_CAJAFUERTE_AUDIO = '<audio src="https://actions.google.com/sounds/v
   '<prosody pitch="+2st" rate="medium" volume="x-loud">¡Bingo!</prosody>' +
   'La caja fuerte se abre. Dentro hay una llave. La cojo sin dudar.';
 
-exports.THE_END = '<audio src="https://actions.google.com/sounds/v1/doors/key_in_lock.ogg" clipEnd="3s"/>' +
+exports.THE_END = '<speak><audio src="https://actions.google.com/sounds/v1/doors/key_in_lock.ogg" clipEnd="3s"/>' +
   '<prosody pitch="+2st" rate="medium" volume="x-loud">¡Sí!</prosody>' +
   'La puerta se ha abierto. La ambulancia ya está fuera. ¡Estás salvado! ' +
   '¡Y también hemos salvado a la humanidad! ' +
   'Encantado de haber trabajado en un nuevo caso contigo. ' +
   'Recuerda que este juego está basado en el universo del juego de cartas de ' +
   ' Mallory Mansion.' +
-  'Búscalo en la web y cómpralo, no lo dudes. ¡Hasta pronto!';
+  'Búscalo en la web y cómpralo, no lo dudes. ¡Hasta pronto!</speak>';
