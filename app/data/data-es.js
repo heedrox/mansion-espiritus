@@ -143,7 +143,7 @@ exports.data = {
       'Es un libro con información sobre los espíritus elementales. Hay más páginas.',
       'Dice que el agua bendita permite deshacerse de espíritus de fuego. ',
       aConditionalResponse([
-        aCondDescUsage(false, '!picked:hechizo-recib', aPickingAction('En la última página hay un hechizo para bandecir agua. Me lo llevo.', 'hechizo-recib')),
+        aCondDescUsage(false, '!picked:hechizo-recib', aPickingAction('En la última página hay un hechizo para bendecir agua. Me lo llevo.', 'hechizo-recib')),
         aCondDescUsage(false, 'picked:hechizo-recib', 'En la última página obtuve el hechizo. Venga, va, de verdad, ¿un hechizo?'),
       ])
     ], false),
@@ -174,6 +174,9 @@ exports.data = {
     anUsage(['vaso-cocina', 'hechizo-recib'], [
       anUnlockingAction(FIRE_KILL_AUDIO, 'killed-spirit-fire')
     ], true),
+    anUsage(['espiritu-cocina', 'hechizo-recib'], [
+      'No creo que bendecir el espíritu sea la solución. Se necesitaba agua bendita, no fuego bendito.'
+    ], false),
     anUsage(['vaso-cocina', 'espiritu-cocina'], [
       aConditionalResponse([
         aCondDesc('!unlocked:killed-spirit-fire', FIRE_AUDIO + 'Uy, sí, ¿qué crees que podemos hacerle con agua? Yo no le enfadaría más.'),
@@ -202,7 +205,7 @@ exports.data = {
   ],
   intentMapper,
   directSentences: {
-    'sigue-leyendo': ['sigue leyendo', 'lee más', 'continúa', 'continua', 'continúa leyendo', 'continua leyendo']
+    'sigue-leyendo': ['sigue leyendo', 'lee más', 'continúa', 'continua', 'continúa leyendo', 'continua leyendo', 'seguir leyendo']
   },
   commandSyns: [
     aCommandSyn(Commands.LOOK, 'libro-colores-recib', Commands.USE),
