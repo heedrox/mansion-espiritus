@@ -62,6 +62,7 @@ const commands = [
   c('look', ''),
   c('look', 'a mi'),
   c('walk', 'dormitorio'),
+  c('look', 'artilugio'),
   c('walk', 'sotano'),
   c('look', 'caja'),
   c('answer', '', '6143'),

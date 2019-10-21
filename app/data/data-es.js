@@ -63,7 +63,7 @@ exports.data = {
     ]),
     aRoom('dormitorio', 'dormitorio', syns.rooms['dormitorio'], [
       aCondDesc('!unlocked:closed-hell', 'En el dormitorio veo una cama grande y un artilugio cuadrado con palancas. En el centro del artilugio puedo ver el infierno.'),
-      aCondDesc('unlocked:closed-hell', 'En la sala de estar puedo ver una chimenea con un cuadro encima.'),
+      aCondDesc('unlocked:closed-hell', 'En el dormitorio veo una cama grande y el artilugio cerrado. Una grieta se ha abierto en el suelo, hacia el sótano.'),
     ]),
     aRoom('sotano', 'sótano', syns.rooms['sotano'], 'Esto es el sótano. En él te veo a ti, tumbado en el suelo y malherido. También veo una caja fuerte, un mueble y una puerta. Debe ser la salida.'),
   ],
@@ -79,7 +79,10 @@ exports.data = {
     'sotano': ['dormitorio'],
   },
   items: [
-    anItem('artilugio-dorm', 'Artilugio', syns.items['artilugio-dorm'], DESCRIPCION_INFIERNO, 'dormitorio', false),
+    anItem('artilugio-dorm', 'Artilugio', syns.items['artilugio-dorm'], [
+      aCondDesc('!unlocked:closed-hell', DESCRIPCION_INFIERNO),
+      aCondDesc('unlocked:closed-hell', 'Pues ya ha dado dolores de cabeza este aparato.'),
+      ], 'dormitorio', false),
     anItem('mural-recib', 'Mural', syns.items['mural-recib'], DESCRIPCION_MURAL, 'recibidor', false),
     anItem('estanteria-recib', 'Estantería', syns.items['estanteria-recib'], 'Una estantería con muchos libros. Los más relevantes son un libro sobre el arte de los colores y un libro sobre espíritus.', 'recibidor', false),
     anItem('libro-espiritus-recib', 'Libro sobre espíritus', syns.items['libro-espiritus-recib'], 'Un libro con información sobre espíritus. Debería leerlo.', 'recibidor', false, 'No tiene sentido que me lo lleve. Puedo leerlo aquí.'),
