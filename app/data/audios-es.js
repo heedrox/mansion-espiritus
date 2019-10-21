@@ -1,19 +1,17 @@
 exports.HELLO = '<speak>' +
   '<par>' +
   '  <media end="thetext.end">' +
-  '    <audio src="https://actions.google.com/sounds/v1/ambiences/outdoor_sounds_with_whirr.ogg"></audio>' +
-  '  </media>' +
-  '  <media end="thetext.end">' +
-  '    <audio src="https://actions.google.com/sounds/v1/animals/crows_caw_in_field.ogg" ></audio>' +
+  '    <audio src="https://actions.google.com/sounds/v1/animals/crows_caw_in_field.ogg" soundLevel="+20dB"></audio>' +
   '  </media>' +
   '  <media xml:id="thetext" begin="1s"> ' +
-  '    Soy Dron Johnson, soy un dron y debes darme instrucciones para resolver esta amenaza.' +
-  '    Estoy en las afueras de una mansión, donde debemos cerrar la puerta que se ha abierto al inframundo, según tengo entendido, en el dormitorio.' +
+  '    ¡Hola! Soy Dron Johnson. Encantado de conocerte. ' +
+  '    Estoy en las afueras de una mansión, donde los espíritus campan a sus anchas, ya que se ha abierto una puerta que lleva al inframundo.' +
   '    Voy a entrar yo solo, ya que es demasiado peligrosa para humanos. ' +
+  '    Tú dame instrucciones y yo las ejecutaré. Voy a entrar. ' +
   '  </media>' +
   '</par>' +
   '<audio src="https://actions.google.com/sounds/v1/doors/opening_closing_heavy_door.ogg"  clipBegin="1s" clipEnd="6s"></audio>' +
-  'Vale, estoy en el recibidor, donde se ve una estantería, un mural en la pared, un baúl y una mesa. ' +
+  'De acuerdo, ya estoy en el recibidor. Aquí veo una estantería, un mural en la pared, un baúl y una mesa. ' +
   '<emphasis level="strong">Tenemos 15 minutos. ¡Rápido! Dime qué hacemos.</emphasis>' +
   '</speak>';
 
@@ -53,7 +51,7 @@ exports.DOOR_AUDIOS = [
   '<audio src="https://actions.google.com/sounds/v1/doors/creaking_wooden_door.ogg" clipEnd="2700ms"/>',
   '<audio src="https://actions.google.com/sounds/v1/doors/locked_doorknob_jiggle.ogg"/>',
   '<audio src="https://actions.google.com/sounds/v1/doors/wood_door_open_close.ogg"/>',
-  '<audio srs="https://actions.google.com/sounds/v1/doors/wood_door_open.ogg"/>'
+  '<audio src="https://actions.google.com/sounds/v1/doors/wood_door_open.ogg"/>'
 ];
 
 exports.OPEN_ARCON_AUDIO = '<audio src="https://actions.google.com/sounds/v1/doors/wood_rattle.ogg" soundLevel="-5dB"/>' +
