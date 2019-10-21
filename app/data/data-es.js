@@ -122,7 +122,7 @@ exports.data = {
       'En el armario cuento hasta 5 juegos de cuchillos, cucharas y tenedores. '
     , 'cocina', false),
     anItem('cama-dormitorio', 'Cama', syns.items['cama-dormitorio'],
-      'Una cama con un estampado de rosas. Cuento hasta 4 rosas en las sábanas. La cama tiene un par de almohadas, con un estampado de una rosa en cada una. '
+      'Una cama con un estampado de rosas. Cuento hasta 6 rosas en las sábanas. La cama tiene un par de almohadas, con un estampado de una rosa en cada una. '
     , 'dormitorio', false, 'La cama se queda donde está.'),
     anItem('yo-sotano', 'Yo moribundo', syns.items['yo-sotano'], 'Eres tú, estás moribundo. No te muevas. Dime qué hacer y salgamos de aquí antes de que pierdas el conocimiento', 'sotano', false, 'En tu estado, mejor no moverte hasta encontrar una salida'),
     anItem('mueble-sotano', 'Mueble', syns.items['mueble-sotano'], 'El mueble tiene dos figuras encima: un humano y un cíclope.', 'sotano', false, 'El mueble es muy pesado y no sé qué hacer con esas figuras de un humano y un cíclope de un solo ojo'),
