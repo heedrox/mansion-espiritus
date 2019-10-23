@@ -160,6 +160,7 @@ exports.data = {
     anUsage('chimenea-sala', ['No puedo mover esa chimenea. Pero el cuadro, eso sí parece interesante'], false),
     anUsage('cuadro-sala', ['Más que moverlo, creo que con mirarlo es suficiente.'], false),
     anUsage('hechizo-recib', ['Si tuviera que darme la bendición, igual sí; pero lo lógico sería usar el hechizo con algo...'], false),
+    anUsage('escudo-recib', ['No creo que pasarme la vida debajo del escudo sea una solución. Debo usar el escudo con algo.'], false),
     anUsage('lobo-sala', [
       aConditionalResponse([
         aCondDesc('!unlocked:killed-spirit-wolf', '¿Por qué no vienes tú y lo atacas así, sin más? Pues eso, yo tampoco'),
