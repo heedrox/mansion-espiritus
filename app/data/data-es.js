@@ -54,11 +54,11 @@ exports.data = {
   rooms: [
     aRoom('recibidor', 'recibidor', syns.rooms['recibidor'], 'En el recibidor puedo ver un baúl, un mural en la pared, una estantería y una mesa.'),
     aRoom('cocina', 'cocina', syns.rooms['cocina'], [
-      aCondDesc('!unlocked:killed-spirit-fire', FIRE_AUDIO + 'En la cocina veo un espíritu que arde y flota en el centro. Además, veo una mesa y un armario.'),
-      aCondDesc('unlocked:killed-spirit-fire', 'En la cocina veo una mesa y un armario.'),
+      aCondDesc('!unlocked:killed-spirit-fire', FIRE_AUDIO + 'En la cocina veo un espíritu que arde y flota en el centro. Además, veo una mesa con un vaso de agua y un armario.'),
+      aCondDesc('unlocked:killed-spirit-fire', 'En la cocina veo una mesa con un vaso de agua y un armario.'),
     ]),
     aRoom('sala-estar', 'sala de estar', syns.rooms['sala-estar'], [
-      aCondDesc('!unlocked:killed-spirit-wolf', WOLF_AUDIO + 'Eso es un espíritu de un lobo que se mueve por la habitación. Además, en el salón veo una chimenea y un cuadro encima. Pero intentemos quitarnos de encima ese lobo primero.'),
+      aCondDesc('!unlocked:killed-spirit-wolf', WOLF_AUDIO + 'Eso es un espíritu de un lobo que se mueve por la habitación. Además, en el salón veo una chimenea y un cuadro encima.'),
       aCondDesc('unlocked:killed-spirit-wolf', 'Este salón tiene una chimenea y un cuadro encima.'),
     ]),
     aRoom('dormitorio', 'dormitorio', syns.rooms['dormitorio'], [
@@ -159,6 +159,7 @@ exports.data = {
     ], false),
     anUsage('chimenea-sala', ['No puedo mover esa chimenea. Pero el cuadro, eso sí parece interesante'], false),
     anUsage('cuadro-sala', ['Más que moverlo, creo que con mirarlo es suficiente.'], false),
+    anUsage('hechizo-recib', ['Si tuviera que darme la bendición, igual sí; pero lo lógico sería usar el hechizo con algo...'], false),
     anUsage('lobo-sala', [
       aConditionalResponse([
         aCondDesc('!unlocked:killed-spirit-wolf', '¿Por qué no vienes tú y lo atacas así, sin más? Pues eso, yo tampoco'),
@@ -174,6 +175,7 @@ exports.data = {
     ], false),
     anUsage('vaso-cocina', 'El vaso está lleno de agua, no se puede hacer nada más con él', false),
     anUsage('mesa-cocina', 'La mesa no se puede mover.', false),
+    anUsage('armario-cocina', 'No tiene sentido llevarme ningún cubierto, gracias.', false),
     anUsage(['vaso-cocina', 'hechizo-recib'], [
       anUnlockingAction(FIRE_KILL_AUDIO, 'killed-spirit-fire')
     ], true),
