@@ -208,7 +208,7 @@ exports.data = {
   ],
   intentMapper,
   directSentences: {
-    'sigue-leyendo': ['sigue leyendo', 'lee más', 'continúa', 'continua', 'continúa leyendo', 'continua leyendo', 'seguir leyendo']
+    'sigue-leyendo': ['sigue leyendo', 'lee más', 'continúa', 'continua', 'continúa leyendo', 'continua leyendo', 'seguir leyendo', 'mirar más páginas', 'vuelve a leer', 'vuelve a leer el libro', 'pasa página', 'pasa la página', 'lee las siguientes páginas', 'mira las siguientes páginas', 'mira la siguiente página', 'lee la siguiente página', 'leer más páginas']
   },
   commandSyns: [
     aCommandSyn(Commands.LOOK, 'libro-colores-recib', Commands.USE),
