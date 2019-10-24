@@ -138,7 +138,7 @@ exports.CLOSE_HELL_AUDIO = ' <speak>' +
   '     </media>  ' +
   '     <media begin="1500ms">' +
   '       <prosody rate="fast">' +
-  '       Vaya, veo que has tenido un buen accidente. No, no te muevas. En el estado en el que estás, creo que solo te quedan 10 minutos antes de perder el conocimiento y morir. ¡Rápido! Dime qué hacemos y salgamos de aquí, para que pueda buscar ayuda.' +
+  '       Vaya, veo que has tenido un buen accidente. No, no te muevas. En el estado en el que estás, creo que solo te quedan 10 minutos antes de perder el conocimiento y morir. Tú no puedes moverte, pero yo sí. Puedo volver a subir al dormitorio, mirar en sótano, ¡Lo que digas! ¡Rápido! Dime qué hacemos y salgamos de aquí, para que pueda buscar ayuda.  ' +
   '       </prosody>' +
   '     </media>  ' +
   '   </par>' +

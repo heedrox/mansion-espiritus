@@ -68,7 +68,7 @@ exports.data = {
     aRoom('sotano', 'sótano', syns.rooms['sotano'], 'Esto es el sótano. En él te veo a ti, tumbado en el suelo y malherido. También veo una caja fuerte, un mueble y una puerta. Debe ser la salida.'),
   ],
   mapImage: {
-    url: 'https://the-anomaly-897ce.firebaseapp.com/the-anomaly-map.jpg',
+    url: 'https://the-anomaly-897ce.firebaseapp.com/the-mansion-map.jpg',
     alt: 'Mapa con: entrada, laboratorio y comunicaciones.',
   },
   map: {
@@ -217,5 +217,6 @@ exports.data = {
     aCommandSyn(Commands.LOOK, 'libro-colores-recib', Commands.USE),
     aCommandSyn(Commands.LOOK, 'libro-espiritus-recib', Commands.USE),
     aCommandSyn(Commands.LOOK, 'caja-sotano', Commands.USE),
+    aCommandSyn(Commands.WALK, 'arcon-recib', Commands.USE),
   ]
 };
