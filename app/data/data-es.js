@@ -50,6 +50,7 @@ exports.data = {
     totalMinutes: 20,
     roomId: 'recibidor',
     welcome: [HELLO],
+    canJumpRooms: true
   },
   rooms: [
     aRoom('recibidor', 'recibidor', syns.rooms['recibidor'], 'En el recibidor puedo ver un baúl, un mural en la pared, una estantería y una mesa.'),
@@ -174,9 +175,9 @@ exports.data = {
         aCondDesc('unlocked:killed-spirit-fire', 'Ya hemos eliminado el espíritu, con agua bendita, ¿lo recuerdas?'),
       ])
     ], false),
-    anUsage('vaso-cocina', 'El vaso está lleno de agua, no se puede hacer nada más con él', false),
-    anUsage('mesa-cocina', 'La mesa no se puede mover.', false),
-    anUsage('armario-cocina', 'No tiene sentido llevarme ningún cubierto, gracias.', false),
+    anUsage('vaso-cocina', [ 'El vaso está lleno de agua, no se puede hacer nada más con él' ], false),
+    anUsage('mesa-cocina', [ 'La mesa no se puede mover.' ], false),
+    anUsage('armario-cocina', [ 'No tiene sentido llevarme ningún cubierto, gracias.' ], false),
     anUsage(['vaso-cocina', 'hechizo-recib'], [
       anUnlockingAction(FIRE_KILL_AUDIO, 'killed-spirit-fire')
     ], true),

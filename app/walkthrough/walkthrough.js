@@ -54,7 +54,6 @@ const commands = [
   c('look', 'mesa'),
   c('look', 'armarios'),
   c('use', 'armario de la cocina'),
-  c('walk', 'recibidor'),
   c('walk', 'dormitorio'),
   c('look', 'cama'),
   c('use', 'cama'),
