@@ -121,7 +121,7 @@ exports.data = {
       ], 'cocina', false, 'Imposible coger ese vaso.'),
     anItem('armario-cocina', 'Armario', syns.items['armario-cocina'],
       'En el armario cuento hasta 5 juegos de cuchillos, cucharas y tenedores. '
-    , 'cocina', false),
+    , 'cocina', false, 'No tiene sentido llevarme ningún cubierto, gracias.' ),
     anItem('cama-dormitorio', 'Cama', syns.items['cama-dormitorio'],
       'Una cama con un estampado de rosas. Cuento hasta 6 rosas en las sábanas. La cama tiene un par de almohadas, con un estampado de una rosa en cada una. '
     , 'dormitorio', false, 'La cama se queda donde está.'),
