@@ -218,6 +218,7 @@ exports.data = {
     aCommandSyn(Commands.LOOK, 'libro-colores-recib', Commands.USE),
     aCommandSyn(Commands.LOOK, 'libro-espiritus-recib', Commands.USE),
     aCommandSyn(Commands.LOOK, 'caja-sotano', Commands.USE),
+    aCommandSyn(Commands.USE, 'armario-cocina', Commands.LOOK),
     aCommandSyn(Commands.WALK, 'arcon-recib', Commands.USE),
   ]
 };
