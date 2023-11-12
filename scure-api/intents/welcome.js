@@ -9,4 +9,4 @@ const welcome =  scure => (conv) => {
   return sendResponse(conv, scure, response);
 };
 
-module.exports = { welcome }
+module.exports = { welcome }
