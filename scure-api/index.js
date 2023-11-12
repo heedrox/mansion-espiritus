@@ -1,33 +1,24 @@
 const { cleanData } =require( './lib/common.js')
-const { getConv } =require('./lib/conv-repository.js')
+const { createConversation } =require('./lib/conv-repository.js')
 const { ScureCliIntentExecutor } = require('./lib/scure-cli-intent-executor.js')
 
 class ScureApi {
   constructor({ data, debug }) {
     this.executor = new ScureCliIntentExecutor(data)    
     this.debug = debug
-    this.conv = getConv()
-    cleanData(this.conv)
   }
 
-  start() {
-    const welcomeResponse = this.executor.executeIntent('_welcome', this.conv, { arg: null })
-    return {
-      sentence: welcomeResponse.sentence,
-      isEnd: false
-    }
-  }
-
-  async processUserInput({ intentName, arg }) {            
+  async processUserInput({ intentName, arg, conv }) {            
       try {
         if (this.debug) {
           console.log({ intentName, arg })
         }
         if (intentName) {
-          const response = this.executor.executeIntent(intentName, this.conv, { arg })
+          const response = this.executor.executeIntent(intentName, conv ? conv : cleanData(createConversation()), { arg })
           return {
             sentence: response.sentence,
-            isEnd: response.isEnd
+            isEnd: response.isEnd,
+            conv: response.conv
           }
         }
       } catch (error) {
