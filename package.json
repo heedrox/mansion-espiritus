@@ -46,8 +46,8 @@
   },
   "dependencies": {
     "actions-on-google": "^2.12.0",
-    "firebase-admin": "^8.6.1",
-    "firebase-functions": "^2.2.0",
+    "firebase-admin": "^11.11.0",
+    "firebase-functions": "^4.5.0",
     "https-proxy-agent": "^3.0.0",
     "pluralize": "^7.0.0",
     "scure": "1.6.0",

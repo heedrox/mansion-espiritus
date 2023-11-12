@@ -70,7 +70,7 @@ exports.data = {
   ],
   mapImage: {
     url: 'https://mansion-espiritus-lkgoxs.firebaseapp.com/the-mansion-map.jpg',
-    alt: 'Mapa con: recibidor, dsala de estar, cocina y dormitorio.',
+    alt: 'Mapa con: recibidor, sala de estar, cocina y dormitorio.',
   },
   map: {
     'recibidor': ['sala-estar', 'cocina', 'dormitorio'],
