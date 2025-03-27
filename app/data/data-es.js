@@ -1,4 +1,3 @@
-const { intentMapper } = require('../intents/intent-mapper');
 const { answerArconCode } = require('../plugins/answer-arcon-code');
 const { answerCajaFuerte } = require('../plugins/answer-caja-fuerte');
 const { pickAndUnlock } = require('../plugins/pick-and-unlock');
@@ -210,10 +209,6 @@ exports.data = {
     anAnswer('code-arcon-recib', '3416', pluginExtension(pickAndUnlock('escudo-recib', 'open-arcon', OPEN_ARCON_AUDIO)), pluginExtension(answerArconCode)),
     anAnswer('code-caja-sotano', '4853', pluginExtension(pickAndUnlock( 'llave-sotano', 'open-caja-sotano', OPEN_CAJAFUERTE_AUDIO)), pluginExtension(answerCajaFuerte)),
   ],
-  intentMapper,
-  directSentences: {
-    'sigue-leyendo': ['sigue leyendo', 'lee más', 'continúa', 'continua', 'continúa leyendo', 'continua leyendo', 'seguir leyendo', 'mirar más páginas', 'vuelve a leer', 'vuelve a leer el libro', 'pasa página', 'pasa la página', 'lee las siguientes páginas', 'mira las siguientes páginas', 'mira la siguiente página', 'lee la siguiente página', 'leer más páginas']
-  },
   commandSyns: [
     aCommandSyn(Commands.LOOK, 'libro-colores-recib', Commands.USE),
     aCommandSyn(Commands.LOOK, 'libro-espiritus-recib', Commands.USE),

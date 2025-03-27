@@ -1,4 +1,4 @@
-require('babel-register');
+require('@babel/register');
 
 const { buildScureFor } = require('scure').scure;
 const testData = require('./data/data-test').data;

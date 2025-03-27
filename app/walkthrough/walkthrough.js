@@ -1,6 +1,12 @@
-const c = require('scure-dialogflow').sdk.dsl.aCommand;
-const { runWalkthrough } = require('scure-dialogflow').sdk;
+require('./register');
+
 const { data } = require('../data/data-es');
+const { cleanData } = require('../../scure-api/lib/common.js');
+const { getConv } = require('../../scure-api/lib/conv-repository.js')
+const { ScureCliIntentExecutor } = require('../../scure-api/lib/scure-cli-intent-executor.js')
+
+const c = (intentName, arg, expectedEnd = false) =>
+({ intentName, arg, expectedEnd })
 
 const commands = [
   c('_welcome', ''),
@@ -12,18 +18,18 @@ const commands = [
   c('walk', 'recibidor'),
   c('look', 'mural'),
   c('look', 'estantería'),
-  c('use', '', 'sigue leyendo'),
-  c('look', 'libro del arte de los colores'),
-  c('use', '', 'sigue leyendo'),
-  c('use', '', 'sigue leyendo'),
-  c('use', '', 'sigue leyendo'),
+  c('use', 'libro del arte de los colores'),
+  c('use', 'libro del arte de los colores'),
+  c('use', 'libro del arte de los colores'),
+  c('use', 'libro del arte de los colores'),
+  c('use', 'libro del arte de los colores'),
   c('pickup', 'arcon'),
   c('use', 'candado'),
-  c('answer', '', '2489'),
-  c('answer', '', '6143'),
+  c('answer', ['2489']),
+  c('answer', ['6143']),
   c('look', 'mural'),
   c('use', 'candado'),
-  c('answer', '', '3416'),
+  c('answer', ['3416']),
   c('look', 'escudo'),
   c('walk', 'sala de estar'),
   c('look', 'chimenea bajo el cuadro'),
@@ -39,8 +45,8 @@ const commands = [
   c('look', 'libros'),
   c('look', 'libro de espíritus'),
   c('use', 'libro de espíritus'),
-  c('use', '', 'sigue leyendo'),
-  c('use', '', 'sigue leyendo'),
+  c('use', 'libro de espíritus'),
+  c('use', 'libro de espíritus'),
   c('look', 'hechizo para bendecir agua'),
   c('look', 'mesa'),
   c('walk', 'cocina'),
@@ -64,19 +70,33 @@ const commands = [
   c('look', 'artilugio'),
   c('walk', 'sotano'),
   c('look', 'caja'),
-  c('answer', '', '6143'),
-  c('answer', '', '3416'),
-  c('answer', '', '9999'),
-  c('answer', '', '3584'),
-  c('answer', '', '4853'),
+  c('answer', ['6143']),
+  c('answer', ['3416']),
+  c('answer', ['9999']),
+  c('answer', ['3584']),
+  c('answer', ['4853']),
   c('look', 'puerta'),
   c('use', 'puerta'),
-  c('use', ['puerta', 'llave']),
+  c('use', ['puerta', 'llave'], true),
 
 ];
 
 try {
-  runWalkthrough(data, commands);
+  const executor = new ScureCliIntentExecutor(data)
+  const conv = getConv()
+  cleanData(conv)
+  commands.forEach(({ intentName, arg, expectedEnd }) => {
+    console.log('data', conv.data);
+    console.log('command', { intentName, arg })
+    const response = executor.executeIntent(intentName, conv, { arg })
+    console.log('response', response)
+    if (expectedEnd && response.isEnd) {
+      console.log('*** FINAL SCENE, EVERYTHING CORRECT ***')
+    } else if (expectedEnd && !response.isEnd) {
+      console.log('*** WRONG. EXPECTED END, BUT WE DID NOT REACH IT ***')
+    }
+  })
+
 } catch (ex) {
   console.log('error', ex);
   throw ex;

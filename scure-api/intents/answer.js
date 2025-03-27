@@ -6,7 +6,7 @@ const { scureAnswer } = commands
 const answer = scure => (conv, args) => {
   const userAnswer = getArgument(args, 'arg');
 
-  const scureResponse = scureAnswer(userAnswer, conv.data, scure);
+  const scureResponse = scureAnswer(userAnswer ?? '', conv.data, scure);
 
   overwriteDataFrom(scureResponse, conv);
 

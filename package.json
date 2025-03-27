@@ -45,26 +45,30 @@
     }
   },
   "dependencies": {
-    "actions-on-google": "^2.12.0",
-    "firebase-admin": "^11.11.0",
-    "firebase-functions": "^4.5.0",
-    "https-proxy-agent": "^3.0.0",
-    "pluralize": "^7.0.0",
-    "scure": "1.6.0",
-    "scure-dialogflow": "1.6.0"
+    "firebase-admin": "^13.2.0",
+    "firebase-functions": "^6.3.2",
+    "https-proxy-agent": "^7.0.6",
+    "pluralize": "^8.0.0",
+    "scure": "^1.6.0"
   },
+  "volta": {
+    "node": "18.18.0",
+    "npm": "10.2.5"
+  },
+  "private": true,
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "chai": "^4.2.0",
-    "eslint": "^5.12.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "mocha": "^6.2.2",
-    "npm-watch": "^0.6.0",
-    "sinon": "^7.5.0",
-    "sinon-chai": "^3.3.0"
-  },
-  "private": true
+    "@babel/cli": "^7.27.0",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/register": "^7.25.9",
+    "@eslint/js": "^9.23.0",
+    "chai": "^4.3.10",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "globals": "^16.0.0",
+    "mocha": "^11.1.0",
+    "sinon": "^20.0.0",
+    "sinon-chai": "^3.7.0"
+  }
 }
