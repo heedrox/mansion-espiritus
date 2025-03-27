@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const {onRequest} = require('firebase-functions/v2/https');
 const { data } = require('./app/data/data');
 const { ScureApi } = require('./scure-api');
 
@@ -16,4 +16,5 @@ async function apiFunction (request, response) {
     })
 }
 
-exports.api = functions.https.onRequest(apiFunction)
+exports.apiv2 = onRequest(apiFunction)
+exports.apiAi = onRequest(apiFunction)
