@@ -35,7 +35,7 @@ describe('Answer caja fuerte responds when user fails', () => {
     expect(response).to.contains('¿No has oído nunca lo de que un código solo sirve una vez? Venga, dime qué hacemos ahora.');
   });
 
-  it('easter egg when same code as first one backwards', () => {
+  it('wrong code', () => {
     const data = {};
     const userAnswer = '999999';
 
