@@ -1,4 +1,3 @@
-const { cleanData } =require( './lib/common.js')
 const { createConversation } =require('./lib/conv-repository.js')
 const { ScureCliIntentExecutor } = require('./lib/scure-cli-intent-executor.js')
 
@@ -14,7 +13,7 @@ class ScureApi {
           console.log({ intentName, arg })
         }
         if (intentName) {
-          const response = this.executor.executeIntent(intentName, conv ? conv : cleanData(createConversation()), { arg })
+          const response = this.executor.executeIntent(intentName, conv ? conv : createConversation(), { arg })
           return {
             sentence: response.sentence,
             isEnd: response.isEnd,

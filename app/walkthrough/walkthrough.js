@@ -1,8 +1,7 @@
 require('./register');
 
 const { data } = require('../data/data-es');
-const { cleanData } = require('../../scure-api/lib/common.js');
-const { getConv } = require('../../scure-api/lib/conv-repository.js')
+const { createConversation } = require('../../scure-api/lib/conv-repository.js')
 const { ScureCliIntentExecutor } = require('../../scure-api/lib/scure-cli-intent-executor.js')
 
 const c = (intentName, arg, expectedEnd = false) =>
@@ -83,8 +82,7 @@ const commands = [
 
 try {
   const executor = new ScureCliIntentExecutor(data)
-  const conv = getConv()
-  cleanData(conv)
+  const conv = createConversation()
   commands.forEach(({ intentName, arg, expectedEnd }) => {
     console.log('data', conv.data);
     console.log('command', { intentName, arg })

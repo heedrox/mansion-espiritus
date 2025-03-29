@@ -38,14 +38,7 @@ const isTimeOver = (data, scure) => {
   return (currentTime.getTime() - startTime.getTime()) > (scure.data.init.totalMinutes * 60 * 1000);
 };
 
-const cleanData = (conv) => {
-  conv.data.numCommands = 0;
-  conv.data.roomId = null;
-  conv.data.startTime = null;
-  conv.data.inventory = [];
-  conv.data.picked = [];
-  return conv;
-};
+
 
 const baseChars = str => str.toLowerCase().replace(/[áäàÀÁÂÃÄÅ]/g, 'a')
   .replace(/[èéèÈÉÊË]/g, 'e')
@@ -105,7 +98,6 @@ module.exports = {
   isEmptyArg,
   overwriteDataFrom,
   isTimeOver,
-  cleanData,
   baseChars,
   sendResponse
 }

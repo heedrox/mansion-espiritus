@@ -1,10 +1,14 @@
 const createConversation = () => ({
-    data: {}    
+    data: {
+        numCommands: 0,
+        roomId: null,
+        starttTime: null,
+        inventory: [],
+        picked: []
+    }    
 })
 
-const getConv = () => global.conv ? global.conv : createConversation()
 
 module.exports = {
-    createConversation,
-    getConv
+    createConversation
 }
