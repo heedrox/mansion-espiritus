@@ -4,21 +4,6 @@ const { ScureApi } = require('./scure-api');
 const { GptTextParser } = require('./scure-api/parser/gpt-text-parser')
 
 const gptParser = new GptTextParser(process.env.openAiKey)
-async function apiFunction (request, response) {
-    const language = request.body.language
-    const localizedData = language ? data[language] : data['es']
-    const scureApi = new ScureApi({ data: localizedData, debug: true })
-    const result = await scureApi.processUserInput({ 
-        intentName: request.body.intentName,
-        arg: request.body.arg,
-        conv: request.body.conv
-    })
-    response.json({
-        sentence: result.sentence,
-        isEnd: result.isEnd,
-        conv: result.conv
-    })
-}
 
 async function aiFunction (request, response) {
     const { text, conv, language } = request.body
@@ -37,5 +22,4 @@ async function aiFunction (request, response) {
     })
 }
 
-exports.apiv2 = onRequest(apiFunction)
-exports.apiAi = onRequest(apiFunction)
+exports.apiAi = onRequest(aiFunction)
