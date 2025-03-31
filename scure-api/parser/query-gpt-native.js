@@ -31,7 +31,7 @@ const doesItLookLikeSystemInstructions = (message) => {
   return percentageMatch >= 0.5;
 };
 
-export const queryGpt = async (prompt, openAiKey) => {
+const queryGpt = async (prompt, openAiKey) => {
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "post",
     body: JSON.stringify({
@@ -66,3 +66,4 @@ export const queryGpt = async (prompt, openAiKey) => {
   return messageContent;
 };
 
+module.exports = { queryGpt }

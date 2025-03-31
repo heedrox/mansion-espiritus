@@ -1,5 +1,5 @@
-import { GptTextParser } from "../../../scure-api/parser/gpt-text-parser.js"
-import env from '../../env.js'
+const { GptTextParser } = require("../../../scure-api/parser/gpt-text-parser.js")
+const env = require('../../env.js')
 
 const OPEN_AI_KEY = env.OPEN_AI_KEY
 

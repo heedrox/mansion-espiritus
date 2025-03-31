@@ -1,5 +1,5 @@
-import { generateText } from 'ai';
-import { createOpenAI } from '@ai-sdk/openai';
+const { generateText } = require('ai');
+const { createOpenAI } = require('@ai-sdk/openai');
 
 const ROLE_SYSTEM_INSTRUCTIONS = `Eres un parseador de texto para aventuras gráficas. El usuario indica, delimitado por tags xml <COMANDO></COMANDO>, lo que quiere hacer en lenguaje natural, y tú lo conviertes en un JSON con el siguiente formato:
 \`\`\`
@@ -35,7 +35,7 @@ const doesItLookLikeSystemInstructions = (message) => {
 };
 
 
-export const queryGpt = async (prompt, openAiKey) => {
+const queryGpt = async (prompt, openAiKey) => {
   const openAiModel = createOpenAI({
     apiKey: openAiKey
   })
@@ -60,3 +60,5 @@ export const queryGpt = async (prompt, openAiKey) => {
 
   return messageContent;
 };
+
+module.exports = { queryGpt }

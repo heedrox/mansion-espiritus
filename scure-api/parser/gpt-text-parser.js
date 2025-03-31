@@ -1,4 +1,4 @@
-import { queryGpt } from "./query-gpt.js"
+const { queryGpt } = require('./query-gpt')
 
 const buildPrompt = (conversation, texto) => 
     (`La conversación anterior ha sido:
@@ -8,7 +8,7 @@ const buildPrompt = (conversation, texto) =>
     <COMANDO>${texto}</COMANDO>
     `)
     
-export class GptTextParser {
+class GptTextParser {
     constructor(openAiKey) {
         this.openAiKey = openAiKey
     }
@@ -30,3 +30,5 @@ export class GptTextParser {
         return text ? this.parseWithGpt(text, conversation.length >= 6 ? conversation.slice(-6,-1) : conversation ) : {}
     }
 }
+
+module.exports = { GptTextParser };
