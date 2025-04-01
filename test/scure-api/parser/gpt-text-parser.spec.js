@@ -5,19 +5,22 @@ const OPEN_AI_KEY = process.env.OPEN_AI_KEY
 
 describe('Gpt Text parser', () => {
 
-    it('parses an empty text', async () => {
+    it('parses an empty text', async function () {
+        this.timeout(20000)
         const parser = new GptTextParser(OPEN_AI_KEY)
         const response = await parser.parse('')
 
         expect(response).to.equal({})
     })
-    it('parses a text with gpt', async () => {
+    it('parses a text with gpt', async function () {
+        this.timeout(20000)
         const parser = new GptTextParser(OPEN_AI_KEY)
         const response = await parser.parse('mirar habitación')
 
         expect(response).to.equal({ intentName: 'look', arg: ['habitación'] })
     })
-    it('has context', async () => {
+    it('has context', async function () {
+        this.timeout(20000)
         const parser = new GptTextParser(OPEN_AI_KEY)
 
         const conversation = [
@@ -27,6 +30,6 @@ describe('Gpt Text parser', () => {
         ]
         const response = await parser.parse('vuelve a mirarlo', conversation)
 
-        expect(response).to.equal({ intentName: 'look', arg: ['mural'] })
+        expect(response).to.equal ({ intentName: 'look', arg: ['mural'] })
     })
 })

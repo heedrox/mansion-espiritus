@@ -1,5 +1,6 @@
 const { generateText, generateObject } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
+import { z } from 'zod';
 
 const ROLE_SYSTEM_INSTRUCTIONS = `Eres un parseador de texto para aventuras gráficas. El usuario indica, delimitado por tags xml <COMANDO></COMANDO>, lo que quiere hacer en lenguaje natural, y tú lo conviertes en un JSON con el siguiente formato:
 \`\`\`
