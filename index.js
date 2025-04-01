@@ -16,11 +16,23 @@ async function aiFunction (request, response) {
         arg,
         conv
     })
+    const newConv = addConversation(text, result.sentence, result.conv)
     response.json({
         sentence: result.sentence,
         isEnd: result.isEnd,
-        conv: result.conv
+        conv: newConv
     })
+}
+
+const addConversation = (text, sentence, conv) => {
+    return {
+        previousConversation: [
+            ...conv.previousConversation,
+            { user: 'USER', sentence: text },
+            { user: 'DRON', sentence: sentence }
+        ],
+        data: conv.data
+    }
 }
 
 exports.apiAi = onRequest(aiFunction)

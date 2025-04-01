@@ -5,7 +5,8 @@ const say = scure => (conv, args) => {
 
   return {
     sentence: text,
-    isEnd: false
+    isEnd: false,
+    conv
   }
 };
 

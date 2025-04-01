@@ -2,10 +2,20 @@ POST http://localhost:5001/mansion-espiritus-lkgoxs/us-central1/apiAi
 Content-type: application/json
 
 {
-    "text": "Vale, qué hacemos",
+    "text": "Pues venga, hazlo",
     "language": "es",
     "conv": {
-        "previousConversation": []        
+        "previousConversation": [
+{
+        "user": "USER",
+        "sentence": "Dime tú qué hacer"
+      },
+      {
+        "user": "DRON",
+        "sentence": "¡Oh, claro! Porque soy un dron con todas las respuestas. ¿Qué tal si miras a tu alrededor y decides qué hacer?"
+      }
+
+        ]        
     }
 }
 

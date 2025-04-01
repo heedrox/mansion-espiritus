@@ -26,7 +26,8 @@ class ScureApi {
       }      
       return {
         sentence: 'Eso no está dentro de mis ámbitos de programación. He crasheado. ¿Puedes reintentarlo?',
-        isEnd: false
+        isEnd: false,
+        conv
       }
   }
   
