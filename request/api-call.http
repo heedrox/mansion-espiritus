@@ -2,7 +2,7 @@ POST http://localhost:5001/mansion-espiritus-lkgoxs/us-central1/apiAi
 Content-type: application/json
 
 {
-    "text": "Hola, quien eres?",
+    "text": "Muy bien, qué tenemos que hacer",
     "language": "es",
     "conv": {
         "previousConversation": []        
