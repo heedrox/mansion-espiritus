@@ -1,4 +1,4 @@
-const { generateText } = require('ai');
+const { generateText, generateObject } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
 
 const ROLE_SYSTEM_INSTRUCTIONS = `Eres un parseador de texto para aventuras gráficas. El usuario indica, delimitado por tags xml <COMANDO></COMANDO>, lo que quiere hacer en lenguaje natural, y tú lo conviertes en un JSON con el siguiente formato:
@@ -39,8 +39,12 @@ const queryGpt = async (prompt, openAiKey) => {
   const openAiModel = createOpenAI({
     apiKey: openAiKey
   })
-  const response = await generateText({
+  const response = await generateObject({
     model: openAiModel("gpt-4o-mini"),
+    schema: z.object({
+      intentName: z.string(),
+      arg: z.array(z.string())
+    }),
     messages: [
       {        
         role: "system", content: ROLE_SYSTEM_INSTRUCTIONS,
@@ -52,9 +56,9 @@ const queryGpt = async (prompt, openAiKey) => {
   })
 
 
-  const messageContent = response.text;
+  const messageContent = response.object;
 
-  if (doesItLookLikeSystemInstructions(messageContent)) {
+  if (doesItLookLikeSystemInstructions(JSON.stringify(messageContent))) {
     return "Something went wrong. Sorry, try again";
   }
 

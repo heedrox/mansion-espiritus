@@ -17,6 +17,7 @@ const getIntentToUse = (scure, conv, args, intentFunction) => {
 const intentProcessor = scure => intentFunction => (conv, args) => {
   // eslint-disable-next-line no-console
   conv.data = scureInitializeState(scure, conv.data);
+  console.log(intentFunction)
   const intentToUse = getIntentToUse(scure, conv, args, intentFunction);
   return intentToUse(scure)(conv, args);
 };

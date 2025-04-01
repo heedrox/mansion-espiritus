@@ -22,5 +22,6 @@ module.exports = {
     welcome,
     bye,
     timeOver,
-    answer
+    answer,
+    say
 }

@@ -4,7 +4,7 @@ const { ScureApi } = require('./scure-api');
 const { GptTextParser } = require('./scure-api/parser/gpt-text-parser')
 require('dotenv').config()
 
-const gptParser = new GptTextParser(process.env.openAiKey)
+const gptParser = new GptTextParser(process.env.OPEN_AI_KEY)
 
 async function aiFunction (request, response) {
     const { text, conv, language } = request.body
@@ -22,7 +22,5 @@ async function aiFunction (request, response) {
         conv: result.conv
     })
 }
-
-console.log('env', process.env)
 
 exports.apiAi = onRequest(aiFunction)

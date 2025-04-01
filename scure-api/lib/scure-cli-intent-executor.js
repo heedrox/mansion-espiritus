@@ -28,6 +28,7 @@ class ScureCliIntentExecutor {
     }
 
     executeIntent(intentName, conv, arg) {
+        console.log('intentName', intentName)
         if (typeof this.executor[intentName] === undefined) {
             return this.executor["_fallback"](conv, arg)
         }

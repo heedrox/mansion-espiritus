@@ -1,7 +1,7 @@
 const { GptTextParser } = require("../../../scure-api/parser/gpt-text-parser.js")
-const env = require('../../env.js')
+require('dotenv').config()
 
-const OPEN_AI_KEY = env.OPEN_AI_KEY
+const OPEN_AI_KEY = process.env.OPEN_AI_KEY
 
 describe('Gpt Text parser', () => {
 
@@ -9,13 +9,13 @@ describe('Gpt Text parser', () => {
         const parser = new GptTextParser(OPEN_AI_KEY)
         const response = await parser.parse('')
 
-        expect(response).toStrictEqual({})
+        expect(response).to.equal({})
     })
     it('parses a text with gpt', async () => {
         const parser = new GptTextParser(OPEN_AI_KEY)
         const response = await parser.parse('mirar habitación')
 
-        expect(response).toStrictEqual({ intentName: 'look', arg: ['habitación'] })
+        expect(response).to.equal({ intentName: 'look', arg: ['habitación'] })
     })
     it('has context', async () => {
         const parser = new GptTextParser(OPEN_AI_KEY)
@@ -27,6 +27,6 @@ describe('Gpt Text parser', () => {
         ]
         const response = await parser.parse('vuelve a mirarlo', conversation)
 
-        expect(response).toStrictEqual({ intentName: 'look', arg: ['mural'] })
+        expect(response).to.equal({ intentName: 'look', arg: ['mural'] })
     })
 })
