@@ -2,6 +2,7 @@ const {onRequest} = require('firebase-functions/v2/https');
 const { data } = require('./app/data/data');
 const { ScureApi } = require('./scure-api');
 const { GptTextParser } = require('./scure-api/parser/gpt-text-parser')
+require('dotenv').config()
 
 const gptParser = new GptTextParser(process.env.openAiKey)
 
@@ -21,5 +22,7 @@ async function aiFunction (request, response) {
         conv: result.conv
     })
 }
+
+console.log('env', process.env)
 
 exports.apiAi = onRequest(aiFunction)
