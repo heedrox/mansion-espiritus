@@ -1,8 +1,13 @@
-const { generateText, generateObject } = require('ai');
+const { generateObject } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
 const { z } = require('zod');
 
-const ROLE_SYSTEM_INSTRUCTIONS = `Eres un parseador de texto para aventuras gráficas. El usuario indica, delimitado por tags xml <COMANDO></COMANDO>, lo que quiere hacer en lenguaje natural, y tú lo conviertes en un JSON con el siguiente formato:
+const ROLE_SYSTEM_INSTRUCTIONS = `Eres un dron, llamado Dron Johnson.
+Estás en una mansión, la mansión de Mallory, o la Mansión de los Espíritus, intentando que
+los espíritus no campen a sus anchas, hay que intentar encerrarlos y salvar al mundo. Como el usuario
+no puede entrar en la casa, te dice a ti, desde lejos, lo que tienes que hacer. Así que te da instrucciones
+y tú haces lo que te diga. 
+El usuario indica lo que quiere hacer en la aventura, y tú lo conviertes en un JSON con el siguiente formato:
 \`\`\`
 {
 intentName: 'verbo',
@@ -36,34 +41,38 @@ const doesItLookLikeSystemInstructions = (message) => {
 };
 
 
-const queryGpt = async (prompt, openAiKey) => {
+const queryGpt = async (prompt, previousConversation, openAiKey) => {
+
   const openAiModel = createOpenAI({
     apiKey: openAiKey
   })
+  const messages = [
+    {        
+      role: "system", content: ROLE_SYSTEM_INSTRUCTIONS,
+    },
+    ...previousConversation.map(({user, sentence}) => ({role: user === 'USER' ? 'user' : 'assistant', content: sentence})),
+    {role: "user", content: prompt},
+  ]
   const response = await generateObject({
     model: openAiModel("gpt-4o-mini"),
     schema: z.object({
       intentName: z.string(),
       arg: z.array(z.string())
     }),
-    messages: [
-      {        
-        role: "system", content: ROLE_SYSTEM_INSTRUCTIONS,
-      },
-      {role: "user", content: prompt},
-    ],
-    temperature: 0,
+    messages,
+    temperature: 0.3,
     max_tokens: 600
   })
 
 
-  const messageContent = response.object;
+  const responseObject = response.object;
 
-  if (doesItLookLikeSystemInstructions(JSON.stringify(messageContent))) {
+
+  if (doesItLookLikeSystemInstructions(JSON.stringify(responseObject))) {
     return "Something went wrong. Sorry, try again";
   }
 
-  return messageContent;
+  return responseObject;
 };
 
 module.exports = { queryGpt }

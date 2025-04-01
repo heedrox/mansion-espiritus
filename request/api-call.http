@@ -2,7 +2,19 @@ POST http://localhost:5001/mansion-espiritus-lkgoxs/us-central1/apiAi
 Content-type: application/json
 
 {
-    "text": "Muy bien, qué tenemos que hacer",
+    "text": "Vale, qué hacemos",
+    "language": "es",
+    "conv": {
+        "previousConversation": []        
+    }
+}
+
+#####
+POST https://apiai-sruiznnf5a-uc.a.run.app
+Content-type: application/json
+
+{
+    "text": "Holissss",
     "language": "es",
     "conv": {
         "previousConversation": []        
