@@ -10,14 +10,14 @@ describe('Gpt Text parser', () => {
         const parser = new GptTextParser(OPEN_AI_KEY)
         const response = await parser.parse('')
 
-        expect(response).to.equal({})
+        expect(response).to.deep.equal({})
     })
     it('parses a text with gpt', async function () {
         this.timeout(20000)
         const parser = new GptTextParser(OPEN_AI_KEY)
         const response = await parser.parse('mirar habitación')
 
-        expect(response).to.equal({ intentName: 'look', arg: ['habitación'] })
+        expect(response).to.deep.equal({ intentName: 'look', arg: ['habitación'] })
     })
     it('has context', async function () {
         this.timeout(20000)
@@ -30,6 +30,6 @@ describe('Gpt Text parser', () => {
         ]
         const response = await parser.parse('vuelve a mirarlo', conversation)
 
-        expect(response).to.equal ({ intentName: 'look', arg: ['mural'] })
+        expect(response).to.deep.equal ({ intentName: 'look', arg: ['mural'] })
     })
 })
