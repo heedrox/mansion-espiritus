@@ -7,6 +7,17 @@ require('dotenv').config()
 const gptParser = new GptTextParser(process.env.OPEN_AI_KEY)
 
 async function aiFunction (request, response) {
+    // Configurar headers CORS
+    response.set('Access-Control-Allow-Origin', '*');
+    response.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Manejar la solicitud OPTIONS (preflight)
+    if (request.method === 'OPTIONS') {
+        response.status(204).send('');
+        return;
+    }
+
     const { text, conv, language } = request.body
     const localizedData = language ? data[language] : data['es']
     const { intentName, arg } = await gptParser.parse(text, conv.previousConversation)

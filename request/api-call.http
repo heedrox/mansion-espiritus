@@ -20,7 +20,7 @@ Content-type: application/json
 }
 
 #####
-POST https://apiai-sruiznnf5a-uc.a.run.app
+POST {https://apiai-sruiznnf5a-uc.a.run.app}
 Content-type: application/json
 
 {

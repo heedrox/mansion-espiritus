@@ -1,5 +1,6 @@
 const { GptTextParser } = require("../../../scure-api/parser/gpt-text-parser.js")
 require('dotenv').config()
+const { expect } = require('chai')
 
 const OPEN_AI_KEY = process.env.OPEN_AI_KEY
 
@@ -17,7 +18,9 @@ describe('Gpt Text parser', () => {
         const parser = new GptTextParser(OPEN_AI_KEY)
         const response = await parser.parse('mirar habitación')
 
-        expect(response).to.deep.equal({ intentName: 'look', arg: ['habitación'] })
+        expect(response.intentName).to.equal('look')
+        expect(response.arg).to.deep.equal(['habitación'])
+        expect(response.summary).to.be.a('string')
     })
     it('has context', async function () {
         this.timeout(20000)
@@ -30,7 +33,9 @@ describe('Gpt Text parser', () => {
         ]
         const response = await parser.parse('vuelve a mirarlo', conversation)
 
-        expect(response).to.deep.equal ({ intentName: 'look', arg: ['mural'] })
+        expect(response.intentName).to.equal('look')
+        expect(response.arg).to.deep.equal(['mural'])
+        expect(response.summary).to.be.a('string')
     })
 
     it('starts the adventure', async function () {
@@ -38,6 +43,8 @@ describe('Gpt Text parser', () => {
         const parser = new GptTextParser(OPEN_AI_KEY)
         const response = await parser.parse('START_ADVENTURE', [])
 
-        expect(response).to.deep.equal ({ intentName: '_welcome', arg: [] })
+        expect(response.intentName).to.equal('_welcome')
+        expect(response.arg).to.deep.equal([])
+        expect(response.summary).to.be.a('string')
     })
 })
