@@ -20,7 +20,7 @@ async function aiFunction (request, response) {
 
     const { text, conv, language, summary } = request.body
     const localizedData = language ? data[language] : data['es']
-    const { intentName, arg } = await gptParser.parse(text, conv.previousConversation)
+    const { intentName, arg, summary: summaryResponse } = await gptParser.parse(text, conv.previousConversation, summary)
     const scureApi = new ScureApi({ data: localizedData, debug: true })
     const result = await scureApi.processUserInput({ 
         intentName,
@@ -31,7 +31,8 @@ async function aiFunction (request, response) {
     response.json({
         sentence: result.sentence,
         isEnd: result.isEnd,
-        conv: newConv
+        conv: newConv,
+        summary: summaryResponse
     })
 }
 

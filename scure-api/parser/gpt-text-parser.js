@@ -13,7 +13,8 @@ class GptTextParser {
             return {
                 intentName: "say",
                 arg: [ text ],
-                error
+                error,
+                summary
             }
         }
         
