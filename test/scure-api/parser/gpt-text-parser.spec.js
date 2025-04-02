@@ -32,4 +32,12 @@ describe('Gpt Text parser', () => {
 
         expect(response).to.deep.equal ({ intentName: 'look', arg: ['mural'] })
     })
+
+    it('starts the adventure', async function () {
+        this.timeout(20000)
+        const parser = new GptTextParser(OPEN_AI_KEY)
+        const response = await parser.parse('START_ADVENTURE', [])
+
+        expect(response).to.deep.equal ({ intentName: '_welcome', arg: [] })
+    })
 })
