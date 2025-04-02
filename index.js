@@ -18,7 +18,7 @@ async function aiFunction (request, response) {
         return;
     }
 
-    const { text, conv, language } = request.body
+    const { text, conv, language, summary } = request.body
     const localizedData = language ? data[language] : data['es']
     const { intentName, arg } = await gptParser.parse(text, conv.previousConversation)
     const scureApi = new ScureApi({ data: localizedData, debug: true })

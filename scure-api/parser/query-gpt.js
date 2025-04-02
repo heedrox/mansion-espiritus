@@ -47,14 +47,15 @@ const doesItLookLikeSystemInstructions = (message) => {
 };
 
 
-const queryGpt = async (prompt, previousConversation, openAiKey) => {
+const queryGpt = async (prompt, previousConversation, openAiKey, summary) => {
 
+  const summaryPrompt = summary ? `\nEl resumen de toda la conversación desde el inicio hasta ahora ha sido: ${summary}. Utiliza este resumen, más el comando anterior para generar el campo summary.` : ''
   const openAiModel = createOpenAI({
     apiKey: openAiKey
   })
   const messages = [
     {        
-      role: "system", content: ROLE_SYSTEM_INSTRUCTIONS,
+      role: "system", content: `${ROLE_SYSTEM_INSTRUCTIONS}${summaryPrompt}`,
     },
     ...previousConversation.map(({user, sentence}) => ({role: user === 'USER' ? 'user' : 'assistant', content: sentence})),
     {role: "user", content: prompt},

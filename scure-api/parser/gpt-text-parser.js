@@ -5,9 +5,9 @@ class GptTextParser {
         this.openAiKey = openAiKey
     }
 
-    async parseWithGpt(text, conversation) {        
+    async parseWithGpt(text, conversation, summary) {        
         try {
-            return await queryGpt(text, conversation, this.openAiKey)
+            return await queryGpt(text, conversation, this.openAiKey, summary)
         } catch(error) {
             console.log('error', error)
             return {
@@ -19,8 +19,8 @@ class GptTextParser {
         
     }
 
-    async parse(text, conversation = []) {
-        return text ? this.parseWithGpt(text, conversation.length >= 6 ? conversation.slice(-6,-1) : conversation ) : {}
+    async parse(text, conversation = [], summary = '') {
+        return text ? this.parseWithGpt(text, conversation.length >= 6 ? conversation.slice(-6,-1) : conversation, summary) : {}
     }
 }
 
