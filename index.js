@@ -19,7 +19,12 @@ async function aiFunction (request, response) {
     }
 
     const { text, conv, language, summary } = request.body
+    if (!text || !conv || !language) {
+        response.status(400).send(`Faltan datos en ${JSON.stringify(request.body)}`)
+        return
+    }
     const localizedData = language ? data[language] : data['es']
+    console.log('request', request.body)
     const { intentName, arg, summary: summaryResponse } = await gptParser.parse(text, conv.previousConversation, summary)
     const scureApi = new ScureApi({ data: localizedData, debug: true })
     const result = await scureApi.processUserInput({ 
@@ -32,7 +37,7 @@ async function aiFunction (request, response) {
         sentence: result.sentence,
         isEnd: result.isEnd,
         conv: newConv,
-        summary: summaryResponse
+        summary: summaryResponse ? summaryResponse : summary
     })
 }
 

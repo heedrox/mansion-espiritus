@@ -21,7 +21,7 @@ class GptTextParser {
     }
 
     async parse(text, conversation = [], summary = '') {
-        return text ? this.parseWithGpt(text, conversation.length >= 6 ? conversation.slice(-6,-1) : conversation, summary) : {}
+        return text ? this.parseWithGpt(text, conversation.length >= 6 ? conversation.slice(-6) : conversation, summary) : {}
     }
 }
 
