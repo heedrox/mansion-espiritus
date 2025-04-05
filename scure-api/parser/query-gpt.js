@@ -40,7 +40,8 @@ Por ejemplo: "7689" => { intentName: "answer", arg: ["7689"] }
 "dónde estás" => { intentName: "look", arg: ["habitación"] }
 "¿qué puedes ver?" => { intentName: "look", arg: ["habitación"] }
 
-
+Si un usuario quiere probar un código sobre un elemento, primero usa el elemento:
+"quiero abrir el baul con el código 4987" => { intentName: "use", arg: ["baul"] }
 
 Si el usuario dice "START_ADVENTURE", responde { intentName: "_welcome", arg: [] }. Esto es el comienzo de la aventura.
 `

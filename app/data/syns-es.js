@@ -30,7 +30,7 @@ const syns = {
     'mesa-cocina': ['mesa', 'mesa de la cocina', 'mesa con vaso de agua', 'mesa del vaso', 'mesa en la cocina', 'mesa de cocina'],
     'armario-cocina': ['armarios', 'armario de la cocina', 'armario en la cocina', 'armario', 'cuchillos', 'cucharas', 'tenedores', 'tenedor', 'cuchillo', 'cuchara', 'cuchillos cucharas y tenedores', 'cuchillos cucharas', 'juegos de cocina', 'juegos', 'cubiertos', 'cubierto', 'juego de cubiertos'],
     'cama-dormitorio': ['cama', 'almohada', 'catre'],
-    'yo-sotano': ['tu', 'yo', 'a mi', 'mi', 'a yo', 'humano', 'humano en el suelo', 'hombre', 'persona'],
+    'yo-sotano': ['tu', 'yo', 'a mi', 'mi', 'a yo', 'humano', 'humano en el suelo', 'hombre', 'mujer', 'persona'],
     'mueble-sotano': ['figuras', 'mueble', 'ciclope', 'humano del mueble', 'persona del mueble', 'hombre en el mueble', 'mesa'],
     'caja-sotano': ['caja fuerte', 'caja', 'cerradura', 'candado', 'combinación'],
   },
