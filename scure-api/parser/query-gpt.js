@@ -31,6 +31,7 @@ Algunos ejemplos de mappings correctos:
 "quiero abrir el baul con la llave" => { intentName: "user", arg: ["baul","llave"] }
 "ahora me voy al recibidor" => { intentName: "walk", arg: ["recibidor"] }
 "cojamos el vaso" => { intentName: "pickup", arg: ["vaso"]}
+"sigue leyendo" => { intentName: "look", arg: ["libro"] }
 "¿qué objetos llevas encima?" => { intentName: "inventory" }
 Cuando un usuario quiere probar un código de unas cifras o responde directamente con un código, se debe usar el verbo "answer".
 Por ejemplo: "7689" => { intentName: "answer", arg: ["7689"] }
