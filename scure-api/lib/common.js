@@ -33,9 +33,10 @@ const overwriteDataFrom = (scureResponse, conv) => {
 };
 
 const isTimeOver = (data, scure) => {
-  const startTime = new Date(JSON.parse(data.startTime || JSON.stringify(new Date())));
+  return false;
+  /*const startTime = new Date(JSON.parse(data.startTime || JSON.stringify(new Date())));
   const currentTime = new Date();
-  return (currentTime.getTime() - startTime.getTime()) > (scure.data.init.totalMinutes * 60 * 1000);
+  return (currentTime.getTime() - startTime.getTime()) > (scure.data.init.totalMinutes * 60 * 1000);*/
 };
 
 

@@ -22,13 +22,13 @@ class ScureApi {
         }
       } catch (error) {
         console.error('Hubo un error procesando la petición. ', error)
-        
+        return {
+          sentence: 'Eso no está dentro de mis ámbitos de programación. He crasheado. ¿Puedes reintentarlo? ' + JSON.stringify(error),
+          isEnd: false,
+          conv
+        }
       }      
-      return {
-        sentence: 'Eso no está dentro de mis ámbitos de programación. He crasheado. ¿Puedes reintentarlo?',
-        isEnd: false,
-        conv
-      }
+      
   }
   
 }
