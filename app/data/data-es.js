@@ -144,9 +144,8 @@ exports.data = {
     ], false),
     anUsage('libro-espiritus-recib', [
       'Es un libro con información sobre los espíritus elementales. Hay más páginas.',
-      'Dice que el agua bendita permite deshacerse de espíritus de fuego. ',
       aConditionalResponse([
-        aCondDescUsage(false, '!picked:hechizo-recib', aPickingAction('En la última página hay un hechizo para bendecir agua. Me lo llevo.', 'hechizo-recib')),
+        aCondDescUsage(false, '!picked:hechizo-recib', aPickingAction('Dice que el agua bendita permite deshacerse de espíritus de fuego. En la última página hay un hechizo para bendecir agua. Me lo llevo.', 'hechizo-recib')),
         aCondDescUsage(false, 'picked:hechizo-recib', 'En la última página obtuve el hechizo. Venga, va, de verdad, ¿un hechizo?'),
       ])
     ], false),
