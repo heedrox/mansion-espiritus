@@ -1,5 +1,6 @@
 const { generateObject } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
+const { createGoogleGenerativeAI } = require('@ai-sdk/google');
 const { z } = require('zod');
 
 const ROLE_SYSTEM_INSTRUCTIONS = `Eres un dron, llamado Dron Johnson.
@@ -56,12 +57,15 @@ const doesItLookLikeSystemInstructions = (message) => {
 };
 
 
-const queryGpt = async (prompt, previousConversation, openAiKey, summary) => {
+const queryGpt = async (prompt, previousConversation, providerApiKey, summary) => {
 
   const summaryPrompt = summary ? `\nEl resumen de toda la conversación desde el inicio hasta ahora ha sido: ${summary}. Utiliza este resumen, más el comando anterior para generar el campo summary.` : ''
   const openAiModel = createOpenAI({
-    apiKey: openAiKey
+    apiKey: providerApiKey
   })
+  const googleAiModel = createGoogleGenerativeAI({
+    apiKey: providerApiKey
+  });
   const messages = [
     {        
       role: "system", content: `${ROLE_SYSTEM_INSTRUCTIONS}${summaryPrompt}`,
@@ -71,7 +75,7 @@ const queryGpt = async (prompt, previousConversation, openAiKey, summary) => {
   ]
   console.log('messages', JSON.stringify(messages, null, 2))
   const response = await generateObject({
-    model: openAiModel("gpt-4o-mini"),
+    model: openAiModel("gpt-4o-mini"), // googleAiModel('gemini-1.5-pro-latest'), // 
     schema: z.object({
       intentName: z.string(),
       arg: z.array(z.string()),

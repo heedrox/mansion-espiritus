@@ -1,13 +1,13 @@
 const { queryGpt } = require('./query-gpt')
 
 class GptTextParser {
-    constructor(openAiKey) {
-        this.openAiKey = openAiKey
+    constructor(providerApiKey) {
+        this.providerApiKey = providerApiKey        
     }
 
     async parseWithGpt(text, conversation, summary) {        
         try {
-            return await queryGpt(text, conversation, this.openAiKey, summary)
+            return await queryGpt(text, conversation, this.providerApiKey, summary)
         } catch(error) {
             console.log('error', error)
             return {

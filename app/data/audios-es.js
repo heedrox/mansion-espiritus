@@ -1,18 +1,7 @@
-exports.HELLO = '<speak>' +
-  '<par>' +
-  '  <media end="thetext.end">' +
-  '    <audio src="https://actions.google.com/sounds/v1/animals/crows_caw_in_field.ogg" soundLevel="+20dB"></audio>' +
-  '  </media>' +
-  '  <media xml:id="thetext" begin="1s"> ' +
-  '    ¡Hola! Soy Dron Johnson. Encantado de conocerte. ' +
-  '    Estoy en las afueras de una mansión, donde los espíritus campan a sus anchas, ya que se ha abierto una puerta que lleva al inframundo.' +
-  '    Voy a entrar yo solo, ya que es demasiado peligrosa para humanos. ' +
-  '    Tú dame instrucciones y yo las ejecutaré. Voy a entrar. ' +
-  '  </media>' +
-  '</par>' +
+exports.HELLO = '<speak>' +  
   '<audio src="https://actions.google.com/sounds/v1/doors/opening_closing_heavy_door.ogg"  clipBegin="1s" clipEnd="6s"></audio>' +
   'De acuerdo, ya estoy en el recibidor. Aquí veo una estantería, un mural en la pared, un baúl y una mesa. ' +
-  '<emphasis level="strong">Tenemos 20 minutos. ¡Rápido! Dime qué hacemos.</emphasis>' +
+  '<emphasis level="strong">¡Rápido! Dime qué hacemos.</emphasis>' +
   '</speak>';
 
 exports.DESCRIPCION_INFIERNO = '<speak>' +
@@ -138,7 +127,7 @@ exports.CLOSE_HELL_AUDIO = ' <speak>' +
   '     </media>  ' +
   '     <media begin="1500ms">' +
   '       <prosody rate="fast">' +
-  '       Vaya, veo que has tenido un buen accidente. No, no te muevas. En el estado en el que estás, creo que solo te quedan 10 minutos antes de perder el conocimiento y morir. Tú no puedes moverte, pero yo sí. Puedo volver a subir al dormitorio, mirar en sótano, ¡Lo que digas! ¡Rápido! Dime qué hacemos y salgamos de aquí, para que pueda buscar ayuda.  ' +
+  '       Vaya, veo que has tenido un buen accidente. No, no te muevas. Dime qué hacer. Puedo volver a subir al dormitorio, mirar en sótano, ¡Lo que digas! ¡Rápido! Salgamos de aquí, para que pueda buscar ayuda. ' +
   '       </prosody>' +
   '     </media>  ' +
   '   </par>' +
@@ -154,6 +143,4 @@ exports.THE_END = '<speak><audio src="https://actions.google.com/sounds/v1/doors
   'La puerta se ha abierto. La ambulancia ya está fuera. ¡Estás salvado! ' +
   '¡Y también hemos salvado a la humanidad! ' +
   'Encantado de haber trabajado en un nuevo caso contigo. ' +
-  'Recuerda que este juego está basado en el universo del juego de cartas de ' +
-  ' Mallory Mansion.' +
-  'Búscalo en la web y cómpralo, no lo dudes. ¡Hasta pronto!</speak>';
+  '¡Hasta pronto!</speak>';
