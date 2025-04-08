@@ -91,6 +91,7 @@ exports.data = {
       aCondDesc('!unlocked:open-arcon', 'Un arcón cerrado, con un candado de 4 cifras.'),
       aCondDesc('unlocked:open-arcon', 'Un arcón que ya hemos abierto, pasemos a otra cosa.'),
     ], 'recibidor', false, 'Demasiado grande para llevármelo.'),
+    anItem('3416','3416', syns.items['3416'], 'Un código de 4 cifras.', 'recibidor', false, 'No tiene sentido que me lo lleve. Puedo leerlo aquí.'),
     anItem('escudo-recib', 'Escudo', syns.items['escudo-recib'], [
       aCondDesc('!unlocked:open-arcon', '¿De qué escudo me hablas?'),
       aCondDesc('unlocked:open-arcon', 'Es el escudo que nos llevamos del arcón. Tiene un símbolo de un lobo en el centro.'),
@@ -127,6 +128,7 @@ exports.data = {
     anItem('yo-sotano', 'Yo moribundo', syns.items['yo-sotano'], 'Eres tú, estás moribundo. No te muevas. Dime qué hacer y salgamos de aquí antes de que pierdas el conocimiento', 'sotano', false, 'En tu estado, mejor no moverte hasta encontrar una salida'),
     anItem('mueble-sotano', 'Mueble', syns.items['mueble-sotano'], 'El mueble tiene dos figuras encima: un humano y un cíclope.', 'sotano', false, 'El mueble es muy pesado y no sé qué hacer con esas figuras de un humano y un cíclope de un solo ojo'),
     anItem('caja-sotano', 'caja fuerte', syns.items['caja-sotano'], 'Una caja fuerte en el suelo. Para abrirla se necesita otro código de 4 cifras.', 'sotano', false, 'Pesa demasiado'),
+    anItem('4853','4853', syns.items['4853'], 'Un código de 4 cifras.', 'sotano', false, 'No tiene sentido que me lo lleve. Puedo leerlo aquí.'),
     anItem('llave-sotano', 'llave', syns.items['llave-sotano'], 'La llave que estaba en la caja fuerte.', 'sotano', false, '¿De qué llave me hablas?'),
     anItem('puerta-sotano', 'puerta', syns.items['puerta-sotano'], 'Parece la puerta al exterior, pero está cerrada. ¡Debemos encontrar la llave!', 'sotano', false, 'La puerta está cerrada.'),
   ],
@@ -153,6 +155,12 @@ exports.data = {
     anUsage('arcon-recib', [
       aConditionalResponse([
         aCondDescUsage(false, '!unlocked:open-arcon', anExpectAnswerAction('Para abrirlo, necesitamos un código de 4 cifras. Dime un número. ¿Cuál pongo?', 'code-arcon-recib')),
+        aCondDescUsage(false, 'unlocked:open-arcon', 'El arcón ya está abierto y gracias a él, nos llevamos un escudo. Pasemos a otra cosa.'),
+      ])
+    ], false),
+    anUsage(['arcon-recib','3416'],[
+      aConditionalResponse([
+        aCondDescUsage(false, '!unlocked:open-arcon', pluginExtension(pickAndUnlock('escudo-recib', 'open-arcon', OPEN_ARCON_AUDIO))),
         aCondDescUsage(false, 'unlocked:open-arcon', 'El arcón ya está abierto y gracias a él, nos llevamos un escudo. Pasemos a otra cosa.'),
       ])
     ], false),
@@ -197,6 +205,12 @@ exports.data = {
         aCondDesc('unlocked:open-caja-sotano', 'Ya abrimos esa caja y nos llevamos una llave.'),
       ]),
     ], false),
+    anUsage(['caja-sotano', '4853'], [
+      aConditionalResponse([
+        aCondDescUsage(false, '!unlocked:open-caja-sotano', pluginExtension(pickAndUnlock('llave-sotano', 'open-caja-sotano', OPEN_CAJAFUERTE_AUDIO))),
+        aCondDescUsage(false, 'unlocked:open-caja-sotano', 'Ya abrimos esa caja y nos llevamos una llave.'),
+      ])
+    ], true),
     anUsage(['llave-sotano', 'puerta-sotano'], [
       aConditionalResponse([
         aCondDescUsage(true, '!unlocked:open-caja-sotano', '¿De qué llave me hablas?'),

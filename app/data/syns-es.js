@@ -19,6 +19,7 @@ const syns = {
     'libro-espiritus-recib': ['libro sobre espíritus', 'lectura de espíritus', 'libro sobre los espíritus','libro con espíritus', 'el de los espíritus', 'libro de espectros', 'libros de expectros', 'páginas', 'más páginas', 'siguientes páginas'],
     'libro-colores-recib': ['libro sobre colores', 'libro del arte de colores',  'libro de arte de colores', 'libro sobre los colores', 'el arte de los colores', 'páginas', 'más páginas', 'siguientes páginas'],
     'arcon-recib': ['arcón', 'arcón del recibidor', 'arcón en el recibidor', 'baúl', 'baúl en el recibidor', 'caja', 'candado', 'cerradura'],
+    '3416': ['3416', 'código 3416', 'combinación 3416', 'código 3416 del recibidor', 'código 3416 en el recibidor', 'código 3416 en el arcón', 'código 3416 en el baúl', 'código 3416 en la caja', 'código 3416 en la cerradura', 'código 3416 en el candado'],
     'escudo-recib': ['escudo del recibidor', 'escudo dentro del arcón', 'escudo del arcón', 'escudo del baúl', 'escudo de dentro del baúl', 'escudo de dentro del arcón'],
     'mesa-recib': ['mesa', 'mesa del recibidor', 'mesa con velas'],
     'hechizo-recib': ['hechizo', 'hechizo para bendecir agua', 'hechizo para agua bendita', 'hechizo para el agua', 'hechizo para bendecir agua', 'hechizo de agua bendita'],
@@ -33,6 +34,7 @@ const syns = {
     'yo-sotano': ['tu', 'yo', 'a mi', 'mi', 'a yo', 'humano', 'humano en el suelo', 'hombre', 'mujer', 'persona'],
     'mueble-sotano': ['figuras', 'mueble', 'ciclope', 'humano del mueble', 'persona del mueble', 'hombre en el mueble', 'mesa'],
     'caja-sotano': ['caja fuerte', 'caja', 'cerradura', 'candado', 'combinación'],
+    '4853': ['4853', 'código 4853', 'combinación 4853', 'código 4853 del sótano', 'código 4853 en el sótano', 'código 4853 en la caja', 'código 4853 en la cerradura', 'código 4853 en la caja fuerte'],
   },
 };
 
