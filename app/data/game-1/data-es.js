@@ -1,10 +1,11 @@
-const { answerArconCode } = require('../plugins/answer-arcon-code');
-const { answerCajaFuerte } = require('../plugins/answer-caja-fuerte');
-const { pickAndUnlock } = require('../plugins/pick-and-unlock');
-const { closeHell } = require('../plugins/close-hell');
+const { answerArconCode } = require('../../plugins/answer-arcon-code');
+const { answerCajaFuerte } = require('../../plugins/answer-caja-fuerte');
+const { pickAndUnlock } = require('../../plugins/pick-and-unlock');
+const { closeHell } = require('../../plugins/close-hell');
 const { theEndingScene, anUnlockingAction, aPickingAction, anAnswer, aCommandSyn, Commands, aRoom, anItem, aLockedDestination, aCondDescUsage, aCondDesc, anUsage, aConditionalResponse, pluginExtension, anExpectAnswerAction } = require('scure').dsl;
 const { syns } = require('./syns-es');
 const { DOOR_AUDIOS, DESCRIPCION_INFIERNO, HELLO, DESCRIPCION_MURAL, OPEN_ARCON_AUDIO, WOLF_AUDIO, WOLF_SHIELD_AUDIO, FIRE_AUDIO, FIRE_KILL_AUDIO, CLOSE_HELL_AUDIO, OPEN_CAJAFUERTE_AUDIO, THE_END } = require('./audios-es');
+
 
 exports.data = {
   sentences: {

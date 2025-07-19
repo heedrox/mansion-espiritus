@@ -1,7 +1,8 @@
 const {onRequest} = require('firebase-functions/v2/https');
-const { data } = require('./app/data/data');
+const { data } = require('./app/data/game-1/data');
 const { ScureApi } = require('./scure-api');
 const { GptTextParser } = require('./scure-api/parser/gpt-text-parser')
+const { multiscapes } = require('./multiscapes')
 require('dotenv').config()
 
 const gptParser = new GptTextParser(process.env.OPEN_AI_KEY)
@@ -18,7 +19,9 @@ async function aiFunction (request, response) {
         return;
     }
 
-    const { text, conv, language, summary } = request.body
+    const { text, conv, language, summary, gameId } = request.body
+    const gameIdRequired = gameId ? gameId : '1'
+    const { data } = require(`./app/data/game-${gameIdRequired}/data`)
     if (!text || !conv || !language) {
         response.status(400).send(`Faltan datos en ${JSON.stringify(request.body)}`)
         return
@@ -53,3 +56,4 @@ const addConversation = (text, sentence, conv) => {
 }
 
 exports.apiAi = onRequest(aiFunction)
+exports.multiscapes = onRequest(multiscapes)

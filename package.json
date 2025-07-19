@@ -11,6 +11,7 @@
     "test": "mocha --require ./test/common.js --require source-map-support/register 'test/**/*.spec.js' test/**/*.spec.js",
     "tdd": "npm-watch test",
     "walkthrough": "node app/walkthrough/walkthrough.js",
+    "walkthrough2": "node app/walkthrough/walkthrough-2.js",
     "walkthrough:watch": "npm-watch walkthrough"
   },
   "watch": {

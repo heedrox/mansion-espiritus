@@ -77,19 +77,11 @@ const sendResponse = (conv, scure, scureResponse) => {
       isEnd: true,
       conv
     }
-  } else if (shouldNotIncludeQuestion(finalSentence)) {
-    return {
-      sentence: finalSentence,
-      isEnd: false,
-      conv
-    }
-  } else {
-    const finalQuestion = scure.sentences.get('final-question');
-    return {
-      sentence: `${finalSentence} ${finalQuestion}`,
-      isEnd: false,
-      conv
-    }
+  }
+  return {
+    sentence: finalSentence,
+    isEnd: false,
+    conv
   }
 };
 
