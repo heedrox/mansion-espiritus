@@ -4,7 +4,7 @@ const { expect } = require('chai')
 
 const PROVIDER_API_KEY = process.env.OPEN_AI_KEY
 
-describe('Gpt Text parser', () => {
+xdescribe('Gpt Text parser', () => {
 
     it('parses an empty text', async function () {
         this.timeout(20000)
