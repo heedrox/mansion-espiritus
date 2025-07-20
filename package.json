@@ -51,14 +51,14 @@
     "ai": "^4.3.19",
     "dotenv": "^16.4.7",
     "firebase-admin": "^13.2.0",
-    "firebase-functions": "^6.3.2",
+    "firebase-functions": "^6.4.0",
     "https-proxy-agent": "^7.0.6",
     "pluralize": "^8.0.0",
     "scure": "^1.7.0",
     "zod": "^3.24.2"
   },
   "volta": {
-    "node": "18.18.0",
+    "node": "20.18.0",
     "npm": "10.2.5"
   },
   "private": true,
