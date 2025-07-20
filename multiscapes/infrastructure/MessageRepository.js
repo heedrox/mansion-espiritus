@@ -1,11 +1,8 @@
-const admin = require('firebase-admin');
+const DatabaseConfig = require('./DatabaseConfig');
 
 class MessageRepository {
     constructor() {
-        if (!admin.apps.length) {
-            admin.initializeApp();
-        }
-        this.db = admin.firestore();
+        this.db = DatabaseConfig.getDb();
     }
 
     static async getMessagesByTimestamp(code, drone) {
@@ -22,9 +19,9 @@ class MessageRepository {
 
     async _getMessagesByTimestamp(code, drone) {
         try {
-            // Construir la ruta de la subcolección messages
-            const collectionName = `twin-islands-${code}`;
-            const messagesPath = `${collectionName}/${drone}/messages`;
+            // Construir la ruta de la subcolección messages usando DatabaseConfig
+            const docPath = DatabaseConfig.getDocumentPath(code, drone);
+            const messagesPath = `${docPath}/messages`;
             console.log('Obteniendo mensajes de:', messagesPath);
             
             // Obtener todos los mensajes ordenados por timestamp

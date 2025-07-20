@@ -1,11 +1,8 @@
-const admin = require('firebase-admin');
+const DatabaseConfig = require('./DatabaseConfig');
 
 class DroneDataService {
     constructor() {
-        if (!admin.apps.length) {
-            admin.initializeApp();
-        }
-        this.db = admin.firestore();
+        this.db = DatabaseConfig.getDb();
     }
 
     static async validateDrone(code, drone) {
@@ -34,9 +31,8 @@ class DroneDataService {
 
     async _getDroneData(code, drone) {
         try {
-            // Construir la ruta del documento: twin-islands-{code}/drone
-            const collectionName = `twin-islands-${code}`;
-            const docPath = `${collectionName}/${drone}`;
+            // Construir la ruta del documento usando DatabaseConfig
+            const docPath = DatabaseConfig.getDocumentPath(code, drone);
             console.log('Buscando documento en:', docPath);
             
             // Recuperar el documento de Firestore
@@ -58,9 +54,8 @@ class DroneDataService {
 
     async _validateDrone(code, drone) {
         try {
-            // Construir la ruta del documento: twin-islands-{code}/drone
-            const collectionName = `twin-islands-${code}`;
-            const docPath = `${collectionName}/${drone}`;
+            // Construir la ruta del documento usando DatabaseConfig
+            const docPath = DatabaseConfig.getDocumentPath(code, drone);
             console.log('Validando drone en:', docPath);
             
             // Verificar que el documento existe

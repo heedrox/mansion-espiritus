@@ -1,11 +1,8 @@
-const admin = require('firebase-admin');
+const DatabaseConfig = require('./DatabaseConfig');
 
 class MessageStorer {
     constructor() {
-        if (!admin.apps.length) {
-            admin.initializeApp();
-        }
-        this.db = admin.firestore();
+        this.db = DatabaseConfig.getDb();
     }
 
     static async store(message, code, drone) {
@@ -25,9 +22,8 @@ class MessageStorer {
 
     async _storeMessage(message, code, drone) {
         try {
-            // Construir la ruta del documento: twin-islands-{code}/drone
-            const collectionName = `twin-islands-${code}`;
-            const docPath = `${collectionName}/${drone}`;
+            // Construir la ruta del documento usando DatabaseConfig
+            const docPath = DatabaseConfig.getDocumentPath(code, drone);
             
             // Obtener referencia al documento del drone
             const docRef = this.db.doc(docPath);

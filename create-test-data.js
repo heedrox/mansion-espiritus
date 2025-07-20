@@ -1,26 +1,20 @@
-const admin = require('firebase-admin');
+const DatabaseConfig = require('./multiscapes/infrastructure/DatabaseConfig');
 
 // Configurar para usar emulador local
 process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 
-// Inicializar Firebase Admin para emulador local
-if (!admin.apps.length) {
-    admin.initializeApp({
-        projectId: 'mansion-espiritus-lkgoxs'
-    });
-}
-
-const db = admin.firestore();
+// Obtener la instancia de Firestore usando la configuración centralizada
+const db = DatabaseConfig.getDb();
 
 async function createTestData() {
     try {
         console.log('🚀 Iniciando creación de datos de prueba...');
 
         // Crear la colección twin-islands-codex con documentos de drones
-        const collectionName = 'twin-islands-codex';
+        const collectionName = DatabaseConfig.getCollectionName('codex');
         
         // Crear documento 'common'
-        const commonRef = db.doc(`${collectionName}/common`);
+        const commonRef = db.doc(DatabaseConfig.getDocumentPath('codex', 'common'));
         await commonRef.set({
             start: "3",
             created: new Date().toISOString()
@@ -28,7 +22,7 @@ async function createTestData() {
         console.log('✅ Documento "common" creado');
 
         // Crear documento 'jackson'
-        const jacksonRef = db.doc(`${collectionName}/jackson`);
+        const jacksonRef = db.doc(DatabaseConfig.getDocumentPath('codex', 'jackson'));
         await jacksonRef.set({
             start: "1",
             created: new Date().toISOString()
@@ -36,7 +30,7 @@ async function createTestData() {
         console.log('✅ Documento "jackson" creado');
 
         // Crear documento 'johnson'
-        const johnsonRef = db.doc(`${collectionName}/johnson`);
+        const johnsonRef = db.doc(DatabaseConfig.getDocumentPath('codex', 'johnson'));
         await johnsonRef.set({
             start: "2",
             created: new Date().toISOString()

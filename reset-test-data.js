@@ -1,27 +1,20 @@
-const admin = require('firebase-admin');
+const DatabaseConfig = require('./multiscapes/infrastructure/DatabaseConfig');
 
 // Configurar para usar emulador local
 process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 
-// Inicializar Firebase Admin para emulador local
-if (!admin.apps.length) {
-    admin.initializeApp({
-        projectId: 'mansion-espiritus-lkgoxs'
-    });
-}
-
-const db = admin.firestore();
+// Obtener la instancia de Firestore usando la configuración centralizada
+const db = DatabaseConfig.getDb();
 
 async function resetTestData() {
     try {
         console.log('🧹 Iniciando reset de datos de prueba...');
 
-        // Lista de colecciones a limpiar
-        const collectionsToReset = [
-            'twin-islands-codex',
-            'twin-islands-test',
-            'twin-islands-demo'
-        ];
+        // Lista de códigos de colecciones a limpiar
+        const codesToReset = ['codex', 'test', 'demo'];
+        
+        // Generar nombres de colecciones usando DatabaseConfig
+        const collectionsToReset = codesToReset.map(code => DatabaseConfig.getCollectionName(code));
 
         for (const collectionName of collectionsToReset) {
             console.log(`\n📁 Limpiando colección: ${collectionName}`);
