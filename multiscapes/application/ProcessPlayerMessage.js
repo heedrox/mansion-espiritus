@@ -25,7 +25,7 @@ class ProcessPlayerMessage {
         const messages = await MessageRepository.getMessagesByTimestamp(code, drone);
         
         // Generar respuesta usando DroneResponseGenerator
-        const response = DroneResponseGenerator.generateResponse(messages);
+        const response = await DroneResponseGenerator.generateResponse(messages, drone);
         
         // Guardar la respuesta del drone en la base de datos (unos milisegundos después)
         if (response) {

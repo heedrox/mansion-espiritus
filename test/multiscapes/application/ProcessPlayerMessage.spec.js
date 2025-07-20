@@ -25,7 +25,7 @@ describe('ProcessPlayerMessage', () => {
         };
         
         DroneResponseGeneratorStub = {
-            generateResponse: sinon.stub()
+            generateResponse: sinon.stub().resolves()
         };
 
         // Stub all modules
@@ -55,7 +55,7 @@ describe('ProcessPlayerMessage', () => {
             MessageStorerStub.store.resolves('msg-id-1');
             DroneDataServiceStub.validateDrone.resolves();
             MessageRepositoryStub.getMessagesByTimestamp.resolves(mockMessages);
-            DroneResponseGeneratorStub.generateResponse.returns('me has mandado mensajes: 1');
+            DroneResponseGeneratorStub.generateResponse.resolves('me has mandado mensajes: 1');
 
             const params = {
                 code: 'codex',
@@ -90,7 +90,8 @@ describe('ProcessPlayerMessage', () => {
 
             // Verify DroneResponseGenerator.generateResponse was called
             expect(DroneResponseGeneratorStub.generateResponse.calledOnce).to.be.true;
-            expect(DroneResponseGeneratorStub.generateResponse.calledWith(mockMessages)).to.be.true;
+            expect(DroneResponseGeneratorStub.generateResponse.calledWith(mockMessages, 'common')).to.be.true;
+            expect(DroneResponseGeneratorStub.generateResponse.calledWith(mockMessages, 'common')).to.be.true;
 
             // Verify drone message was created and stored
             expect(MessageStub.create.calledOnce).to.be.true;
@@ -111,7 +112,7 @@ describe('ProcessPlayerMessage', () => {
 
             DroneDataServiceStub.validateDrone.resolves();
             MessageRepositoryStub.getMessagesByTimestamp.resolves(mockMessages);
-            DroneResponseGeneratorStub.generateResponse.returns('me has mandado mensajes: 1');
+            DroneResponseGeneratorStub.generateResponse.resolves('me has mandado mensajes: 1');
 
             const params = {
                 code: 'codex',
@@ -143,7 +144,7 @@ describe('ProcessPlayerMessage', () => {
 
             DroneDataServiceStub.validateDrone.resolves();
             MessageRepositoryStub.getMessagesByTimestamp.resolves(mockMessages);
-            DroneResponseGeneratorStub.generateResponse.returns('me has mandado mensajes: 0');
+            DroneResponseGeneratorStub.generateResponse.resolves('me has mandado mensajes: 0');
 
             const params = {
                 code: 'codex',
@@ -156,7 +157,7 @@ describe('ProcessPlayerMessage', () => {
             // Assert
             expect(result).to.equal('me has mandado mensajes: 0');
             expect(MessageRepositoryStub.getMessagesByTimestamp.calledWith('codex', 'johnson')).to.be.true;
-            expect(DroneResponseGeneratorStub.generateResponse.calledWith([])).to.be.true;
+            expect(DroneResponseGeneratorStub.generateResponse.calledWith([], 'johnson')).to.be.true;
         });
     });
 }); 
