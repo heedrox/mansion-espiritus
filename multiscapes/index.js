@@ -24,11 +24,12 @@ module.exports = {
             }
 
             // Ejecutar el caso de uso
-            const responseMessage = await ProcessPlayerMessage.process({ code, drone, message });
+            const droneResponse = await ProcessPlayerMessage.process({ code, drone, message });
 
             // Convertir a respuesta JSON
             response.json({
-                message: responseMessage,
+                message: droneResponse.message,
+                photoUrls: droneResponse.photoUrls || [],
                 timestamp: new Date().toISOString()
             });
 

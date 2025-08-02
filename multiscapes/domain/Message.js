@@ -1,11 +1,12 @@
 class Message {
-    constructor(message, user, timestamp) {
+    constructor(message, user, timestamp, photoUrls = []) {
         this.message = message;
         this.user = user;
         this.timestamp = timestamp;
+        this.photoUrls = photoUrls;
     }
 
-    static create({ message, user, timestamp }) {
+    static create({ message, user, timestamp, photoUrls = [] }) {
         if (!message) {
             throw new Error('Message is required');
         }
@@ -16,7 +17,7 @@ class Message {
             throw new Error('Timestamp is required');
         }
         
-        return new Message(message, user, timestamp);
+        return new Message(message, user, timestamp, photoUrls);
     }
 
     static createAsPlayer({ message, timestamp }) {
@@ -34,7 +35,8 @@ class Message {
         return {
             message: this.message,
             user: this.user,
-            timestamp: this.timestamp
+            timestamp: this.timestamp,
+            photoUrls: this.photoUrls
         };
     }
 }

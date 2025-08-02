@@ -25,21 +25,22 @@ class ProcessPlayerMessage {
         const messages = await MessageRepository.getMessagesByTimestamp(code, drone);
         
         // Generar respuesta usando DroneResponseGenerator
-        const response = await DroneResponseGenerator.generateResponse(messages, drone);
+        const droneResponse = await DroneResponseGenerator.generateResponse(messages, drone);
         
         // Guardar la respuesta del drone en la base de datos (unos milisegundos después)
-        if (response) {
+        if (droneResponse && droneResponse.message) {
             const droneTimestamp = new Date().toISOString();
             const droneMessageInstance = Message.create({ 
-                message: response, 
+                message: droneResponse.message, 
                 user: "drone", 
-                timestamp: droneTimestamp 
+                timestamp: droneTimestamp,
+                photoUrls: droneResponse.photoUrls || []
             });
             await MessageStorer.store(droneMessageInstance, code, drone);
             console.log('Respuesta del drone guardada con ID');
         }
         
-        return response;
+        return droneResponse;
     }
 }
 
