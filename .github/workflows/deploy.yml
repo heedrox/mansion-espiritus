@@ -27,8 +27,6 @@ jobs:
 
     - name: Create service account key file
       run: echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' > service-account-key.json
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
     - name: Deploy to Firebase
       run: firebase deploy --only functions --non-interactive
