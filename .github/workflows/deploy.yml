@@ -1,4 +1,4 @@
-name: Deploy to Firebase
+name: Deploy to Firebase (GCP Auth)
 
 on:
   push:
@@ -26,22 +26,10 @@ jobs:
     - name: Install Firebase CLI
       run: npm install -g firebase-tools
 
-    - name: Install Google Cloud CLI
-      run: |
-        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-        sudo apt-get update && sudo apt-get install -y google-cloud-cli
-
-    - name: Authenticate with Google Cloud
-      run: |
-        echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' > service-account-key.json
-        gcloud auth activate-service-account --key-file=service-account-key.json
-        gcloud config set project mansion-espiritus-lkgoxs
+    - name: Google Auth
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
     - name: Deploy to Firebase
-      run: firebase deploy --only functions --non-interactive
-
-    - name: Clean up
-      if: always()
-      run: rm -f service-account-key.json
-        
+      run: firebase deploy --only functions --non-interactive 
