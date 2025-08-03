@@ -1,0 +1,30 @@
+{
+    "functions": [
+      {
+        "source": "functions",
+        "runtime": "nodejs20",
+        "codebase": "default",
+        "ignore": [
+          "node_modules",
+          ".git",
+          "firebase-debug.log",
+          "firebase-debug.*.log"
+        ]
+      }
+    ],
+    "emulators": {
+      "functions": {
+        "port": 5001
+      },
+      "firestore": {
+        "port": 8080,
+        "database": "miniscapes"
+      },
+      "hosting": {
+        "port": 5002
+      },
+      "ui": {
+        "enabled": true
+      }
+    }
+  }
