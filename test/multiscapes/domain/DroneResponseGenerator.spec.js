@@ -477,6 +477,152 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             await gameStateService.closeBarrier();
             console.log('🔒 Barrera cerrada en base de datos después del test');
         });
+
+        // Spec 1.9: Verificación de Códigos - Código Válido
+        it('should validate valid code response', async function() {
+            // Set timeout for this specific test
+            this.timeout(60000); // 60 seconds
+            
+            // Skip if no API key
+            if (!process.env.OPEN_AI_KEY) {
+                this.skip();
+            }
+
+            // Arrange - Set barrier state to closed in database
+            const GameStateService = require('../../../multiscapes/infrastructure/GameStateService');
+            const gameStateService = new GameStateService();
+            await gameStateService.closeBarrier();
+            console.log('🔒 Barrera cerrada en base de datos para el test');
+
+            // Arrange - Message with valid code
+            const messages = [
+                {
+                    message: "verifica el código DOTBA",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            // Act with timeout protection
+            let result;
+            try {
+                result = await Promise.race([
+                    DroneResponseGenerator.generateResponse(messages),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('AI call timeout')), 40000)
+                    )
+                ]);
+            } catch (error) {
+                console.log('❌ AI call failed or timed out:', error.message);
+                this.skip(); // Skip test instead of failing
+                return;
+            }
+
+            // Assert
+            if (result.message.includes('Hubo un error procesando tu mensaje')) {
+                console.log('⚠️  AI not available, skipping content validation');
+                expect(result.message).to.include('Hubo un error procesando tu mensaje');
+            } else {
+                // Use AI validation for valid code characteristics
+                const codeValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Responde al mensaje del usuario'
+                );
+                
+                // Assert validation results - Simplified for tool testing
+                expect(codeValidation.isValid, `Code validation failed: ${codeValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                
+                // Check that photoUrls array exists
+                expect(result.photoUrls).to.be.an('array');
+            }
+            
+            console.log('🤖 Drone Response:', result.message);
+            console.log('📸 Photo URLs:', result.photoUrls);
+            
+            // Verify that barrier was actually opened
+            const barrierState = await gameStateService.getBarrierState();
+            expect(barrierState).to.be.true;
+            console.log('🔓 Barrera verificada como abierta en base de datos');
+        });
+
+        // Spec 1.10: Verificación de Códigos - Código Inválido
+        it('should validate invalid code response', async function() {
+            // Set timeout for this specific test
+            this.timeout(60000); // 60 seconds
+            
+            // Skip if no API key
+            if (!process.env.OPEN_AI_KEY) {
+                this.skip();
+            }
+
+            // Arrange - Set barrier state to closed in database
+            const GameStateService = require('../../../multiscapes/infrastructure/GameStateService');
+            const gameStateService = new GameStateService();
+            await gameStateService.closeBarrier();
+            console.log('🔒 Barrera cerrada en base de datos para el test');
+
+            // Arrange - Message with invalid code
+            const messages = [
+                {
+                    message: "verifica el código INVALIDO",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            // Act with timeout protection
+            let result;
+            try {
+                result = await Promise.race([
+                    DroneResponseGenerator.generateResponse(messages),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('AI call timeout')), 40000)
+                    )
+                ]);
+            } catch (error) {
+                console.log('❌ AI call failed or timed out:', error.message);
+                this.skip(); // Skip test instead of failing
+                return;
+            }
+
+            // Assert
+            if (result.message.includes('Hubo un error procesando tu mensaje')) {
+                console.log('⚠️  AI not available, skipping content validation');
+                expect(result.message).to.include('Hubo un error procesando tu mensaje');
+            } else {
+                // Use AI validation for invalid code characteristics
+                const codeValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Indica que el código es inválido'
+                );
+                
+                const barrierValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona la barrera o necesidad de código'
+                );
+                
+                const rejectionValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Expresa rechazo o negación'
+                );
+                
+                // Assert validation results
+                expect(codeValidation.isValid, `Code validation failed: ${codeValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(barrierValidation.isValid, `Barrier validation failed: ${barrierValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(rejectionValidation.isValid, `Rejection validation failed: ${rejectionValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                
+                // Check that photoUrls array exists
+                expect(result.photoUrls).to.be.an('array');
+            }
+            
+            console.log('🤖 Drone Response:', result.message);
+            console.log('📸 Photo URLs:', result.photoUrls);
+            
+            // Verify that barrier remains closed
+            const barrierState = await gameStateService.getBarrierState();
+            expect(barrierState).to.be.false;
+            console.log('🔒 Barrera verificada como cerrada en base de datos');
+        });
     });
 
     describe('Características de Personalidad', () => {

@@ -46,6 +46,7 @@ class DroneResponseGenerator {
                     message: z.string().describe('La respuesta del drone al usuario'),
                     photoUrls: z.array(z.string().url()).optional().describe('Array de URLs de fotos que el drone puede incluir en su respuesta')
                 }),
+                maxSteps: 5,
                 tools: {
                     checkCodes: {
                         description: 'Verifica si un código es válido y retorna sus efectos',
@@ -57,6 +58,23 @@ class DroneResponseGenerator {
                             console.log(`🔍 Verificando código: ${code} - Razón: ${reason}`);
                             const result = CheckCodes.checkCode(code);
                             console.log(`📋 Resultado: ${result.isValid ? 'Válido' : 'Inválido'} - ${result.message}`);
+                            console.log(`📊 StateChanges:`, result.stateChanges);
+                            
+                            // Aplicar cambios de estado si el código es válido
+                            if (result.isValid && result.stateChanges) {
+                                console.log(`🔄 Aplicando cambios de estado...`);
+                                const GameStateService = require('../infrastructure/GameStateService');
+                                const gameStateService = new GameStateService();
+                                
+                                for (const [key, value] of Object.entries(result.stateChanges)) {
+                                    console.log(`🔧 Aplicando ${key} = ${value}`);
+                                    if (key === 'barreraElectromagneticaAbierta' && value === true) {
+                                        await gameStateService.openBarrier();
+                                        console.log('🔓 Barrera electromagnética abierta desde herramienta checkCodes');
+                                    }
+                                }
+                            }
+                            
                             return result;
                         }
                     }
