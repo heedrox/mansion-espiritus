@@ -4,7 +4,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 // Configuration for CI environment
-const CI_TIMEOUT = process.env.timeout || 120000; // 2 minutes default
+const CI_TIMEOUT = process.env.timeout || 60000; // 1 minute default
 const OPEN_AI_KEY = process.env.OPEN_AI_KEY;
 
 console.log('🚀 Starting CI test suite...');
@@ -33,7 +33,7 @@ function runTests(testPattern = '', options = {}) {
             stdio: 'inherit',
             env: {
                 ...process.env,
-                MOCHA_TIMEOUT: CI_TIMEOUT.toString(),
+                MOCHA_TIMEOUT: Math.min(CI_TIMEOUT, 60000).toString(),
                 NODE_OPTIONS: '--max-old-space-size=4096'
             }
         });
@@ -42,7 +42,7 @@ function runTests(testPattern = '', options = {}) {
             console.log('⏰ Test timeout reached, terminating...');
             testProcess.kill('SIGTERM');
             reject(new Error('Test timeout'));
-        }, CI_TIMEOUT + 10000); // Add 10 seconds buffer
+        }, Math.min(CI_TIMEOUT + 10000, 2147483647)); // Max 32-bit signed integer
 
         testProcess.on('close', (code) => {
             clearTimeout(timeout);

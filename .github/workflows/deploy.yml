@@ -27,7 +27,7 @@ jobs:
       run: npm test -- --grep "DroneResponseGenerator" --invert
       env:
         OPEN_AI_KEY: ${{ secrets.OPEN_AI_KEY }}
-        timeout: 60000
+        timeout: 30000
       continue-on-error: true
 
     - name: Install Firebase CLI
