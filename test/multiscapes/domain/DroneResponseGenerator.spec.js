@@ -377,18 +377,14 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                 this.skip();
             }
 
-            // Arrange - Simulate context where DOTBA code was already entered
+            // Arrange - Set barrier state to open in database
+            const GameStateService = require('../../../multiscapes/infrastructure/GameStateService');
+            const gameStateService = new GameStateService();
+            await gameStateService.openBarrier();
+            console.log('🔓 Barrera abierta en base de datos para el test');
+
+            // Arrange - Simple message without context
             const messages = [
-                {
-                    message: "introduce el código DOTBA",
-                    user: "player",
-                    timestamp: new Date(Date.now() - 1000).toISOString()
-                },
-                {
-                    message: "¡Código DOTBA introducido! La barrera se ha abierto.",
-                    user: "assistant",
-                    timestamp: new Date(Date.now() - 500).toISOString()
-                },
                 {
                     message: "ve a la nueva isla",
                     user: "player",
@@ -443,6 +439,10 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             
             console.log('🤖 Drone Response:', result.message);
             console.log('📸 Photo URLs:', result.photoUrls);
+            
+            // Cleanup - Restore barrier state to closed
+            await gameStateService.closeBarrier();
+            console.log('🔒 Barrera cerrada en base de datos después del test');
         });
     });
 

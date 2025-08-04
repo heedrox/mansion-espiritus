@@ -187,10 +187,11 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 ```
 
 #### 1.8 Movimiento Permitido - Ir a Nueva Isla
-- **Given**: La barrera electromagnética ha sido abierta con el código DOTBA
+- **Given**: El estado de la base de datos indica que la barrera electromagnética está abierta
 - **When**: El jugador dice "ve a la nueva isla" o "explora la nueva zona"
 - **Then**: El drone responde que puede moverse a la nueva área
 - **Test**: `should validate new island access response`
+- **Arrange**: El test establece `barreraElectromagneticaAbierta: true` en la base de datos
 - **Request**:
 ```json
 {
