@@ -1,0 +1,12 @@
+---
+alwaysApply: true
+---
+
+Cuando modifiquemos funcionalidad, sigue siempre el siguiente flujo:
+- Añade en los specs (ficheros ".spec.md")
+- Haz un test (fichero .spec.js). Relaciona en los specs el nombre del test, con la siguientes estrategias:
+  - Referencia en el js, a través de comentarios especificos en cada test.
+  - Referencia en el md el test correspondiente (nombre de fichero y test)
+- Ejecuta el test y confirma que no pasa.
+- Luego cambia la funcionalidad para que cumpla.
+- Luego ejecuta el test.

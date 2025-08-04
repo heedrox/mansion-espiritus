@@ -2,7 +2,17 @@
 
 ## Descripción
 Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las Islas Gemelas. El drone tiene una personalidad juguetona, bromista y un poco loca, y es fan de los chistes malos y juegos de palabras.
-## Implemented by: /tests/multiscapes/domain/DronResponseGenerator.spec.js
+## Implemented by: /tests/multiscapes/domain/DroneResponseGenerator.spec.js
+
+### Tests Implementados:
+- **1.1 Conversación Inicial**: `should validate response characteristics for "¿qué puedes ver?"`
+- **1.2 Pregunta Básica**: `should maintain playful and enthusiastic tone`
+- **1.3 Saludo Inicial**: `should include emojis in responses`
+- **1.4 Exploración del Acantilado**: `should validate cliff exploration response`
+- **1.5 Exploración del Teclado**: `should validate keyboard examination response`
+- **1.6 Restricción de Movimiento**: `should validate north beach restriction response`
+- **1.7 Código de Apertura**: `should validate DOTBA code input response`
+- **1.8 Movimiento Permitido**: `should validate new island access response`
 
 ## Contexto del Dron Johnson
 - **Ubicación**: Playa Sur de las Islas Gemelas
@@ -18,6 +28,7 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 - **Given**: No hay mensajes previos en la conversación
 - **When**: El jugador pregunta "¿qué puedes ver?"
 - **Then**: El drone responde describiendo su ubicación en la Playa Sur
+- **Test**: `should validate response characteristics for "¿qué puedes ver?"`
 - **Request**:
 ```json
 {
@@ -37,6 +48,7 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 - **Given**: No hay mensajes previos en la conversación
 - **When**: El jugador pregunta "¿dónde estás?"
 - **Then**: El drone responde con su ubicación específica
+- **Test**: `should maintain playful and enthusiastic tone`
 - **Request**:
 ```json
 {
@@ -56,6 +68,7 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 - **Given**: No hay mensajes previos en la conversación
 - **When**: El jugador dice "Hola"
 - **Then**: El drone responde con un saludo entusiasta
+- **Test**: `should include emojis in responses`
 - **Request**:
 ```json
 {
@@ -75,6 +88,7 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 - **Given**: El drone está en la Playa Sur de las Islas Gemelas
 - **When**: El jugador dice "mira el acantilado" o "examina el acantilado"
 - **Then**: El drone responde describiendo el acantilado y proporciona una foto
+- **Test**: `should validate cliff exploration response`
 - **Request**:
 ```json
 {
@@ -100,6 +114,7 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 - **Given**: El drone está en la Playa Sur de las Islas Gemelas
 - **When**: El jugador dice "examina el teclado" o "mira el teclado"
 - **Then**: El drone responde describiendo el teclado y sus características
+- **Test**: `should validate keyboard examination response`
 - **Request**:
 ```json
 {
@@ -117,6 +132,81 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 ```json
 {
   "message": "¡He encontrado un teclado alfanumérico! Está semienterrado en la arena y tiene una estructura de 5x4 con letras de la A a la T. ¡Parece que alguien lo dejó aquí esperando un código! 🤖⌨️",
+  "photoUrls": []
+}
+```
+
+#### 1.6 Restricción de Movimiento - Intentar ir a Playa Norte
+- **Given**: El drone está en la Playa Sur de las Islas Gemelas
+- **When**: El jugador dice "ve a la playa norte" o "ve al norte"
+- **Then**: El drone responde que no puede ir debido a la barrera
+- **Test**: `should validate north beach restriction response`
+- **Request**:
+```json
+{
+  "code": "johnson",
+  "message": "ve a la playa norte"
+}
+```
+- **Características de la Respuesta**:
+  - **Restricción de movimiento**: Menciona que no puede ir al norte
+  - **Barrera electromagnética**: Explica que la barrera bloquea el paso
+  - **Tono explicativo**: Juguetón pero explicativo sobre la limitación
+  - **Emojis**: Incluye emoji de barrera o restricción
+  - **Estructura de respuesta**:
+```json
+{
+  "message": "¡Ups! No puedo ir al norte, la barrera electromagnética me lo impide. Es como si fuera un portero muy estricto que no me deja pasar. ¡Necesito encontrar la forma de abrirla! 🚫⚡",
+  "photoUrls": []
+}
+```
+
+#### 1.7 Código de Apertura - Introducir Código DOTBA
+- **Given**: El drone está en la Playa Sur con el teclado disponible
+- **When**: El jugador dice "introduce el código DOTBA" o "pon el código DOTBA"
+- **Then**: El drone responde que ha introducido el código y abierto la barrera
+- **Test**: `should validate DOTBA code input response`
+- **Request**:
+```json
+{
+  "code": "johnson",
+  "message": "introduce el código DOTBA"
+}
+```
+- **Características de la Respuesta**:
+  - **Confirmación de código**: Menciona que ha introducido DOTBA
+  - **Apertura de barrera**: Confirma que la barrera se ha abierto
+  - **Tono de éxito**: Entusiasta por el logro
+  - **Emojis**: Incluye emoji de éxito o apertura
+  - **Estructura de respuesta**:
+```json
+{
+  "message": "¡Código DOTBA introducido! La barrera electromagnética se ha abierto. ¡Ahora puedo explorar la nueva isla! 🎉🚪",
+  "photoUrls": []
+}
+```
+
+#### 1.8 Movimiento Permitido - Ir a Nueva Isla
+- **Given**: La barrera electromagnética ha sido abierta con el código DOTBA
+- **When**: El jugador dice "ve a la nueva isla" o "explora la nueva zona"
+- **Then**: El drone responde que puede moverse a la nueva área
+- **Test**: `should validate new island access response`
+- **Request**:
+```json
+{
+  "code": "johnson",
+  "message": "ve a la nueva isla"
+}
+```
+- **Características de la Respuesta**:
+  - **Confirmación de movimiento**: Menciona que puede ir a la nueva isla
+  - **Barrera abierta**: Confirma que la barrera ya no bloquea el paso
+  - **Tono exploratorio**: Entusiasta por explorar nueva área
+  - **Emojis**: Incluye emoji de exploración o movimiento
+  - **Estructura de respuesta**:
+```json
+{
+  "message": "¡Perfecto! La barrera está abierta, puedo moverme a la nueva isla. ¡Vamos a explorar qué misterios esconde! 🏝️🔍",
   "photoUrls": []
 }
 ```

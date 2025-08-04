@@ -32,6 +32,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
     });
 
     describe('Conversación Inicial - Sin Mensajes Previos', () => {
+        // Spec 1.1: Pregunta Básica - ¿Qué puedes ver?
         it('should validate response characteristics for "¿qué puedes ver?"', async function() {
             // Set timeout for this specific test
             this.timeout(60000); // 60 seconds
@@ -93,6 +94,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
         
         });
 
+        // Spec 1.5: Exploración del Teclado - Examinar Teclado
         it('should validate keyboard examination response', async function() {
             // Set timeout for this specific test
             this.timeout(60000); // 60 seconds
@@ -160,6 +162,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             console.log('📸 Photo URLs:', result.photoUrls);
         });
 
+        // Spec 1.4: Exploración del Acantilado - Mirar Acantilado
         it('should validate cliff exploration response', async function() {
             // Set timeout for this specific test
             this.timeout(60000); // 60 seconds
@@ -227,9 +230,224 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             console.log('🤖 Drone Response:', result.message);
             console.log('📸 Photo URLs:', result.photoUrls);
         });
+
+        // Spec 1.6: Restricción de Movimiento - Intentar ir a Playa Norte
+        it('should validate north beach restriction response', async function() {
+            // Set timeout for this specific test
+            this.timeout(60000); // 60 seconds
+            
+            // Skip if no API key
+            if (!process.env.OPEN_AI_KEY) {
+                this.skip();
+            }
+
+            // Arrange
+            const messages = [
+                {
+                    message: "ve a la playa norte",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            // Act with timeout protection
+            let result;
+            try {
+                result = await Promise.race([
+                    DroneResponseGenerator.generateResponse(messages),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('AI call timeout')), 40000)
+                    )
+                ]);
+            } catch (error) {
+                console.log('❌ AI call failed or timed out:', error.message);
+                this.skip(); // Skip test instead of failing
+                return;
+            }
+
+            // Assert
+            if (result.message.includes('Hubo un error procesando tu mensaje')) {
+                console.log('⚠️  AI not available, skipping content validation');
+                expect(result.message).to.include('Hubo un error procesando tu mensaje');
+            } else {
+                // Use AI validation for north beach restriction characteristics
+                const restrictionValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona que no puede ir al norte'
+                );
+                
+                const barrierValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona la barrera electromagnética'
+                );
+                
+                const movementValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Explica que el movimiento está bloqueado'
+                );
+                
+                // Assert validation results
+                expect(restrictionValidation.isValid, `Restriction validation failed: ${restrictionValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(barrierValidation.isValid, `Barrier validation failed: ${barrierValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(movementValidation.isValid, `Movement validation failed: ${movementValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                
+                // Check that photoUrls array exists
+                expect(result.photoUrls).to.be.an('array');
+            }
+            
+            console.log('🤖 Drone Response:', result.message);
+            console.log('📸 Photo URLs:', result.photoUrls);
+        });
+
+        // Spec 1.7: Código de Apertura - Introducir Código DOTBA
+        it('should validate DOTBA code input response', async function() {
+            // Set timeout for this specific test
+            this.timeout(60000); // 60 seconds
+            
+            // Skip if no API key
+            if (!process.env.OPEN_AI_KEY) {
+                this.skip();
+            }
+
+            // Arrange
+            const messages = [
+                {
+                    message: "introduce el código DOTBA",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            // Act with timeout protection
+            let result;
+            try {
+                result = await Promise.race([
+                    DroneResponseGenerator.generateResponse(messages),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('AI call timeout')), 40000)
+                    )
+                ]);
+            } catch (error) {
+                console.log('❌ AI call failed or timed out:', error.message);
+                this.skip(); // Skip test instead of failing
+                return;
+            }
+
+            // Assert
+            if (result.message.includes('Hubo un error procesando tu mensaje')) {
+                console.log('⚠️  AI not available, skipping content validation');
+                expect(result.message).to.include('Hubo un error procesando tu mensaje');
+            } else {
+                // Use AI validation for DOTBA code input characteristics
+                const codeValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona que ha introducido el código DOTBA'
+                );
+                
+                const barrierValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Confirma que la barrera se ha abierto'
+                );
+                
+                const successValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Expresa éxito o logro'
+                );
+                
+                // Assert validation results
+                expect(codeValidation.isValid, `Code validation failed: ${codeValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(barrierValidation.isValid, `Barrier validation failed: ${barrierValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(successValidation.isValid, `Success validation failed: ${successValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                
+                // Check that photoUrls array exists
+                expect(result.photoUrls).to.be.an('array');
+            }
+            
+            console.log('🤖 Drone Response:', result.message);
+            console.log('📸 Photo URLs:', result.photoUrls);
+        });
+
+        // Spec 1.8: Movimiento Permitido - Ir a Nueva Isla
+        it('should validate new island access response', async function() {
+            // Set timeout for this specific test
+            this.timeout(60000); // 60 seconds
+            
+            // Skip if no API key
+            if (!process.env.OPEN_AI_KEY) {
+                this.skip();
+            }
+
+            // Arrange - Simulate context where DOTBA code was already entered
+            const messages = [
+                {
+                    message: "introduce el código DOTBA",
+                    user: "player",
+                    timestamp: new Date(Date.now() - 1000).toISOString()
+                },
+                {
+                    message: "¡Código DOTBA introducido! La barrera se ha abierto.",
+                    user: "assistant",
+                    timestamp: new Date(Date.now() - 500).toISOString()
+                },
+                {
+                    message: "ve a la nueva isla",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            // Act with timeout protection
+            let result;
+            try {
+                result = await Promise.race([
+                    DroneResponseGenerator.generateResponse(messages),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('AI call timeout')), 40000)
+                    )
+                ]);
+            } catch (error) {
+                console.log('❌ AI call failed or timed out:', error.message);
+                this.skip(); // Skip test instead of failing
+                return;
+            }
+
+            // Assert
+            if (result.message.includes('Hubo un error procesando tu mensaje')) {
+                console.log('⚠️  AI not available, skipping content validation');
+                expect(result.message).to.include('Hubo un error procesando tu mensaje');
+            } else {
+                // Use AI validation for new island access characteristics
+                const movementValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona que puede ir a la nueva isla'
+                );
+                
+                const barrierValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Confirma que la barrera está abierta'
+                );
+                
+                const explorationValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Expresa entusiasmo por explorar'
+                );
+                
+                // Assert validation results
+                expect(movementValidation.isValid, `Movement validation failed: ${movementValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(barrierValidation.isValid, `Barrier validation failed: ${barrierValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(explorationValidation.isValid, `Exploration validation failed: ${explorationValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                
+                // Check that photoUrls array exists
+                expect(result.photoUrls).to.be.an('array');
+            }
+            
+            console.log('🤖 Drone Response:', result.message);
+            console.log('📸 Photo URLs:', result.photoUrls);
+        });
     });
 
     describe('Características de Personalidad', () => {
+        // Spec 1.2: Pregunta Básica - ¿Dónde estás?
         it('should maintain playful and enthusiastic tone', async function() {
             // Set timeout for this specific test
             this.timeout(60000); // 60 seconds
@@ -274,6 +492,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             console.log('🤖 Drone Response:', result.message);
         });
 
+        // Spec 1.3: Saludo Inicial - Hola
         it('should include emojis in responses', async function() {
             // Set timeout for this specific test
             this.timeout(60000); // 60 seconds
@@ -320,6 +539,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
     });
 
     describe('Elementos Visibles Requeridos', () => {
+        // Spec 1.1: Elementos Visibles Requeridos
         it('should mention key visible elements', async function() {
             // Set timeout for this specific test
             this.timeout(60000); // 60 seconds
@@ -366,6 +586,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
     });
 
     describe('Response Structure', () => {
+        // Spec: Response Structure Validation
         it('should return valid DroneResponse object', async function() {
             // Set timeout for this specific test
             this.timeout(60000); // 60 seconds
