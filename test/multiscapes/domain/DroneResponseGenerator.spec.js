@@ -4,6 +4,33 @@ const DroneResponseGenerator = require('../../../multiscapes/domain/DroneRespons
 const DroneResponseValidator = require('./DroneResponseValidator');
 
 describe('DroneResponseGenerator - Dron Johnson', () => {
+    before(async function() {
+        // Initialize database with required documents
+        const DatabaseConfig = require('../../../multiscapes/infrastructure/DatabaseConfig');
+        const db = DatabaseConfig.getDb();
+        
+        try {
+            // Create the codex document if it doesn't exist
+            const codexRef = db.collection('twin-islands').doc('codex');
+            const codexDoc = await codexRef.get();
+            
+            if (!codexDoc.exists) {
+                console.log('📝 Creating codex document in database...');
+                await codexRef.set({
+                    barreraElectromagneticaAbierta: false,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+                console.log('✅ Codex document created successfully');
+            } else {
+                console.log('📋 Codex document already exists');
+            }
+        } catch (error) {
+            console.error('❌ Error initializing database:', error.message);
+            // Don't fail the tests if database setup fails
+        }
+    });
+
     beforeEach(function() {
         // Ensure we have the API key for testing
         if (!process.env.OPEN_AI_KEY) {
