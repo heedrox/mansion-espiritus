@@ -2,6 +2,7 @@
 
 ## Descripción
 Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las Islas Gemelas. El drone tiene una personalidad juguetona, bromista y un poco loca, y es fan de los chistes malos y juegos de palabras.
+## Implemented by: /tests/multiscapes/domain/DronResponseGenerator.spec.js
 
 ## Contexto del Dron Johnson
 - **Ubicación**: Playa Sur de las Islas Gemelas
@@ -25,12 +26,12 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 }
 ```
 - **Características de la Respuesta**:
-  - **Ubicación**: Menciona que está en la Playa Sur de las Islas Gemelas
+  - **Ubicación en playa sur**: Menciona que está en la Playa Sur de las Islas Gemelas
   - **Elementos visibles**: Describe arena dorada, acantilados al sur, faro con luz azul
-  - **Barrera**: Menciona la barrera electromagnética al norte
-  - **Tono**: Juguetón y entusiasta
+  - **Barrera electromagnética**: Menciona la barrera al norte
+  - **Tono juguetón**: Entusiasta y divertido
   - **Emojis**: Incluye al menos un emoji
-  - **Personalidad**: Comentario divertido sobre la situación
+  - **Personalidad bromista**: Comentario divertido sobre la situación
 
 #### 1.2 Pregunta Básica - ¿Dónde estás?
 - **Given**: No hay mensajes previos en la conversación
@@ -45,10 +46,10 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 ```
 - **Características de la Respuesta**:
   - **Ubicación específica**: Playa Sur de las Islas Gemelas
-  - **Contexto**: Menciona que es zona restringida
+  - **Contexto de zona restringida**: Menciona que es zona restringida
   - **Elementos clave**: Arena dorada, acantilados, faro, barrera
-  - **Disposición**: Expresa estar listo para explorar
-  - **Tono**: Entusiasta y misterioso
+  - **Disposición exploratoria**: Expresa estar listo para explorar
+  - **Tono entusiasta**: Entusiasta y misterioso
   - **Emojis**: Incluye emoji de drone o similar
 
 #### 1.3 Saludo Inicial - Hola
@@ -63,12 +64,37 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 }
 ```
 - **Características de la Respuesta**:
-  - **Saludo**: Responde al saludo del operador
-  - **Ubicación**: Menciona Playa Sur de las Islas Gemelas
-  - **Misión**: Hace referencia a la exploración del misterio
-  - **Radiación**: Menciona la radiación de las islas
-  - **Tono**: Alegre y bromista
+  - **Saludo al operador**: Responde al saludo del operador
+  - **Ubicación en islas**: Menciona Playa Sur de las Islas Gemelas
+  - **Misión de exploración**: Hace referencia a la exploración del misterio
+  - **Radiación de las islas**: Menciona la radiación de las islas
+  - **Tono alegre**: Alegre y bromista
   - **Emojis**: Incluye emoji apropiado
+
+#### 1.4 Exploración del Acantilado - Mirar Acantilado
+- **Given**: El drone está en la Playa Sur de las Islas Gemelas
+- **When**: El jugador dice "mira el acantilado" o "examina el acantilado"
+- **Then**: El drone responde describiendo el acantilado y proporciona una foto
+- **Request**:
+```json
+{
+  "code": "johnson",
+  "message": "mira el acantilado"
+}
+```
+- **Características de la Respuesta**:
+  - **Descripción del acantilado**: Menciona acantilados altos y erosionados
+  - **Detalles visuales**: Describe sombras misteriosas y signos extraños
+  - **Foto del acantilado**: Incluye la URL específica del acantilado
+  - **Tono exploratorio**: Juguetón y misterioso sobre la exploración
+  - **Emojis**: Incluye emoji de paisaje o exploración
+  - **Estructura de respuesta**:
+```json
+{
+  "message": "¡Oh, los acantilados! Son altos y erosionados, proyectando sombras misteriosas sobre la costa. Veo signos extraños grabados en la roca... ¡es como un libro de historia escrito en piedra! 🏞️",
+        "photoUrls": ["https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg"]
+}
+```
 
 ## Notas de Implementación
 
@@ -81,6 +107,8 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 ### Elementos Visibles en la Playa Sur
 - **Arena dorada**: Playa tranquila
 - **Acantilados al sur**: Altos y erosionados
+- **Foto**: `https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg`
+- **Descripción**: Proyectan sombras misteriosas, signos extraños grabados
 - **Faro**: Negro con luz azul intermitente
 - **Barrera electromagnética**: Al norte, bloquea el paso
 - **Teclado alfanumérico**: Semienterrado en la arena

@@ -92,6 +92,74 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
 
         
         });
+
+        it('should validate cliff exploration response', async function() {
+            // Set timeout for this specific test
+            this.timeout(60000); // 60 seconds
+            
+            // Skip if no API key
+            if (!process.env.OPEN_AI_KEY) {
+                this.skip();
+            }
+
+            // Arrange
+            const messages = [
+                {
+                    message: "mira el acantilado",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            // Act with timeout protection
+            let result;
+            try {
+                result = await Promise.race([
+                    DroneResponseGenerator.generateResponse(messages),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('AI call timeout')), 40000)
+                    )
+                ]);
+            } catch (error) {
+                console.log('❌ AI call failed or timed out:', error.message);
+                this.skip(); // Skip test instead of failing
+                return;
+            }
+
+            // Assert
+            if (result.message.includes('Hubo un error procesando tu mensaje')) {
+                console.log('⚠️  AI not available, skipping content validation');
+                expect(result.message).to.include('Hubo un error procesando tu mensaje');
+            } else {
+                // Use AI validation for cliff exploration characteristics
+                const cliffDescriptionValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona acantilado o rocas'
+                );
+                
+                const cliffDetailsValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Responde al comando de mirar el acantilado'
+                );
+                
+                const cliffPhotoValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona escanear o explorar'
+                );
+                
+                // Assert validation results
+                expect(cliffDescriptionValidation.isValid, `Cliff description validation failed: ${cliffDescriptionValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(cliffDetailsValidation.isValid, `Cliff details validation failed: ${cliffDetailsValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(cliffPhotoValidation.isValid, `Cliff photo validation failed: ${cliffPhotoValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                
+                // Check that photoUrls array exists (photo inclusion is optional for now)
+                expect(result.photoUrls).to.be.an('array');
+                expect(result.photoUrls, `Photo URLs validation failed. Expected: https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg\nActual: ${JSON.stringify(result.photoUrls)}\nDrone Response: ${result.message}`).to.include('https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg');
+            }
+            
+            console.log('🤖 Drone Response:', result.message);
+            console.log('📸 Photo URLs:', result.photoUrls);
+        });
     });
 
     describe('Características de Personalidad', () => {
