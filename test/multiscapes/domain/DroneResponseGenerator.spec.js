@@ -241,7 +241,13 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                 this.skip();
             }
 
-            // Arrange
+            // Arrange - Set barrier state to closed in database
+            const GameStateService = require('../../../multiscapes/infrastructure/GameStateService');
+            const gameStateService = new GameStateService();
+            await gameStateService.closeBarrier();
+            console.log('🔒 Barrera cerrada en base de datos para el test');
+
+            // Arrange - Simple message
             const messages = [
                 {
                     message: "ve a la playa norte",

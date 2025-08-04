@@ -137,10 +137,11 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 ```
 
 #### 1.6 Restricción de Movimiento - Intentar ir a Playa Norte
-- **Given**: El drone está en la Playa Sur de las Islas Gemelas
+- **Given**: El estado de la base de datos indica que la barrera electromagnética está cerrada
 - **When**: El jugador dice "ve a la playa norte" o "ve al norte"
 - **Then**: El drone responde que no puede ir debido a la barrera
 - **Test**: `should validate north beach restriction response`
+- **Arrange**: El test establece `barreraElectromagneticaAbierta: false` en la base de datos
 - **Request**:
 ```json
 {
