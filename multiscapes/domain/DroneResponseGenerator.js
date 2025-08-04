@@ -3,6 +3,7 @@ const { createOpenAI } = require('@ai-sdk/openai');
 const { z } = require('zod');
 const DroneResponse = require('./DroneResponse');
 const GameStateService = require('../infrastructure/GameStateService');
+const CheckCodes = require('./checkCodes');
 
 class DroneResponseGenerator {
     static async generateResponse(messages) {
@@ -44,7 +45,22 @@ class DroneResponseGenerator {
                 schema: z.object({
                     message: z.string().describe('La respuesta del drone al usuario'),
                     photoUrls: z.array(z.string().url()).optional().describe('Array de URLs de fotos que el drone puede incluir en su respuesta')
-                })
+                }),
+                tools: {
+                    checkCodes: {
+                        description: 'Verifica si un código es válido y retorna sus efectos',
+                        parameters: z.object({
+                            code: z.string().describe('El código a verificar'),
+                            reason: z.string().describe('Por qué necesitas verificar este código')
+                        }),
+                        execute: async ({ code, reason }) => {
+                            console.log(`🔍 Verificando código: ${code} - Razón: ${reason}`);
+                            const result = CheckCodes.checkCode(code);
+                            console.log(`📋 Resultado: ${result.isValid ? 'Válido' : 'Inválido'} - ${result.message}`);
+                            return result;
+                        }
+                    }
+                }
             });
 
             return DroneResponse.create(response.object.message, response.object.photoUrls || []);
@@ -84,18 +100,19 @@ Puedes comentar sobre:
 - Solo puedes moverse al norte DESPUÉS de introducir el código correcto.
 
 # CÓDIGO DE APERTURA:
-- El código para abrir la barrera es "DOTBA".
-- Si te piden introducir "DOTBA", confirma que lo has introducido y que la barrera se ha abierto.
-- Después de abrir la barrera, puedes ir al norte a explorar la nueva isla.
+- No conoces los códigos de antemano. Solo sabes que existen códigos que pueden abrir la barrera.
+- Si el usuario menciona un código, usa la herramienta checkCodes para verificarlo.
+- Si el código es válido, confirma que lo has procesado y que la barrera se ha abierto.
+- Después de que se abra la barrera, puedes ir al norte a explorar la nueva isla.
 
 # ESTADO DE LA BARRERA:
 - Por defecto, la barrera está CERRADA y bloquea el paso al norte.
-- Después de introducir "DOTBA", la barrera se ABRE permanentemente.
+- Después de introducir un código válido, la barrera se ABRE permanentemente.
 - Una vez abierta, puedes ir al norte sin restricciones.
 
 # RESPUESTAS SEGÚN ESTADO:
-- Si te piden ir al norte SIN haber introducido DOTBA: "No puedo ir al norte, la barrera me lo impide"
-- Si te piden ir al norte DESPUÉS de introducir DOTBA: "¡Perfecto! La barrera está abierta, puedo ir a la nueva isla"
+- Si te piden ir al norte SIN haber introducido un código válido: "No puedo ir al norte, la barrera me lo impide"
+- Si te piden ir al norte DESPUÉS de introducir un código válido: "¡Perfecto! La barrera está abierta, puedo ir a la nueva isla"
 
 Tus respuestas deben ser breves, variadas y observacionales. Incluye detalles relevantes sin divagar. Si algo te parece sospechoso o fuera de lugar, puedes señalarlo. Si el operador no te da instrucciones claras, pídele que las aclare de forma educada.
 
@@ -106,7 +123,7 @@ Ejemplos de estilo:
 "Barrera de energía. Estable. Emisión constante. Sin paso permitido."
 "Acantilados elevados. Algunas marcas grabadas, pero no identificables desde esta distancia."
 "Barrera bloquea paso al norte. Necesito código para abrir."
-"Código DOTBA introducido. Barrera abierta. Puedo explorar nueva isla."
+"Código introducido. Barrera abierta. Puedo explorar nueva isla."
 "Barrera abierta. Movimiento al norte permitido. Nueva isla accesible."
 
 Responde como si estuvieras realmente allí, con una mezcla de eficiencia robótica y juicio humano.

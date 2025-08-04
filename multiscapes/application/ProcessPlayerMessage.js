@@ -4,6 +4,7 @@ const DroneDataService = require('../infrastructure/DroneDataService');
 const MessageRepository = require('../infrastructure/MessageRepository');
 const DroneResponseGenerator = require('../domain/DroneResponseGenerator');
 const GameStateService = require('../infrastructure/GameStateService');
+const CheckCodes = require('../domain/checkCodes');
 
 class ProcessPlayerMessage {
     static async process({ code, message }) {
@@ -20,11 +21,31 @@ class ProcessPlayerMessage {
             messageId = await MessageStorer.store(messageInstance, code);
             console.log('Mensaje del player guardado con ID:', messageId);
             
-            // Verificar si el mensaje contiene el código DOTBA para abrir la barrera
-            if (message.toLowerCase().includes('dotba')) {
+            // Verificar si el mensaje contiene algún código
+            const codeMatch = message.match(/\b[A-Z]{4,}\b/gi);
+            if (codeMatch) {
                 const gameStateService = new GameStateService();
-                await gameStateService.openBarrier();
-                console.log('🔓 Barrera electromagnética abierta con código DOTBA');
+                
+                for (const potentialCode of codeMatch) {
+                    const codeResult = CheckCodes.checkCode(potentialCode);
+                    
+                    if (codeResult.isValid) {
+                        console.log(`🔓 Código válido encontrado: ${codeResult.code}`);
+                        console.log(`📋 Efecto: ${codeResult.effect}`);
+                        
+                        // Aplicar cambios de estado si existen
+                        if (codeResult.stateChanges) {
+                            for (const [key, value] of Object.entries(codeResult.stateChanges)) {
+                                if (key === 'barreraElectromagneticaAbierta' && value === true) {
+                                    await gameStateService.openBarrier();
+                                    console.log('🔓 Barrera electromagnética abierta');
+                                }
+                            }
+                        }
+                        
+                        break; // Solo procesar el primer código válido
+                    }
+                }
             }
         }
 
