@@ -5,34 +5,28 @@ class DroneDataService {
         this.db = DatabaseConfig.getDb();
     }
 
-    static async validateDrone(code, drone) {
+    static async validateGame(code) {
         if (!code) {
             throw new Error('Code is required');
         }
-        if (!drone) {
-            throw new Error('Drone is required');
-        }
 
         const service = new DroneDataService();
-        await service._validateDrone(code, drone);
+        await service._validateGame(code);
     }
 
-    static async getDroneData(code, drone) {
+    static async getGameData(code) {
         if (!code) {
             throw new Error('Code is required');
         }
-        if (!drone) {
-            throw new Error('Drone is required');
-        }
 
         const service = new DroneDataService();
-        return await service._getDroneData(code, drone);
+        return await service._getGameData(code);
     }
 
-    async _getDroneData(code, drone) {
+    async _getGameData(code) {
         try {
             // Construir la ruta del documento usando DatabaseConfig
-            const docPath = DatabaseConfig.getDocumentPath(code, drone);
+            const docPath = DatabaseConfig.getDocumentPath(code);
             console.log('Buscando documento en:', docPath);
             
             // Recuperar el documento de Firestore
@@ -47,28 +41,28 @@ class DroneDataService {
             console.log('Datos del documento:', data);
             return data;
         } catch (error) {
-            console.error('Error al obtener datos del drone:', error);
+            console.error('Error al obtener datos del juego:', error);
             throw error;
         }
     }
 
-    async _validateDrone(code, drone) {
+    async _validateGame(code) {
         try {
             // Construir la ruta del documento usando DatabaseConfig
-            const docPath = DatabaseConfig.getDocumentPath(code, drone);
-            console.log('Validando drone en:', docPath);
+            const docPath = DatabaseConfig.getDocumentPath(code);
+            console.log('Validando juego en:', docPath);
             
             // Verificar que el documento existe
             const docRef = this.db.doc(docPath);
             const doc = await docRef.get();
 
             if (!doc.exists) {
-                throw new Error(`No se encontró el drone en la ruta: ${docPath}`);
+                throw new Error(`No se encontró el juego en la ruta: ${docPath}`);
             }
 
-            console.log('Drone validado correctamente');
+            console.log('Juego validado correctamente');
         } catch (error) {
-            console.error('Error al validar drone:', error);
+            console.error('Error al validar juego:', error);
             throw error;
         }
     }

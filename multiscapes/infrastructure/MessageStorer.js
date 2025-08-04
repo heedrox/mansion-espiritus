@@ -5,27 +5,24 @@ class MessageStorer {
         this.db = DatabaseConfig.getDb();
     }
 
-    static async store(message, code, drone) {
+    static async store(message, code) {
         if (!message) {
             throw new Error('Message is required');
         }
         if (!code) {
             throw new Error('Code is required');
         }
-        if (!drone) {
-            throw new Error('Drone is required');
-        }
 
         const storer = new MessageStorer();
-        return await storer._storeMessage(message, code, drone);
+        return await storer._storeMessage(message, code);
     }
 
-    async _storeMessage(message, code, drone) {
+    async _storeMessage(message, code) {
         try {
             // Construir la ruta del documento usando DatabaseConfig
-            const docPath = DatabaseConfig.getDocumentPath(code, drone);
+            const docPath = DatabaseConfig.getDocumentPath(code);
             
-            // Obtener referencia al documento del drone
+            // Obtener referencia al documento del juego
             const docRef = this.db.doc(docPath);
             
             // Verificar que el documento existe

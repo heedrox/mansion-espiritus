@@ -15,16 +15,16 @@ module.exports = {
 
         try {
             // Obtener los valores del body de la petición
-            const { code, drone, message } = request.body;
+            const { code, message } = request.body;
 
             // Validar parámetros requeridos
-            const validationError = _validate({ code, drone, message });
+            const validationError = _validate({ code, message });
             if (validationError) {
                 return response.status(400).json(validationError);
             }
 
             // Ejecutar el caso de uso
-            const droneResponse = await ProcessPlayerMessage.process({ code, drone, message });
+            const droneResponse = await ProcessPlayerMessage.process({ code, message });
 
             // Convertir a respuesta JSON
             response.json({
@@ -43,16 +43,10 @@ module.exports = {
     }
 }
 
-function _validate({ code, drone, message }) {
+function _validate({ code, message }) {
     if (!code) {
         return {
             error: 'El parámetro "code" es requerido'
-        };
-    }
-
-    if (!drone) {
-        return {
-            error: 'El parámetro "drone" es requerido'
         };
     }
 
@@ -79,7 +73,7 @@ async function multiscapesInit(request, response) {
 
     try {
         // Obtener parámetros de la query string
-        const { code, drone } = request.query;
+        const { code } = request.query;
 
         // Validar parámetros requeridos
         if (!code) {
@@ -88,15 +82,9 @@ async function multiscapesInit(request, response) {
             });
         }
 
-        if (!drone) {
-            return response.status(400).json({
-                error: 'El parámetro "drone" es requerido'
-            });
-        }
-
         // Ejecutar el caso de uso
         const GetInitialStatus = require('./application/GetInitialStatus');
-        const result = await GetInitialStatus.execute({ code, drone });
+        const result = await GetInitialStatus.execute({ code });
 
         // Convertir a respuesta JSON
         response.json(result);

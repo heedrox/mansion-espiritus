@@ -1,11 +1,11 @@
 const MessageRepository = require('../infrastructure/MessageRepository');
 
 class GetInitialStatus {
-    static async execute({ code, drone }) {
-        console.log('Intentando obtener mensajes para:', code, drone);
+    static async execute({ code }) {
+        console.log('Intentando obtener mensajes para:', code);
         
         // Obtener todos los mensajes ordenados por timestamp
-        const messages = await MessageRepository.getMessagesByTimestamp(code, drone);
+        const messages = await MessageRepository.getMessagesByTimestamp(code);
 
         return {
             messages: messages,

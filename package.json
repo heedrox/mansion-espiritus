@@ -5,6 +5,7 @@
     "lint": "eslint .",
     "serve": "firebase serve --only functions",
     "shell": "firebase functions:shell",
+    "emulator": "firebase emulators:start --only functions,firestore",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
@@ -58,7 +59,7 @@
     "zod": "^3.25.76"
   },
   "volta": {
-    "node": "20.18.0",
+    "node": "20.18.3",
     "npm": "10.2.5"
   },
   "private": true,

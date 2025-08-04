@@ -5,22 +5,19 @@ class MessageRepository {
         this.db = DatabaseConfig.getDb();
     }
 
-    static async getMessagesByTimestamp(code, drone) {
+    static async getMessagesByTimestamp(code) {
         if (!code) {
             throw new Error('Code is required');
         }
-        if (!drone) {
-            throw new Error('Drone is required');
-        }
 
         const repository = new MessageRepository();
-        return await repository._getMessagesByTimestamp(code, drone);
+        return await repository._getMessagesByTimestamp(code);
     }
 
-    async _getMessagesByTimestamp(code, drone) {
+    async _getMessagesByTimestamp(code) {
         try {
             // Construir la ruta de la subcolección messages usando DatabaseConfig
-            const docPath = DatabaseConfig.getDocumentPath(code, drone);
+            const docPath = DatabaseConfig.getDocumentPath(code);
             const messagesPath = `${docPath}/messages`;
             console.log('Obteniendo mensajes de:', messagesPath);
             

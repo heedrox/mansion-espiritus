@@ -5,27 +5,26 @@ const MessageRepository = require('../infrastructure/MessageRepository');
 const DroneResponseGenerator = require('../domain/DroneResponseGenerator');
 
 class ProcessPlayerMessage {
-    static async process({ code, drone, message }) {
+    static async process({ code, message }) {
         console.log('code', code);
-        console.log('drone', drone);
 
-        // Validar que el drone existe
-        await DroneDataService.validateDrone(code, drone);
+        // Validar que el juego existe
+        await DroneDataService.validateGame(code);
 
         // Si se proporcionó un mensaje, crearlo y guardarlo
         let messageId = null;
         if (message) {
             const timestamp = new Date().toISOString();
             const messageInstance = Message.createAsPlayer({ message, timestamp });
-            messageId = await MessageStorer.store(messageInstance, code, drone);
+            messageId = await MessageStorer.store(messageInstance, code);
             console.log('Mensaje del player guardado con ID:', messageId);
         }
 
         // Obtener todos los mensajes ordenados por timestamp (incluyendo el recién guardado)
-        const messages = await MessageRepository.getMessagesByTimestamp(code, drone);
+        const messages = await MessageRepository.getMessagesByTimestamp(code);
         
         // Generar respuesta usando DroneResponseGenerator
-        const droneResponse = await DroneResponseGenerator.generateResponse(messages, drone);
+        const droneResponse = await DroneResponseGenerator.generateResponse(messages);
         
         // Guardar la respuesta del drone en la base de datos (unos milisegundos después)
         if (droneResponse && droneResponse.message) {
@@ -36,7 +35,7 @@ class ProcessPlayerMessage {
                 timestamp: droneTimestamp,
                 photoUrls: droneResponse.photoUrls || []
             });
-            await MessageStorer.store(droneMessageInstance, code, drone);
+            await MessageStorer.store(droneMessageInstance, code);
             console.log('Respuesta del drone guardada con ID');
         }
         

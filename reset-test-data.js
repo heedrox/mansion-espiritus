@@ -10,66 +10,60 @@ async function resetTestData() {
     try {
         console.log('🧹 Iniciando reset de datos de prueba...');
 
-        // Lista de códigos de colecciones a limpiar
-        const codesToReset = ['codex', 'test', 'demo'];
+        // Limpiar la colección twin-islands
+        const collectionName = DatabaseConfig.getCollectionName();
+        console.log(`\n📁 Limpiando colección: ${collectionName}`);
         
-        // Generar nombres de colecciones usando DatabaseConfig
-        const collectionsToReset = codesToReset.map(code => DatabaseConfig.getCollectionName(code));
+        // Obtener todos los documentos de la colección
+        const snapshot = await db.collection(collectionName).get();
+        
+        if (snapshot.empty) {
+            console.log(`   ⚠️  La colección ${collectionName} está vacía`);
+            return;
+        }
 
-        for (const collectionName of collectionsToReset) {
-            console.log(`\n📁 Limpiando colección: ${collectionName}`);
+        console.log(`   📄 Encontrados ${snapshot.size} documentos`);
+
+        // Mantener documentos pero limpiar sus mensajes
+        const processPromises = snapshot.docs.map(async (doc) => {
+            const docRef = doc.ref;
+            const docId = doc.id;
             
-            // Obtener todos los documentos de la colección
-            const snapshot = await db.collection(collectionName).get();
+            console.log(`   📄 Procesando documento: ${docId}`);
+
+            // Obtener todas las subcolecciones del documento
+            const subcollections = await docRef.listCollections();
             
-            if (snapshot.empty) {
-                console.log(`   ⚠️  La colección ${collectionName} está vacía`);
-                continue;
+            // Eliminar solo las subcolecciones de mensajes
+            for (const subcollection of subcollections) {
+                if (subcollection.id === 'messages') {
+                    console.log(`      📂 Limpiando subcolección: ${subcollection.id}`);
+                    
+                    // Obtener todos los documentos de la subcolección
+                    const subSnapshot = await subcollection.get();
+                    
+                    if (!subSnapshot.empty) {
+                        // Eliminar todos los documentos de la subcolección
+                        const subDeletePromises = subSnapshot.docs.map(subDoc => subDoc.ref.delete());
+                        await Promise.all(subDeletePromises);
+                        console.log(`         ✅ ${subSnapshot.size} mensajes eliminados de ${subcollection.id}`);
+                    } else {
+                        console.log(`         ℹ️  No hay mensajes para eliminar en ${subcollection.id}`);
+                    }
+                } else {
+                    console.log(`      ℹ️  Manteniendo subcolección: ${subcollection.id}`);
+                }
             }
 
-            console.log(`   📄 Encontrados ${snapshot.size} documentos`);
+            console.log(`      ✅ Documento ${docId} mantenido (solo mensajes eliminados)`);
+        });
 
-            // Mantener documentos de drones pero limpiar sus mensajes
-            const processPromises = snapshot.docs.map(async (doc) => {
-                const docRef = doc.ref;
-                const docId = doc.id;
-                
-                console.log(`   📄 Procesando documento: ${docId}`);
-
-                // Obtener todas las subcolecciones del documento
-                const subcollections = await docRef.listCollections();
-                
-                // Eliminar solo las subcolecciones de mensajes
-                for (const subcollection of subcollections) {
-                    if (subcollection.id === 'messages') {
-                        console.log(`      📂 Limpiando subcolección: ${subcollection.id}`);
-                        
-                        // Obtener todos los documentos de la subcolección
-                        const subSnapshot = await subcollection.get();
-                        
-                        if (!subSnapshot.empty) {
-                            // Eliminar todos los documentos de la subcolección
-                            const subDeletePromises = subSnapshot.docs.map(subDoc => subDoc.ref.delete());
-                            await Promise.all(subDeletePromises);
-                            console.log(`         ✅ ${subSnapshot.size} mensajes eliminados de ${subcollection.id}`);
-                        } else {
-                            console.log(`         ℹ️  No hay mensajes para eliminar en ${subcollection.id}`);
-                        }
-                    } else {
-                        console.log(`      ℹ️  Manteniendo subcolección: ${subcollection.id}`);
-                    }
-                }
-
-                console.log(`      ✅ Documento ${docId} mantenido (solo mensajes eliminados)`);
-            });
-
-            await Promise.all(processPromises);
-            console.log(`   ✅ Colección ${collectionName} procesada (documentos mantenidos, mensajes eliminados)`);
-        }
+        await Promise.all(processPromises);
+        console.log(`   ✅ Colección ${collectionName} procesada (documentos mantenidos, mensajes eliminados)`);
 
         console.log('\n🎉 Reset de datos completado exitosamente!');
         console.log('\n📊 Datos procesados:');
-        console.log('✅ Documentos de drones mantenidos (common, jackson, johnson)');
+        console.log('✅ Documentos mantenidos');
         console.log('✅ Solo mensajes eliminados de las subcolecciones');
         console.log('✅ Otras subcolecciones preservadas');
 

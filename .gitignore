@@ -3,3 +3,5 @@ firebase-debug.log
 .env
 serviceAccountKey.json
 deploy-only.sh
+firestore-debug.log
+ui-debug.log

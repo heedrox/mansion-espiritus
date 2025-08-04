@@ -25,13 +25,13 @@ class DatabaseConfig {
         return this._db;
     }
     
-    static getCollectionName(code) {
-        return `twin-islands-${code}`;
+    static getCollectionName() {
+        return 'twin-islands';
     }
     
-    static getDocumentPath(code, drone) {
-        const collectionName = this.getCollectionName(code);
-        return `${collectionName}/${drone}`;
+    static getDocumentPath(code) {
+        const collectionName = this.getCollectionName();
+        return `${collectionName}/${code}`;
     }
 }
 
