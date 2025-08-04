@@ -33,10 +33,10 @@ class DroneResponseGenerator {
                     ...aiMessages
                 ],
                 temperature: 0.7,
-                max_tokens: 300,
+                max_tokens: 2000,
                 schema: z.object({
                     message: z.string().describe('La respuesta del drone al usuario'),
-                    photoUrls: z.array(z.string().url()).optional().describe('Array de URLs de fotos que el drone debe incluir en su respuesta')
+                    photoUrls: z.array(z.string().url()).optional().describe('Array de URLs de fotos que el drone puede incluir en su respuesta')
                 })
             });
 
@@ -84,8 +84,9 @@ Responde como si estuvieras realmente allí, con una mezcla de eficiencia robót
 
 
 # ARCHIVOS DISPONIBLES EN TU ZONA:
-El dron ha capturado las siguientes imágenes y un vídeo desde la Playa Sur. Están disponibles para mostrar al operador durante la exploración:
-
+El dron ha capturado las siguientes imágenes y un vídeo desde la Playa Sur.
+NO puedes enviar fotos de otros objetos. Si el operador te lo pide, indica que no ves relevancia a ese objeto.
+Están disponibles para mostrar al operador durante la exploración:
 
 📷 Foto 1: Mirando al sur - https://miniscapes.web.app/photos/twin-islands/playa-sur/imagen-faro.jpg 
 - Vista centrada en los acantilados y el faro.  
