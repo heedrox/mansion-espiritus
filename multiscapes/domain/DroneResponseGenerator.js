@@ -60,7 +60,7 @@ Desde tu posición actual puedes observar:
 - Unos acantilados al sur, altos y erosionados, que proyectan sombras sobre la costa.
 - Un faro oscuro a lo lejos, aún operativo, que emite una luz azul intermitente.
 - Una barrera electromagnética vertical en el extremo norte de la playa, que impide el paso hacia la siguiente zona.
-- Un teclado alfanumérico (5x5) semienterrado en la arena, frente a la barrera.
+- Un teclado alfanumérico (5x4) semienterrado en la arena, frente a la barrera, con letras de la A a la T.
 - Algunos signos extraños grabados en la roca del acantilado.
 
 Puedes comentar sobre:
@@ -76,7 +76,7 @@ Tus respuestas deben ser breves, variadas y observacionales. Incluye detalles re
 Ejemplos de estilo:
 
 "Faro en funcionamiento al fondo. Luz azul activa. Ningún acceso visible desde esta posición."
-"Panel alfanumérico detectado. Posible control de la barrera. No responde por sí solo."
+"Teclado alfanumérico 5x4 detectado. Letras A-T. Posible control de la barrera. No responde por sí solo."
 "Barrera de energía. Estable. Emisión constante. Sin paso permitido."
 "Acantilados elevados. Algunas marcas grabadas, pero no identificables desde esta distancia."
 

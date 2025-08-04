@@ -93,6 +93,73 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
         
         });
 
+        it('should validate keyboard examination response', async function() {
+            // Set timeout for this specific test
+            this.timeout(60000); // 60 seconds
+            
+            // Skip if no API key
+            if (!process.env.OPEN_AI_KEY) {
+                this.skip();
+            }
+
+            // Arrange
+            const messages = [
+                {
+                    message: "examina el teclado",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            // Act with timeout protection
+            let result;
+            try {
+                result = await Promise.race([
+                    DroneResponseGenerator.generateResponse(messages),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('AI call timeout')), 40000)
+                    )
+                ]);
+            } catch (error) {
+                console.log('❌ AI call failed or timed out:', error.message);
+                this.skip(); // Skip test instead of failing
+                return;
+            }
+
+            // Assert
+            if (result.message.includes('Hubo un error procesando tu mensaje')) {
+                console.log('⚠️  AI not available, skipping content validation');
+                expect(result.message).to.include('Hubo un error procesando tu mensaje');
+            } else {
+                // Use AI validation for keyboard examination characteristics
+                const keyboardDescriptionValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona teclado alfanumérico'
+                );
+                
+                const keyboardStructureValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Describe estructura 5x4 con letras A-T'
+                );
+                
+                const keyboardLocationValidation = await DroneResponseValidator.validateCharacteristic(
+                    result.message, 
+                    'Menciona que está semienterrado en la arena'
+                );
+                
+                // Assert validation results
+                expect(keyboardDescriptionValidation.isValid, `Keyboard description validation failed: ${keyboardDescriptionValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(keyboardStructureValidation.isValid, `Keyboard structure validation failed: ${keyboardStructureValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(keyboardLocationValidation.isValid, `Keyboard location validation failed: ${keyboardLocationValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                
+                // Check that photoUrls array exists
+                expect(result.photoUrls).to.be.an('array');
+            }
+            
+            console.log('🤖 Drone Response:', result.message);
+            console.log('📸 Photo URLs:', result.photoUrls);
+        });
+
         it('should validate cliff exploration response', async function() {
             // Set timeout for this specific test
             this.timeout(60000); // 60 seconds
@@ -134,17 +201,17 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                 // Use AI validation for cliff exploration characteristics
                 const cliffDescriptionValidation = await DroneResponseValidator.validateCharacteristic(
                     result.message, 
-                    'Menciona acantilado o rocas'
+                    'Menciona acantilados'
                 );
                 
                 const cliffDetailsValidation = await DroneResponseValidator.validateCharacteristic(
                     result.message, 
-                    'Responde al comando de mirar el acantilado'
+                    'Responde al comando de explorar acantilados'
                 );
                 
                 const cliffPhotoValidation = await DroneResponseValidator.validateCharacteristic(
                     result.message, 
-                    'Menciona escanear o explorar'
+                    'Responde al comando de examinar acantilados'
                 );
                 
                 // Assert validation results

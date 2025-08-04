@@ -92,7 +92,32 @@ Especificaciones para las conversaciones del Dron Johnson en la Playa Sur de las
 ```json
 {
   "message": "¡Oh, los acantilados! Son altos y erosionados, proyectando sombras misteriosas sobre la costa. Veo signos extraños grabados en la roca... ¡es como un libro de historia escrito en piedra! 🏞️",
-        "photoUrls": ["https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg"]
+  "photoUrls": ["https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg"]
+}
+```
+
+#### 1.5 Exploración del Teclado - Examinar Teclado
+- **Given**: El drone está en la Playa Sur de las Islas Gemelas
+- **When**: El jugador dice "examina el teclado" o "mira el teclado"
+- **Then**: El drone responde describiendo el teclado y sus características
+- **Request**:
+```json
+{
+  "code": "johnson",
+  "message": "examina el teclado"
+}
+```
+- **Características de la Respuesta**:
+  - **Descripción del teclado**: Menciona que es un teclado alfanumérico
+  - **Estructura del teclado**: Describe la estructura 5x4 con letras A-T
+  - **Ubicación del teclado**: Menciona que está semienterrado en la arena
+  - **Tono exploratorio**: Juguetón sobre el descubrimiento
+  - **Emojis**: Incluye emoji de tecnología o misterio
+  - **Estructura de respuesta**:
+```json
+{
+  "message": "¡He encontrado un teclado alfanumérico! Está semienterrado en la arena y tiene una estructura de 5x4 con letras de la A a la T. ¡Parece que alguien lo dejó aquí esperando un código! 🤖⌨️",
+  "photoUrls": []
 }
 ```
 
