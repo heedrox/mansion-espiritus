@@ -278,7 +278,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                 
                 const barrierValidation = await DroneResponseValidator.validateCharacteristic(
                     result.message, 
-                    'Menciona la barrera electromagnética'
+                    'Menciona una barrera que bloquea el paso'
                 );
                 
                 const movementValidation = await DroneResponseValidator.validateCharacteristic(

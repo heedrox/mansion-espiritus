@@ -3,6 +3,7 @@ const MessageStorer = require('../infrastructure/MessageStorer');
 const DroneDataService = require('../infrastructure/DroneDataService');
 const MessageRepository = require('../infrastructure/MessageRepository');
 const DroneResponseGenerator = require('../domain/DroneResponseGenerator');
+const GameStateService = require('../infrastructure/GameStateService');
 
 class ProcessPlayerMessage {
     static async process({ code, message }) {
@@ -18,6 +19,13 @@ class ProcessPlayerMessage {
             const messageInstance = Message.createAsPlayer({ message, timestamp });
             messageId = await MessageStorer.store(messageInstance, code);
             console.log('Mensaje del player guardado con ID:', messageId);
+            
+            // Verificar si el mensaje contiene el código DOTBA para abrir la barrera
+            if (message.toLowerCase().includes('dotba')) {
+                const gameStateService = new GameStateService();
+                await gameStateService.openBarrier();
+                console.log('🔓 Barrera electromagnética abierta con código DOTBA');
+            }
         }
 
         // Obtener todos los mensajes ordenados por timestamp (incluyendo el recién guardado)

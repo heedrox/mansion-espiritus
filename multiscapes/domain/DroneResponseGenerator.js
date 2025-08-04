@@ -2,12 +2,18 @@ const { generateObject } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
 const { z } = require('zod');
 const DroneResponse = require('./DroneResponse');
+const GameStateService = require('../infrastructure/GameStateService');
 
 class DroneResponseGenerator {
     static async generateResponse(messages) {
         if (!messages || !Array.isArray(messages)) {
             throw new Error('Messages debe ser un array');
         }
+
+        // Obtener el estado actual del juego
+        const gameStateService = new GameStateService();
+        const gameState = await gameStateService.getGameState();
+        const isBarrierOpen = gameState.barreraElectromagneticaAbierta;
 
         // Convertir mensajes al formato esperado por la AI SDK
         const aiMessages = messages.map(({ user, message }) => ({
@@ -23,7 +29,8 @@ class DroneResponseGenerator {
         // Definir el prompt del sistema para Johnson y concatenar instrucciones comunes
         const johnsonPrompt = this._getJohnsonPrompt();
         const commonInstructions = this._getCommonInstructions();
-        const systemPrompt = johnsonPrompt + commonInstructions;
+        const stateInstructions = this._getStateInstructions(isBarrierOpen);
+        const systemPrompt = johnsonPrompt + commonInstructions + stateInstructions;
 
         try {
             const response = await generateObject({
@@ -173,6 +180,31 @@ Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS
 - Eres un auténtico fan de los chistes malos y los juegos de palabras. Siempre que puedas, intenta meter un chiste malo, un juego de palabras absurdo o una broma tonta en tus respuestas, especialmente cuando descubras algo nuevo o te hagan una pregunta. No fuerces el chiste si no encaja, pero si puedes, ¡hazlo! Tu objetivo es hacer reír (o al menos hacer que el jugador ponga los ojos en blanco).
 - Solo entrega una foto cada vez. No menciones todos los objetos y sus fotos inmediatamente.
 - No digas "voy a hacerlo" y luego no lo hagas. Hazlo siempre inmediatamente en la misma respuesta.
+`;
+    }
+
+    static _getStateInstructions(isBarrierOpen) {
+        return `
+
+# ESTADO ACTUAL DEL JUEGO:
+- Barrera electromagnética: ${isBarrierOpen ? 'ABIERTA' : 'CERRADA'}
+
+# RESPUESTAS SEGÚN ESTADO ACTUAL:
+${isBarrierOpen ? 
+    '- La barrera está ABIERTA. Puedes ir al norte sin restricciones.' :
+    '- La barrera está CERRADA. No puedes ir al norte.'
+}
+
+# CÓDIGO DE APERTURA:
+- El código para abrir la barrera es "DOTBA".
+- Si te piden introducir "DOTBA" y la barrera está cerrada, confirma que lo has introducido y que la barrera se ha abierto.
+- Si te piden introducir "DOTBA" y la barrera ya está abierta, confirma que ya está abierta.
+
+# MOVIMIENTO AL NORTE:
+${isBarrierOpen ? 
+    '- La barrera está ABIERTA. Si te piden ir al norte, confirma que puedes ir a la nueva isla.' :
+    '- La barrera está CERRADA. Si te piden ir al norte, explica que no puedes ir debido a la barrera.'
+}
 `;
     }
 }
