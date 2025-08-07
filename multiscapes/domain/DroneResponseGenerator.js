@@ -33,6 +33,9 @@ class DroneResponseGenerator {
         const stateInstructions = this._getStateInstructions(isBarrierOpen);
         const systemPrompt = johnsonPrompt + commonInstructions + stateInstructions;
 
+        console.log('🤖 ANTES DE LLAMAR A AI - Mensajes:', JSON.stringify(aiMessages, null, 2));
+        console.log('🔧 TOOLS CONFIGURADAS - checkCodes está disponible');
+        
         try {
             const response = await generateObject({
                 model: openAiModel("gpt-4o-mini"),
@@ -55,7 +58,7 @@ class DroneResponseGenerator {
                             reason: z.string().describe('Por qué necesitas verificar este código')
                         }),
                         execute: async ({ code, reason }) => {
-                            console.log(`🔍 Verificando código: ${code} - Razón: ${reason}`);
+                            console.log(`🔍 ¡¡¡TOOL CHECKCODE INVOCADA!!! - Código: ${code} - Razón: ${reason}`);
                             const result = CheckCodes.checkCode(code);
                             console.log(`📋 Resultado: ${result.isValid ? 'Válido' : 'Inválido'} - ${result.message}`);
                             console.log(`📊 StateChanges:`, result.stateChanges);
@@ -80,6 +83,8 @@ class DroneResponseGenerator {
                     })
                 }
             });
+            
+            console.log('🤖 RESPUESTA DE AI RECIBIDA:', JSON.stringify(response, null, 2));
 
             return DroneResponse.create(response.object.message, response.object.photoUrls || []);
         } catch (error) {
@@ -119,9 +124,11 @@ Puedes comentar sobre:
 
 # CÓDIGO DE APERTURA:
 - No conoces los códigos de antemano. Solo sabes que existen códigos que pueden abrir la barrera.
-- Si el usuario menciona un código, usa la herramienta checkCodes para verificarlo.
+- IMPORTANTE: Si el usuario menciona CUALQUIER código alfanumérico (como DOTBA, ABCD, 1234, etc.), SIEMPRE usa la herramienta checkCodes para verificarlo.
+- Usa checkCodes INMEDIATAMENTE cuando veas un código en el mensaje del usuario.
 - Si el código es válido, confirma que lo has procesado y que la barrera se ha abierto.
 - Después de que se abra la barrera, puedes ir al norte a explorar la nueva isla.
+- EJEMPLOS de cuándo usar checkCodes: "DOTBA", "el código es ABCD", "prueba 1234", "código XYZW"
 
 # ESTADO DE LA BARRERA:
 - Por defecto, la barrera está CERRADA y bloquea el paso al norte.

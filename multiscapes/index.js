@@ -99,3 +99,59 @@ async function multiscapesInit(request, response) {
 }
 
 module.exports.multiscapesInit = multiscapesInit;
+
+// Endpoint de testing para probar desde navegador
+async function multiscapesTest(request, response) {
+    // Configurar headers CORS
+    response.set('Access-Control-Allow-Origin', '*');
+    response.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Manejar la solicitud OPTIONS (preflight)
+    if (request.method === 'OPTIONS') {
+        response.status(204).send('');
+        return;
+    }
+
+    try {
+        // Obtener parámetros de la query string
+        const { code, message } = request.query;
+
+        // Validar parámetros requeridos
+        const validationError = _validate({ code, message });
+        if (validationError) {
+            return response.status(400).json(validationError);
+        }
+
+        console.log('🧪 TEST ENDPOINT - Recibido code:', code, 'message:', message);
+
+        // Ejecutar el caso de uso (igual que el endpoint principal pero desde GET)
+        const ProcessPlayerMessage = require('./application/ProcessPlayerMessage');
+        const droneResponse = await ProcessPlayerMessage.process({ code, message });
+
+        // Convertir a respuesta JSON
+        response.json({
+            message: droneResponse.message,
+            photoUrls: droneResponse.photoUrls || [],
+            timestamp: new Date().toISOString(),
+            testInfo: {
+                receivedCode: code,
+                receivedMessage: message,
+                endpoint: 'multiscapesTest (GET)'
+            }
+        });
+
+    } catch (error) {
+        console.error('Error en endpoint de testing:', error);
+        response.status(500).json({
+            error: 'Error interno del servidor',
+            details: error.message,
+            testInfo: {
+                endpoint: 'multiscapesTest (GET)',
+                errorOccurred: true
+            }
+        });
+    }
+}
+
+module.exports.multiscapesTest = multiscapesTest;
