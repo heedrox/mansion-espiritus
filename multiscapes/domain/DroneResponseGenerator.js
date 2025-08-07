@@ -1,4 +1,4 @@
-const { generateObject } = require('ai');
+const { generateObject, tool } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
 const { z } = require('zod');
 const DroneResponse = require('./DroneResponse');
@@ -48,7 +48,7 @@ class DroneResponseGenerator {
                 }),
                 maxSteps: 5,
                 tools: {
-                    checkCodes: {
+                    checkCodes: tool({
                         description: 'Verifica si un código es válido y retorna sus efectos',
                         parameters: z.object({
                             code: z.string().describe('El código a verificar'),
@@ -77,7 +77,7 @@ class DroneResponseGenerator {
                             
                             return result;
                         }
-                    }
+                    })
                 }
             });
 
@@ -229,11 +229,6 @@ ${isBarrierOpen ?
     '- La barrera está ABIERTA. Puedes ir al norte sin restricciones.' :
     '- La barrera está CERRADA. No puedes ir al norte.'
 }
-
-# CÓDIGO DE APERTURA:
-- El código para abrir la barrera es "DOTBA".
-- Si te piden introducir "DOTBA" y la barrera está cerrada, confirma que lo has introducido y que la barrera se ha abierto.
-- Si te piden introducir "DOTBA" y la barrera ya está abierta, confirma que ya está abierta.
 
 # MOVIMIENTO AL NORTE:
 ${isBarrierOpen ? 

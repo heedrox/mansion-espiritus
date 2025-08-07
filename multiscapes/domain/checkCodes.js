@@ -16,6 +16,7 @@ class CheckCodes {
      * @returns {Object} - Resultado de la verificación
      */
     static checkCode(code) {
+        console.log('checkCode', code)
         const upperCode = code.toUpperCase().trim();
         
         // Definir códigos válidos y sus efectos
