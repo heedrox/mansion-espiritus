@@ -381,7 +381,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                 // Use AI validation for DOTBA code input characteristics
                 const codeValidation = await DroneResponseValidator.validateCharacteristic(
                     result.message, 
-                    'Menciona que ha introducido el código DOTBA'
+                    'Se ha usado el código DOTBA'
                 );
                 
                 const barrierValidation = await DroneResponseValidator.validateCharacteristic(
