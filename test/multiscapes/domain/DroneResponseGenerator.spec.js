@@ -4,12 +4,28 @@ const DroneResponseGenerator = require('../../../multiscapes/domain/DroneRespons
 const DroneResponseValidator = require('./DroneResponseValidator');
 
 describe('DroneResponseGenerator - Dron Johnson', () => {
-    before(async function() {
-        // Initialize database with required documents
-        const DatabaseConfig = require('../../../multiscapes/infrastructure/DatabaseConfig');
-        const db = DatabaseConfig.getDb();
+    // Removed before hook to avoid database connection issues
+    // Database initialization will be handled in individual tests as needed
+
+    beforeEach(async function() {
+        // Ensure we have the API key for testing
+        if (!process.env.OPEN_AI_KEY) {
+            console.warn('⚠️  OPEN_AI_KEY not set. Tests will be skipped.');
+        }
         
+        // Mock global fetch if it doesn't exist
+        if (typeof global.fetch === 'undefined') {
+            global.fetch = () => Promise.reject(new Error('fetch not available in test environment'));
+        }
+
+        // Set timeout for all tests in this suite
+        this.timeout(45000); // 45 seconds
+        
+        // Initialize database with required documents
         try {
+            const DatabaseConfig = require('../../../multiscapes/infrastructure/DatabaseConfig');
+            const db = DatabaseConfig.getDb();
+            
             // Create the codex document if it doesn't exist
             const codexRef = db.collection('twin-islands').doc('codex');
             const codexDoc = await codexRef.get();
@@ -29,21 +45,6 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             console.error('❌ Error initializing database:', error.message);
             // Don't fail the tests if database setup fails
         }
-    });
-
-    beforeEach(function() {
-        // Ensure we have the API key for testing
-        if (!process.env.OPEN_AI_KEY) {
-            console.warn('⚠️  OPEN_AI_KEY not set. Tests will be skipped.');
-        }
-        
-        // Mock global fetch if it doesn't exist
-        if (typeof global.fetch === 'undefined') {
-            global.fetch = () => Promise.reject(new Error('fetch not available in test environment'));
-        }
-
-        // Set timeout for all tests in this suite
-        this.timeout(45000); // 45 seconds
     });
 
     afterEach(() => {
@@ -70,7 +71,13 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             }
 
             // Arrange
-            const messages = [];
+            const messages = [
+                {
+                    message: "¿qué puedes ver?",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
 
             // Act with timeout protection
             let result;
@@ -109,9 +116,9 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                 );
                 
                 // Assert validation results
-                expect(locationValidation.isValid, `Location validation failed: ${locationValidation.reason}`).to.be.true;
-                expect(environmentValidation.isValid, `Environment validation failed: ${environmentValidation.reason}`).to.be.true;
-                expect(objectsValidation.isValid, `Objects validation failed: ${objectsValidation.reason}`).to.be.true;
+                expect(locationValidation.isValid, `Location validation failed: ${locationValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(environmentValidation.isValid, `Environment validation failed: ${environmentValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
+                expect(objectsValidation.isValid, `Objects validation failed: ${objectsValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
             }
             expect(result.photoUrls).to.be.an('array');
             
@@ -665,7 +672,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                     'Tiene un tono juguetón o entusiasta con exclamaciones'
                 );
                 
-                expect(personalityValidation.isValid, `Personality validation failed: ${personalityValidation.reason}`).to.be.true;
+                expect(personalityValidation.isValid, `Personality validation failed: ${personalityValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
             }
             
             console.log('🤖 Drone Response:', result.message);
@@ -710,7 +717,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                     'Incluye emojis o tiene un tono juguetón con bromas'
                 );
                 
-                expect(emojiValidation.isValid, `Emoji/playful tone validation failed: ${emojiValidation.reason}`).to.be.true;
+                expect(emojiValidation.isValid, `Emoji/playful tone validation failed: ${emojiValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
             }
             
             console.log('🤖 Drone Response:', result.message);
@@ -757,7 +764,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                     'Menciona al menos 3 de estos elementos: arena, acantilados, faro, barrera, teclado'
                 );
                 
-                expect(elementsValidation.isValid, `Key elements validation failed: ${elementsValidation.reason}`).to.be.true;
+                expect(elementsValidation.isValid, `Key elements validation failed: ${elementsValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
             }
             
             console.log('🤖 Drone Response:', result.message);

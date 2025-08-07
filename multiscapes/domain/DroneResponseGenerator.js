@@ -1,4 +1,4 @@
-const { generateObject, tool } = require('ai');
+const { generateText, tool, Output } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
 const { z } = require('zod');
 const DroneResponse = require('./DroneResponse');
@@ -33,11 +33,11 @@ class DroneResponseGenerator {
         const stateInstructions = this._getStateInstructions(isBarrierOpen);
         const systemPrompt = johnsonPrompt + commonInstructions + stateInstructions;
 
-        console.log('🤖 ANTES DE LLAMAR A AI - Mensajes:', JSON.stringify(aiMessages, null, 2));
+                    // console.log('🤖 ANTES DE LLAMAR A AI - Mensajes:', JSON.stringify(aiMessages, null, 2));
         console.log('🔧 TOOLS CONFIGURADAS - checkCodes está disponible');
         
         try {
-            const response = await generateObject({
+            const response = await generateText({
                 model: openAiModel("gpt-4o-mini"),
                 messages: [
                     { role: 'system', content: systemPrompt },
@@ -45,13 +45,16 @@ class DroneResponseGenerator {
                 ],
                 temperature: 0.7,
                 max_tokens: 2000,
-                schema: z.object({
-                    message: z.string().describe('La respuesta del drone al usuario'),
-                    photoUrls: z.array(z.string().url()).optional().describe('Array de URLs de fotos que el drone puede incluir en su respuesta')
+                experimental_output: Output.object({
+                    schema: z.object({
+                        message: z.string().describe('La respuesta del drone al usuario'),
+                        photoUrls: z.array(z.string().url()).optional().describe('Array de URLs de fotos que el drone puede incluir en su respuesta')
+                    })
                 }),
-                maxSteps: 5,
-                tools: {
-                    checkCodes: tool({
+                maxSteps: 3,
+                tools: [
+                    tool({
+                        name: 'checkCodes',
                         description: 'Verifica si un código es válido y retorna sus efectos',
                         parameters: z.object({
                             code: z.string().describe('El código a verificar'),
@@ -81,12 +84,19 @@ class DroneResponseGenerator {
                             return result;
                         }
                     })
-                }
+                ]
             });
             
-            console.log('🤖 RESPUESTA DE AI RECIBIDA:', JSON.stringify(response, null, 2));
-
-            return DroneResponse.create(response.object.message, response.object.photoUrls || []);
+            // console.log('🤖 RESPUESTA DE AI RECIBIDA:', JSON.stringify(response, null, 2));
+            
+            // Extraer el mensaje y las URLs de fotos del resultado experimental
+            let finalMessage = response.text;
+            let photoUrls = response.experimental_output?.photoUrls || [];
+            
+            // Con maxSteps: 3, el modelo debería completar la tarea en un solo paso
+            // y devolver el resultado directamente en experimental_output
+            
+            return DroneResponse.create(finalMessage, photoUrls);
         } catch (error) {
             console.error('Error al generar respuesta con AI:', error);
             return DroneResponse.create(`Hubo un error procesando tu mensaje, no te entendí bien. Inténtalo nuevamente.`);
@@ -126,9 +136,13 @@ Puedes comentar sobre:
 - No conoces los códigos de antemano. Solo sabes que existen códigos que pueden abrir la barrera.
 - IMPORTANTE: Si el usuario menciona CUALQUIER código alfanumérico (como DOTBA, ABCD, 1234, etc.), SIEMPRE usa la herramienta checkCodes para verificarlo.
 - Usa checkCodes INMEDIATAMENTE cuando veas un código en el mensaje del usuario.
+- OBLIGATORIO: Si el usuario dice "introduce el código DOTBA" o "pon el código DOTBA", DEBES usar checkCodes con el código "DOTBA".
+- CRÍTICO: Cuando veas "DOTBA" en el mensaje del usuario, DEBES usar la herramienta checkCodes ANTES de responder.
 - Si el código es válido, confirma que lo has procesado y que la barrera se ha abierto.
 - Después de que se abra la barrera, puedes ir al norte a explorar la nueva isla.
 - EJEMPLOS de cuándo usar checkCodes: "DOTBA", "el código es ABCD", "prueba 1234", "código XYZW"
+- RECUERDA: Cuando el usuario mencione "DOTBA", SIEMPRE usa checkCodes para verificarlo.
+- INSTRUCCIÓN FINAL: Si ves "DOTBA" en el mensaje, USA LA HERRAMIENTA checkCodes.
 
 # ESTADO DE LA BARRERA:
 - Por defecto, la barrera está CERRADA y bloquea el paso al norte.
