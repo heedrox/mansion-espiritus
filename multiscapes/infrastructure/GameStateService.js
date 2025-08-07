@@ -1,13 +1,14 @@
 const DatabaseConfig = require('./DatabaseConfig');
 
 class GameStateService {
-    constructor() {
+    constructor(code = 'codex') {
         this.db = DatabaseConfig.getDb();
+        this.code = code;
     }
 
     async getBarrierState() {
         try {
-            const docRef = this.db.collection('twin-islands').doc('codex');
+            const docRef = this.db.collection('twin-islands').doc(this.code);
             const doc = await docRef.get();
             
             if (doc.exists) {
@@ -26,7 +27,7 @@ class GameStateService {
 
     async setBarrierState(isOpen) {
         try {
-            const docRef = this.db.collection('twin-islands').doc('codex');
+            const docRef = this.db.collection('twin-islands').doc(this.code);
             await docRef.update({
                 barreraElectromagneticaAbierta: isOpen
             });
@@ -47,7 +48,7 @@ class GameStateService {
 
     async getGameState() {
         try {
-            const docRef = this.db.collection('twin-islands').doc('codex');
+            const docRef = this.db.collection('twin-islands').doc(this.code);
             const doc = await docRef.get();
             
             if (doc.exists) {

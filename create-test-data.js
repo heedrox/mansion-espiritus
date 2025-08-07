@@ -6,24 +6,25 @@ process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 // Obtener la instancia de Firestore usando la configuración centralizada
 const db = DatabaseConfig.getDb();
 
-async function createTestData() {
+async function createTestData(code = 'codex') {
     try {
         console.log('🚀 Iniciando creación de datos de prueba...');
+        console.log(`🔑 Código: ${code}`);
 
-        // Crear el documento 'codex' en la colección twin-islands
+        // Crear el documento en la colección twin-islands
         const collectionName = DatabaseConfig.getCollectionName();
-        const docPath = DatabaseConfig.getDocumentPath('codex');
+        const docPath = DatabaseConfig.getDocumentPath(code);
         
-        // Crear documento 'codex'
-        const codexRef = db.doc(docPath);
-        await codexRef.set({
+        // Crear documento
+        const docRef = db.doc(docPath);
+        await docRef.set({
             start: "1",
             created: new Date().toISOString()
         });
-        console.log('✅ Documento "codex" creado');
+        console.log(`✅ Documento "${code}" creado`);
 
         // Crear algunos mensajes de prueba en la subcolección messages
-        const messagesRef = codexRef.collection('messages');
+        const messagesRef = docRef.collection('messages');
         
         const testMessages = [
             {
@@ -61,7 +62,7 @@ async function createTestData() {
         console.log('🎉 Datos de prueba creados exitosamente!');
         console.log('\n📊 Estructura creada:');
         console.log('twin-islands/');
-        console.log('└── codex/');
+        console.log(`└── ${code}/`);
         console.log('    ├── start: "1"');
         console.log('    └── messages/ (5 mensajes: 3 player + 2 drone)');
 
@@ -71,13 +72,25 @@ async function createTestData() {
     }
 }
 
-// Ejecutar la función
-createTestData()
-    .then(() => {
+// Función principal
+async function main() {
+    const args = process.argv.slice(2);
+    const code = args[0] || 'codex';
+    
+    try {
+        await createTestData(code);
         console.log('\n✅ Script completado exitosamente');
-        process.exit(0);
-    })
-    .catch((error) => {
+    } catch (error) {
         console.error('\n❌ Script falló:', error);
         process.exit(1);
-    }); 
+    } finally {
+        process.exit(0);
+    }
+}
+
+// Ejecutar si es el archivo principal
+if (require.main === module) {
+    main();
+}
+
+module.exports = { createTestData }; 

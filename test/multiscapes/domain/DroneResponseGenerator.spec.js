@@ -26,20 +26,21 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             const DatabaseConfig = require('../../../multiscapes/infrastructure/DatabaseConfig');
             const db = DatabaseConfig.getDb();
             
-            // Create the codex document if it doesn't exist
-            const codexRef = db.collection('twin-islands').doc('codex');
-            const codexDoc = await codexRef.get();
+            // Create the test document if it doesn't exist
+            const testCode = 'test-codex';
+            const testRef = db.collection('twin-islands').doc(testCode);
+            const testDoc = await testRef.get();
             
-            if (!codexDoc.exists) {
-                console.log('📝 Creating codex document in database...');
-                await codexRef.set({
+            if (!testDoc.exists) {
+                console.log('📝 Creating test document in database...');
+                await testRef.set({
                     barreraElectromagneticaAbierta: false,
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
                 });
-                console.log('✅ Codex document created successfully');
+                console.log('✅ Test document created successfully');
             } else {
-                console.log('📋 Codex document already exists');
+                console.log('📋 Test document already exists');
             }
         } catch (error) {
             console.error('❌ Error initializing database:', error.message);
@@ -83,7 +84,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -151,7 +152,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -219,7 +220,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -277,7 +278,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
 
             // Arrange - Set barrier state to closed in database
             const GameStateService = require('../../../multiscapes/infrastructure/GameStateService');
-            const gameStateService = new GameStateService();
+            const gameStateService = new GameStateService('test-codex');
             await gameStateService.closeBarrier();
             console.log('🔒 Barrera cerrada en base de datos para el test');
 
@@ -294,7 +295,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -362,7 +363,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -419,7 +420,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
 
             // Arrange - Set barrier state to open in database
             const GameStateService = require('../../../multiscapes/infrastructure/GameStateService');
-            const gameStateService = new GameStateService();
+            const gameStateService = new GameStateService('test-codex');
             await gameStateService.openBarrier();
             console.log('🔓 Barrera abierta en base de datos para el test');
 
@@ -436,7 +437,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -514,7 +515,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -564,7 +565,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
 
             // Arrange - Set barrier state to closed in database
             const GameStateService = require('../../../multiscapes/infrastructure/GameStateService');
-            const gameStateService = new GameStateService();
+            const gameStateService = new GameStateService('test-codex');
             await gameStateService.closeBarrier();
             console.log('🔒 Barrera cerrada en base de datos para el test');
 
@@ -581,7 +582,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -650,7 +651,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -695,7 +696,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -742,7 +743,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )
@@ -789,7 +790,7 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             let result;
             try {
                 result = await Promise.race([
-                    DroneResponseGenerator.generateResponse(messages),
+                    DroneResponseGenerator.generateResponse(messages, 'test-codex'),
                     new Promise((_, reject) => 
                         setTimeout(() => reject(new Error('AI call timeout')), 40000)
                     )

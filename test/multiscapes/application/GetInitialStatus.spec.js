@@ -46,7 +46,7 @@ describe('GetInitialStatus', () => {
             MessageRepository.getMessagesByTimestamp.resolves(mockMessages);
 
             const params = {
-                code: 'codex',
+                code: 'test-codex',
                 drone: 'common'
             };
 
@@ -65,7 +65,7 @@ describe('GetInitialStatus', () => {
 
             // Verify that MessageRepository was called with correct parameters
             expect(MessageRepository.getMessagesByTimestamp.calledOnce).to.be.true;
-            expect(MessageRepository.getMessagesByTimestamp.calledWith('codex')).to.be.true;
+            expect(MessageRepository.getMessagesByTimestamp.calledWith('test-codex')).to.be.true;
         });
 
         it('should return empty array when no messages exist', async () => {
@@ -75,7 +75,7 @@ describe('GetInitialStatus', () => {
             MessageRepository.getMessagesByTimestamp.resolves(mockMessages);
 
             const params = {
-                code: 'codex',
+                code: 'test-codex',
                 drone: 'johnson'
             };
 
@@ -103,7 +103,7 @@ describe('GetInitialStatus', () => {
             MessageRepository.getMessagesByTimestamp.resolves(mockMessages);
 
             const params = {
-                code: 'codex',
+                code: 'test-codex',
                 drone: 'jackson'
             };
 

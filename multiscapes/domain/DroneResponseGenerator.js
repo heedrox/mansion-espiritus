@@ -6,13 +6,13 @@ const GameStateService = require('../infrastructure/GameStateService');
 const CheckCodes = require('./checkCodes');
 
 class DroneResponseGenerator {
-    static async generateResponse(messages) {
+    static async generateResponse(messages, code = 'codex') {
         if (!messages || !Array.isArray(messages)) {
             throw new Error('Messages debe ser un array');
         }
 
         // Obtener el estado actual del juego
-        const gameStateService = new GameStateService();
+        const gameStateService = new GameStateService(code);
         const gameState = await gameStateService.getGameState();
         const isBarrierOpen = gameState.barreraElectromagneticaAbierta;
 
@@ -70,7 +70,7 @@ class DroneResponseGenerator {
                             if (result.isValid && result.stateChanges) {
                                 console.log(`🔄 Aplicando cambios de estado...`);
                                 const GameStateService = require('../infrastructure/GameStateService');
-                                const gameStateService = new GameStateService();
+                                const gameStateService = new GameStateService(code);
                                 
                                 for (const [key, value] of Object.entries(result.stateChanges)) {
                                     console.log(`🔧 Aplicando ${key} = ${value}`);
