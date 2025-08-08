@@ -265,13 +265,13 @@ ${isBarrierOpen ?
             const json = JSON.stringify(gameState ?? {}, null, 2);
             return `
 
-# ESTADO DEL JUEGO (JSON)
+# GAME_STATE_JSON
 ${json}
 `;
         } catch (error) {
             return `
 
-# ESTADO DEL JUEGO (JSON)
+# GAME_STATE_JSON
 {"error": "No se pudo serializar el estado del juego"}
 `;
         }
