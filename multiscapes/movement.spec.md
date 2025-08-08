@@ -55,10 +55,12 @@ availableDestinations: {
 - ✅ Integración completa con el prompt del sistema
 - ✅ Test creado y pasando: `destinations-prompt-integration.spec.js`
 
-### 🔄 Fase 3: Implementar Comando de Movimiento
-- ⏳ Crear herramienta `moveTo` para procesar comandos de movimiento
-- ⏳ Actualizar `currentRoom` en el estado del juego
-- ⏳ Crear tests para verificar el funcionamiento del movimiento
+### ✅ Fase 3: Implementar Comando de Movimiento
+- ✅ Creada herramienta `moveTo` para procesar comandos de movimiento
+- ✅ Actualizado `currentRoom` en el estado del juego
+- ✅ Creados tests para verificar el funcionamiento del movimiento
+- ✅ Integrada la herramienta en `DroneResponseGenerator`
+- ✅ Añadidas instrucciones de movimiento al prompt del dron
 
 ## Tests
 
@@ -74,5 +76,11 @@ availableDestinations: {
 ### ✅ Test 4: drone-destinations-response.spec.js
 - ✅ Verificar que la funcionalidad de destinos disponibles funciona correctamente
 
-### ⏳ Test 5: movement-command.spec.js
-- ⏳ Verificar que el comando de movimiento funciona correctamente (pendiente de implementar)
+### ✅ Test 5: moveTo-function.spec.js
+- ✅ Verificar que la función `MoveTo` funciona correctamente
+- ✅ Verificar movimiento exitoso cuando barrera está abierta
+- ✅ Verificar movimiento denegado cuando barrera está cerrada
+- ✅ Verificar movimiento denegado para destinos inválidos
+
+### ⏳ Test 6: movement-command.spec.js
+- ⏳ Verificar que el comando de movimiento funciona correctamente con la AI (pendiente de API key)

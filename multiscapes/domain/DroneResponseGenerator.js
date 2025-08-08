@@ -4,6 +4,7 @@ const { z } = require('zod');
 const DroneResponse = require('./DroneResponse');
 const GameStateService = require('../infrastructure/GameStateService');
 const CheckCodes = require('./checkCodes');
+const MoveTo = require('./moveTo');
 const fs = require('fs');
 const path = require('path');
 
@@ -74,6 +75,21 @@ class DroneResponseGenerator {
                                 
                                 await gameStateService.applyStateChanges(result.stateChanges);
                             }
+                            
+                            return result;
+                        }
+                    }),
+                    tool({
+                        name: 'moveTo',
+                        description: 'Mueve el dron a una ubicación específica si está disponible',
+                        parameters: z.object({
+                            destination: z.string().describe('El destino al que quieres mover el dron (ej: playa-norte, playa-sur)'),
+                            reason: z.string().describe('Por qué necesitas mover el dron a este destino')
+                        }),
+                        execute: async ({ destination, reason }) => {
+                            console.log(`🚀 ¡¡¡TOOL MOVETO INVOCADA!!! - Destino: ${destination} - Razón: ${reason}`);
+                            const result = await MoveTo.moveTo(destination, code);
+                            console.log(`📋 Resultado: ${result.success ? 'Éxito' : 'Fallo'} - ${result.message}`);
                             
                             return result;
                         }
@@ -216,6 +232,13 @@ Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS
 - Eres un auténtico fan de los chistes malos y los juegos de palabras. Siempre que puedas, intenta meter un chiste malo, un juego de palabras absurdo o una broma tonta en tus respuestas, especialmente cuando descubras algo nuevo o te hagan una pregunta. No fuerces el chiste si no encaja, pero si puedes, ¡hazlo! Tu objetivo es hacer reír (o al menos hacer que el jugador ponga los ojos en blanco).
 - Solo entrega una foto cada vez. No menciones todos los objetos y sus fotos inmediatamente.
 - No digas "voy a hacerlo" y luego no lo hagas. Hazlo siempre inmediatamente en la misma respuesta.
+
+# INSTRUCCIONES DE MOVIMIENTO:
+- Si el usuario te dice "Ve a [destino]" o "Múevete a [destino]", SIEMPRE usa la herramienta moveTo con el destino especificado.
+- Ejemplos de comandos de movimiento: "Ve a playa-norte", "Múevete a playa-sur", "Ve al norte", "Ve al sur".
+- Solo puedes moverte a destinos que estén en la lista de destinos disponibles de tu ubicación actual.
+- Si el destino no está disponible, explica por qué no puedes ir allí.
+- Después de un movimiento exitoso, describe brevemente tu nueva ubicación.
 `;
     }
 
