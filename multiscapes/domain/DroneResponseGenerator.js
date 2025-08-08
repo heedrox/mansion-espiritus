@@ -120,7 +120,7 @@ class DroneResponseGenerator {
 
     static _getRoomPrompt(roomName = 'playa-sur') {
         try {
-            const gamesDataDir = path.resolve(__dirname, '../../miniscapes/games-data');
+            const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
             const filePath = path.join(gamesDataDir, `${roomName}.json`);
             const raw = fs.readFileSync(filePath, 'utf8');
             const data = JSON.parse(raw);

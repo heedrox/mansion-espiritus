@@ -44,7 +44,7 @@ class DatabaseConfig {
 
     static getGamesDataDir() {
         // Base path for room prompts and media data
-        return require('path').resolve(__dirname, '../../miniscapes/games-data');
+        return require('path').resolve(__dirname, '../../multiscapes/games-data');
     }
 }
 
