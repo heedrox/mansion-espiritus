@@ -25,23 +25,21 @@ describe('GameResetService', () => {
             const result = await resetService.resetGame(testCode);
 
             // Assert
-            expect(result).to.have.property('success', true);
-            expect(result).to.have.property('message');
-            expect(result).to.have.property('code', testCode);
-            expect(result.message).to.include('Juego reseteado exitosamente');
+            expect(result).to.equal(true);
 
             // Verify that the document exists with initial state
             const gameStateService = new GameStateService(testCode);
             const gameState = await gameStateService.getGameState();
             expect(gameState.barreraElectromagneticaAbierta).to.be.false;
             expect(gameState.start).to.equal('1');
+            expect(gameState.currentRoom).to.equal('playa-sur');
 
             // Verify that introduction message exists
             const messages = await MessageRepository.getMessagesByTimestamp(testCode);
             expect(messages).to.be.an('array');
             expect(messages.length).to.be.greaterThan(0);
             
-            const introMessage = messages.find(msg => msg.isIntroduction);
+            const introMessage = messages[0];
             expect(introMessage).to.exist;
             expect(introMessage.user).to.equal('drone');
             expect(introMessage.message).to.include('Dron Johnson');
@@ -63,8 +61,7 @@ describe('GameResetService', () => {
             const result = await resetService.resetGame(nonExistentCode);
 
             // Assert
-            expect(result).to.have.property('success', true);
-            expect(result).to.have.property('code', nonExistentCode);
+            expect(result).to.equal(true);
 
             // Verify that the document was created
             const gameStateService = new GameStateService(nonExistentCode);

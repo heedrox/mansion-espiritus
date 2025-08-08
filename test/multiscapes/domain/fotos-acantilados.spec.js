@@ -36,7 +36,7 @@ describe('Nueva Foto de Acantilados', () => {
             const prompt = DroneResponseGenerator._getJohnsonPrompt();
             
             // Verify that both acantilado photos are mentioned in the prompt
-            const hasAcantiladoOriginal = prompt.includes('acantilado.jpg') && !prompt.includes('acantilado-2.jpg');
+            const hasAcantiladoOriginal = prompt.includes('acantilado.jpg');
             const hasAcantiladoNuevo = prompt.includes('acantilado-2.jpg');
             
             expect(hasAcantiladoOriginal, 'Prompt should contain acantilado.jpg').to.be.true;

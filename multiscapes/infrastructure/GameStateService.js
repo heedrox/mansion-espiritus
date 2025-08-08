@@ -56,20 +56,23 @@ class GameStateService {
                 return {
                     ...data,
                     barreraElectromagneticaAbierta: data.barreraElectromagneticaAbierta ?? false,
-                    start: data.start ?? "1"
+                    start: data.start ?? "1",
+                    currentRoom: data.currentRoom ?? 'playa-sur'
                 };
             } else {
                 // Estado por defecto
                 return {
                     barreraElectromagneticaAbierta: false,
-                    start: "1"
+                    start: "1",
+                    currentRoom: 'playa-sur'
                 };
             }
         } catch (error) {
             console.error('Error al obtener estado del juego:', error);
             return {
                 barreraElectromagneticaAbierta: false,
-                start: "1"
+                start: "1",
+                currentRoom: 'playa-sur'
             };
         }
     }
