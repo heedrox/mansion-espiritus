@@ -5,23 +5,31 @@ class DatabaseConfig {
     
     static getDb() {
         if (!this._db) {
+            const useEmulator = !!process.env.FIRESTORE_EMULATOR_HOST;
+            const defaultProjectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT || 'demo-twin-islands';
+
             if (!admin.apps.length) {
-                admin.initializeApp({
-                    projectId: 'mansion-espiritus-lkgoxs'
-                });
+                if (useEmulator) {
+                    // Initialize without credentials for emulator, but set a projectId
+                    process.env.GOOGLE_CLOUD_PROJECT = defaultProjectId;
+                    process.env.GCLOUD_PROJECT = defaultProjectId;
+                    admin.initializeApp({ projectId: defaultProjectId });
+                } else {
+                    // Production / non-emulator
+                    admin.initializeApp({
+                        credential: admin.credential.applicationDefault(),
+                        projectId: defaultProjectId
+                    });
+                }
             }
             
             this._db = admin.firestore();
             
-            // Configurar base de datos según entorno (solo una vez)
-            if (process.env.NODE_ENV === 'production') {
-                this._db.settings({ databaseId: 'miniscapes' });
-            } else {
-                // En desarrollo, usar base de datos específica
-                this._db.settings({ databaseId: 'miniscapes' });
+            // Log emulator usage
+            if (useEmulator) {
+                console.log('🔌 Usando Firestore Emulator en', process.env.FIRESTORE_EMULATOR_HOST, 'proyecto:', defaultProjectId);
             }
         }
-        
         return this._db;
     }
     
@@ -30,8 +38,13 @@ class DatabaseConfig {
     }
     
     static getDocumentPath(code) {
-        const collectionName = this.getCollectionName();
-        return `${collectionName}/${code}`;
+        const collection = this.getCollectionName();
+        return `${collection}/${code}`;
+    }
+
+    static getGamesDataDir() {
+        // Base path for room prompts and media data
+        return require('path').resolve(__dirname, '../../miniscapes/games-data');
     }
 }
 

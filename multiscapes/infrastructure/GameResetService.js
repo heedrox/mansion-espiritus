@@ -8,27 +8,20 @@ class GameResetService {
 
     async resetGame(code) {
         try {
-            console.log(`🔄 Iniciando reset del juego para código: ${code}`);
-            
-            // 1. Eliminar el documento completo y todas sus subcolecciones
+            // Eliminar documento y subcolecciones si existen
             await this._deleteDocumentAndSubcollections(code);
-            
-            // 2. Crear nuevo documento con estado inicial
+
+            // Crear documento inicial
             await this._createInitialDocument(code);
-            
-            // 3. Agregar mensaje de introducción
+
+            // Añadir mensaje de introducción
             await this._addIntroductionMessage(code);
-            
-            console.log(`✅ Reset completado para código: ${code}`);
-            return {
-                success: true,
-                message: `Juego reseteado exitosamente para código: ${code}`,
-                code: code
-            };
-            
+
+            console.log('✅ Juego reseteado correctamente');
+            return true;
         } catch (error) {
-            console.error(`❌ Error durante el reset del juego ${code}:`, error);
-            throw error;
+            console.error('❌ Error al resetear el juego:', error);
+            return false;
         }
     }
 
@@ -38,30 +31,19 @@ class GameResetService {
             
             // Obtener todas las subcolecciones
             const collections = await docRef.listCollections();
-            
-            // Eliminar cada subcolección
             for (const collection of collections) {
-                console.log(`🗑️ Eliminando subcolección: ${collection.id}`);
                 const snapshot = await collection.get();
                 const batch = this.db.batch();
-                
-                snapshot.docs.forEach(doc => {
-                    batch.delete(doc.ref);
-                });
-                
+                snapshot.docs.forEach(doc => batch.delete(doc.ref));
                 await batch.commit();
             }
-            
-            // Eliminar el documento principal
+
+            // Eliminar documento principal
             await docRef.delete();
-            console.log(`🗑️ Documento principal eliminado para código: ${code}`);
-            
+            console.log(`🧹 Documento y subcolecciones eliminados para el código: ${code}`);
         } catch (error) {
-            console.error(`Error al eliminar documento y subcolecciones para ${code}:`, error);
-            // Si el documento no existe, no es un error
-            if (error.code !== 'NOT_FOUND') {
-                throw error;
-            }
+            console.error('Error al eliminar documento y subcolecciones:', error);
+            throw error;
         }
     }
 
@@ -78,10 +60,9 @@ class GameResetService {
             };
             
             await docRef.set(initialData);
-            console.log(`📄 Documento inicial creado para código: ${code}`);
-            
+            console.log('🆕 Documento inicial creado:', initialData);
         } catch (error) {
-            console.error(`Error al crear documento inicial para ${code}:`, error);
+            console.error('Error al crear documento inicial:', error);
             throw error;
         }
     }
@@ -92,22 +73,15 @@ class GameResetService {
             
             const introductionMessage = {
                 message: `¡Bip-bip! Aquí Dron Johnson ya aterrizado, en misión por las Islas Gemelas. 🌊✨  
-                
-Estoy en la Playa Sur: acantilados, faro azul, barrera misteriosa y un teclado medio enterrado. Puedo explorar y sacar fotos de lo que me indiques 📸.  
-
-La radiación impide que vengas, así que dame instrucciones y yo haré el trabajo. También te advierto que la radiación puede influir en los sistemas de comunicación, así que aseguraos de hablar mucho entre quienes estéis por allí.
-
-¿Con ganas de descubrir los secretos de estas islas? 🤖`,
-                user: "drone",
-                timestamp: new Date().toISOString(),
-                isIntroduction: true
+Estoy en la Playa Sur. Aquí hay una barrera electromagnética al norte y signos extraños en los acantilados. ¿Por dónde empezamos?`,
+                user: 'drone',
+                timestamp: new Date().toISOString()
             };
             
             await messagesRef.add(introductionMessage);
-            console.log(`💬 Mensaje de introducción agregado para código: ${code}`);
-            
+            console.log('✉️ Mensaje de introducción añadido');
         } catch (error) {
-            console.error(`Error al agregar mensaje de introducción para ${code}:`, error);
+            console.error('Error al añadir mensaje de introducción:', error);
             throw error;
         }
     }
