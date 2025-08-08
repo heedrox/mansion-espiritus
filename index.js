@@ -2,7 +2,7 @@ const {onRequest} = require('firebase-functions/v2/https');
 const { data } = require('./app/data/game-1/data');
 const { ScureApi } = require('./scure-api');
 const { GptTextParser } = require('./scure-api/parser/gpt-text-parser')
-const { multiscapes, multiscapesInit, multiscapesTest } = require('./multiscapes')
+const { multiscapes, multiscapesInit, multiscapesTest, multiscapesReset } = require('./multiscapes')
 require('dotenv').config()
 
 const gptParser = new GptTextParser(process.env.OPEN_AI_KEY)
@@ -59,3 +59,4 @@ exports.apiAi = onRequest(aiFunction)
 exports.multiscapes = onRequest(multiscapes)
 exports.multiscapesInit = onRequest(multiscapesInit)
 exports.multiscapesTest = onRequest(multiscapesTest)
+exports.multiscapesReset = onRequest(multiscapesReset)

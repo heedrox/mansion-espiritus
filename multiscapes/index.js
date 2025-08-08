@@ -155,3 +155,70 @@ async function multiscapesTest(request, response) {
 }
 
 module.exports.multiscapesTest = multiscapesTest;
+
+// Endpoint para reset de juego
+async function multiscapesReset(request, response) {
+    // Configurar headers CORS
+    response.set('Access-Control-Allow-Origin', '*');
+    response.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    response.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Manejar la solicitud OPTIONS (preflight)
+    if (request.method === 'OPTIONS') {
+        response.status(204).send('');
+        return;
+    }
+
+    // Solo permitir POST
+    if (request.method !== 'POST') {
+        return response.status(405).json({
+            error: 'Método no permitido',
+            details: 'Este endpoint solo acepta POST',
+            allowedMethods: ['POST']
+        });
+    }
+
+    try {
+        // Obtener parámetros del body
+        const { code } = request.body;
+
+        // Validar parámetros requeridos
+        if (!code) {
+            return response.status(400).json({
+                error: 'El parámetro "code" es requerido'
+            });
+        }
+
+        console.log(`🔄 RESET ENDPOINT - Recibido code: ${code}`);
+
+        // Ejecutar el reset del juego
+        const GameResetService = require('./infrastructure/GameResetService');
+        const resetService = new GameResetService();
+        const result = await resetService.resetGame(code);
+
+        // Convertir a respuesta JSON
+        response.json({
+            success: true,
+            message: result.message,
+            code: result.code,
+            timestamp: new Date().toISOString(),
+            resetInfo: {
+                endpoint: 'multiscapesReset',
+                action: 'game_reset'
+            }
+        });
+
+    } catch (error) {
+        console.error('Error en endpoint de reset:', error);
+        response.status(500).json({
+            error: 'Error interno del servidor',
+            details: error.message,
+            resetInfo: {
+                endpoint: 'multiscapesReset',
+                errorOccurred: true
+            }
+        });
+    }
+}
+
+module.exports.multiscapesReset = multiscapesReset;

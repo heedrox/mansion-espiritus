@@ -60,9 +60,9 @@ class DroneResponseGenerator {
                             code: z.string().describe('El código a verificar'),
                             reason: z.string().describe('Por qué necesitas verificar este código')
                         }),
-                        execute: async ({ code, reason }) => {
-                            console.log(`🔍 ¡¡¡TOOL CHECKCODE INVOCADA!!! - Código: ${code} - Razón: ${reason}`);
-                            const result = CheckCodes.checkCode(code);
+                        execute: async ({ code: inputCode, reason }) => {
+                            console.log(`🔍 ¡¡¡TOOL CHECKCODE INVOCADA!!! - Código: ${inputCode} - Razón: ${reason}`);
+                            const result = CheckCodes.checkCode(inputCode);
                             console.log(`📋 Resultado: ${result.isValid ? 'Válido' : 'Inválido'} - ${result.message}`);
                             console.log(`📊 StateChanges:`, result.stateChanges);
                             
@@ -72,13 +72,7 @@ class DroneResponseGenerator {
                                 const GameStateService = require('../infrastructure/GameStateService');
                                 const gameStateService = new GameStateService(code);
                                 
-                                for (const [key, value] of Object.entries(result.stateChanges)) {
-                                    console.log(`🔧 Aplicando ${key} = ${value}`);
-                                    if (key === 'barreraElectromagneticaAbierta' && value === true) {
-                                        await gameStateService.openBarrier();
-                                        console.log('🔓 Barrera electromagnética abierta desde herramienta checkCodes');
-                                    }
-                                }
+                                await gameStateService.applyStateChanges(result.stateChanges);
                             }
                             
                             return result;
@@ -90,7 +84,9 @@ class DroneResponseGenerator {
             // console.log('🤖 RESPUESTA DE AI RECIBIDA:', JSON.stringify(response, null, 2));
             
             // Extraer el mensaje y las URLs de fotos del resultado experimental
-            let finalMessage = response.text;
+
+            console.log('experimental_output', response.experimental_output);
+            let finalMessage = response.experimental_output?.message;
             let photoUrls = response.experimental_output?.photoUrls || [];
             
             // Con maxSteps: 3, el modelo debería completar la tarea en un solo paso
@@ -134,15 +130,12 @@ Puedes comentar sobre:
 
 # CÓDIGO DE APERTURA:
 - No conoces los códigos de antemano. Solo sabes que existen códigos que pueden abrir la barrera.
-- IMPORTANTE: Si el usuario menciona CUALQUIER código alfanumérico (como DOTBA, ABCD, 1234, etc.), SIEMPRE usa la herramienta checkCodes para verificarlo.
+- IMPORTANTE: Si el usuario menciona CUALQUIER código alfanumérico (como ABCD, 1234, etc.), SIEMPRE usa la herramienta checkCodes para verificarlo.
 - Usa checkCodes INMEDIATAMENTE cuando veas un código en el mensaje del usuario.
-- OBLIGATORIO: Si el usuario dice "introduce el código DOTBA" o "pon el código DOTBA", DEBES usar checkCodes con el código "DOTBA".
-- CRÍTICO: Cuando veas "DOTBA" en el mensaje del usuario, DEBES usar la herramienta checkCodes ANTES de responder.
-- Si el código es válido, confirma que lo has procesado y que la barrera se ha abierto.
+- OBLIGATORIO: Si el usuario dice "introduce el código XXXX" o "pon el código XXXX", DEBES usar checkCodes con el código "XXXX".
+- Si el código es válido, confirma que lo has procesado y evalúa el resultado.
 - Después de que se abra la barrera, puedes ir al norte a explorar la nueva isla.
-- EJEMPLOS de cuándo usar checkCodes: "DOTBA", "el código es ABCD", "prueba 1234", "código XYZW"
-- RECUERDA: Cuando el usuario mencione "DOTBA", SIEMPRE usa checkCodes para verificarlo.
-- INSTRUCCIÓN FINAL: Si ves "DOTBA" en el mensaje, USA LA HERRAMIENTA checkCodes.
+- EJEMPLOS de cuándo usar checkCodes: "el código es ABCD", "prueba 1234", "código XYZW"
 
 # ESTADO DE LA BARRERA:
 - Por defecto, la barrera está CERRADA y bloquea el paso al norte.
@@ -201,7 +194,7 @@ Están disponibles para mostrar al operador durante la exploración:
 - Perspectiva diferente de los acantilados desde otro ángulo.  
 - Se observan formaciones rocosas más pronunciadas y grietas profundas.  
 - La erosión marina es más evidente en esta vista.  
-- Se pueden apreciar diferentes capas geológicas expuestas.
+- Se observan distintos símbolos, ¿son letras?
 
 ---
 

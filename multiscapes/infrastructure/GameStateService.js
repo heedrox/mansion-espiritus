@@ -72,6 +72,23 @@ class GameStateService {
             };
         }
     }
+
+    async applyStateChanges(stateChanges) {
+        try {
+            if (!stateChanges || typeof stateChanges !== 'object') {
+                console.log('No hay cambios de estado para aplicar');
+                return;
+            }
+
+            const docRef = this.db.collection('twin-islands').doc(this.code);
+            await docRef.update(stateChanges);
+            
+            console.log(`🔄 Cambios de estado aplicados:`, stateChanges);
+        } catch (error) {
+            console.error('Error al aplicar cambios de estado:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = GameStateService; 
