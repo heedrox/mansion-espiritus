@@ -187,6 +187,7 @@ Están disponibles para mostrar al operador durante la exploración:
 - Se aprecian estratos claramente marcados y señales de erosión.  
 - Algunas marcas o símbolos grabados pueden distinguirse, aunque están deteriorados.  
 - No se detectan accesos visibles hacia la parte superior.
+- Cuando entregues esta foto, haz alusión a que existen más símbolos que podría fotografiar si quisiera.
 
 ---
 
