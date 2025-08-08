@@ -30,7 +30,7 @@ class DroneResponseGenerator {
 
         // Definir el prompt del sistema dependiente de la ubicación y concatenar instrucciones comunes
         const roomName = gameState.currentRoom || 'playa-sur';
-        const johnsonPrompt = this._getRoomPrompt(roomName);
+        const johnsonPrompt = this._getRoomPrompt(roomName, gameState);
         const commonInstructions = this._getCommonInstructions();
         const gameStateJsonBlock = this._getGameStateJsonBlock(gameState);
         const systemPrompt = johnsonPrompt + commonInstructions + gameStateJsonBlock;
@@ -112,7 +112,7 @@ class DroneResponseGenerator {
         }
     }
 
-    static _getRoomPrompt(roomName = 'playa-sur') {
+    static _getRoomPrompt(roomName = 'playa-sur', gameState = {}) {
         try {
             const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
             const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
@@ -123,8 +123,11 @@ class DroneResponseGenerator {
             const locationLabel = data.locationLabel || this._formatRoomLabel(roomName);
             const mediaSection = this._composeMediaSectionFromJson(Array.isArray(data.media) ? data.media : [], locationLabel);
             const guidelines = this._getMediaGuidelines();
+            
+            // Añadir información de destinos disponibles si existe
+            const destinationsSection = this._composeDestinationsSection(data, gameState);
 
-            return `${basePrompt}\n\n${mediaSection}\n\n${guidelines}`;
+            return `${basePrompt}\n\n${mediaSection}\n\n${destinationsSection}\n\n${guidelines}`;
         } catch (error) {
             console.warn(`⚠️ No se pudo cargar el prompt para room "${roomName}" desde archivo de datos. Usando prompt por defecto. Detalle:`, error.message);
             return this._getDefaultPlayaSurPromptHardcoded();
@@ -159,6 +162,27 @@ class DroneResponseGenerator {
         }
 
         return output;
+    }
+
+    static _composeDestinationsSection(data, gameState) {
+        if (!data.availableDestinations || typeof data.availableDestinations.getDestinations !== 'function') {
+            return '';
+        }
+
+        const destinations = data.availableDestinations.getDestinations(gameState);
+        const description = data.availableDestinations.description || '';
+
+        if (destinations.length === 0) {
+            return `# DESTINOS DISPONIBLES:
+Actualmente no puedes ir a ningún lado desde esta ubicación. ${description}`;
+        }
+
+        const destinationsList = destinations.map(dest => `- ${dest}`).join('\n');
+        return `# DESTINOS DISPONIBLES:
+Puedes ir a los siguientes lugares:
+${destinationsList}
+
+${description}`;
     }
 
     static _getMediaGuidelines() {

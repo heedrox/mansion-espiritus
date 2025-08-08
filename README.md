@@ -20,6 +20,7 @@ El proyecto incluye tests unitarios y tests de IA para validar el comportamiento
 ### Tests Rápidos
 ```bash
 npm test                    # Todos los tests
+npm run single-test -- archivo.spec.js # un unico test
 npm run test:ai            # Solo tests de IA
 npm run test:ci            # Script de CI/CD
 ```

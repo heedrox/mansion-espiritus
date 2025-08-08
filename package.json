@@ -10,6 +10,7 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "test": "mocha --require ./test/common.js --require source-map-support/register 'test/**/*.spec.js' test/**/*.spec.js",
+    "single-test": "mocha --require ./test/common.js --require source-map-support/register",
     "test:ci": "node scripts/test-ci.js",
     "test:ai": "npm test -- --grep 'DroneResponseGenerator' --grep 'Dron Johnson'",
     "tdd": "npm-watch test",

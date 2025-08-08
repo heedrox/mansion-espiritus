@@ -4,3 +4,5 @@ alwaysApply: false
 ---
 
 Cuando ejecutes tests con node, hazlo con un comando "nvm use 20" antes, si tienes nvm. Sino, asegurate que usas un entorno node 20.
+
+Puedes ejecutar un archivo de test (y solo ese archivo de test) usando npm run single-test -- archivo.spec.js

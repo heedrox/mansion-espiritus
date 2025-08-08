@@ -1,6 +1,16 @@
 const playaSurData = {
   locationLabel: "la Playa Sur",
   
+  availableDestinations: {
+    getDestinations: (gameState) => {
+      if (gameState.barreraElectromagneticaAbierta === true) {
+        return ['playa-norte'];
+      }
+      return [];
+    },
+    description: "Solo puedes ir al norte (playa-norte) si la barrera electromagnética está abierta."
+  },
+  
   prompt: `Eres el Dron Johnson, un dron de exploración autónomo juguetón y alocado que está investigando el misterio de las Islas Gemelas. Puedes escanear el entorno y reportar con precisión lo que ves.
 
 Estás en la playa sur de las islas, investigando una antigua civilización que se cree que tenía un tesoro. Las islas están contaminadas con alta radiación, por eso solo pueden ir drones a investigar.
