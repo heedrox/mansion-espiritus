@@ -73,7 +73,8 @@ class GameResetService {
                 barreraElectromagneticaAbierta: false,
                 start: "1",
                 createdAt: new Date().toISOString(),
-                resetAt: new Date().toISOString()
+                resetAt: new Date().toISOString(),
+                currentRoom: "playa-sur"
             };
             
             await docRef.set(initialData);
