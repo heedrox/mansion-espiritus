@@ -31,7 +31,8 @@ class DroneResponseGenerator {
         const johnsonPrompt = this._getJohnsonPrompt();
         const commonInstructions = this._getCommonInstructions();
         const stateInstructions = this._getStateInstructions(isBarrierOpen);
-        const systemPrompt = johnsonPrompt + commonInstructions + stateInstructions;
+        const gameStateJsonBlock = this._getGameStateJsonBlock(gameState);
+        const systemPrompt = johnsonPrompt + commonInstructions + stateInstructions + gameStateJsonBlock;
 
                     // console.log('🤖 ANTES DE LLAMAR A AI - Mensajes:', JSON.stringify(aiMessages, null, 2));
         // console.log('🔧 TOOLS CONFIGURADAS - checkCodes está disponible');
@@ -257,6 +258,23 @@ ${isBarrierOpen ?
     '- La barrera está CERRADA. Si te piden ir al norte, explica que no puedes ir debido a la barrera.'
 }
 `;
+    }
+
+    static _getGameStateJsonBlock(gameState) {
+        try {
+            const json = JSON.stringify(gameState ?? {}, null, 2);
+            return `
+
+# ESTADO DEL JUEGO (JSON)
+${json}
+`;
+        } catch (error) {
+            return `
+
+# ESTADO DEL JUEGO (JSON)
+{"error": "No se pudo serializar el estado del juego"}
+`;
+        }
     }
 }
 
