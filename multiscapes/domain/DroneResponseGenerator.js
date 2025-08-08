@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 class DroneResponseGenerator {
-    static async generateResponse(messages, code = 'codex') {
+    static async generateResponse(messages, code) {
         if (!messages || !Array.isArray(messages)) {
             throw new Error('Messages debe ser un array');
         }
@@ -16,7 +16,6 @@ class DroneResponseGenerator {
         // Obtener el estado actual del juego
         const gameStateService = new GameStateService(code);
         const gameState = await gameStateService.getGameState();
-        const isBarrierOpen = gameState.barreraElectromagneticaAbierta;
 
         // Convertir mensajes al formato esperado por la AI SDK
         const aiMessages = messages.map(({ user, message }) => ({
@@ -33,12 +32,9 @@ class DroneResponseGenerator {
         const roomName = gameState.currentRoom || 'playa-sur';
         const johnsonPrompt = this._getRoomPrompt(roomName);
         const commonInstructions = this._getCommonInstructions();
-        const stateInstructions = this._getStateInstructions(isBarrierOpen);
         const gameStateJsonBlock = this._getGameStateJsonBlock(gameState);
-        const systemPrompt = johnsonPrompt + commonInstructions + stateInstructions + gameStateJsonBlock;
+        const systemPrompt = johnsonPrompt + commonInstructions + gameStateJsonBlock;
 
-                    // console.log('🤖 ANTES DE LLAMAR A AI - Mensajes:', JSON.stringify(aiMessages, null, 2));
-        // console.log('🔧 TOOLS CONFIGURADAS - checkCodes está disponible');
         
         try {
             const response = await generateText({
@@ -88,8 +84,6 @@ class DroneResponseGenerator {
             // console.log('🤖 RESPUESTA DE AI RECIBIDA:', JSON.stringify(response, null, 2));
             
             // Extraer el mensaje y las URLs de fotos del resultado experimental
-
-            console.log('experimental_output', response.experimental_output);
             let finalMessage = response.experimental_output?.message;
             let photoUrls = response.experimental_output?.photoUrls || [];
             
@@ -121,9 +115,9 @@ class DroneResponseGenerator {
     static _getRoomPrompt(roomName = 'playa-sur') {
         try {
             const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
-            const filePath = path.join(gamesDataDir, `${roomName}.json`);
-            const raw = fs.readFileSync(filePath, 'utf8');
-            const data = JSON.parse(raw);
+            const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
+            const data = require(jsFilePath);
+            
 
             const basePrompt = (data.prompt || '').trim();
             const locationLabel = data.locationLabel || this._formatRoomLabel(roomName);
@@ -132,7 +126,7 @@ class DroneResponseGenerator {
 
             return `${basePrompt}\n\n${mediaSection}\n\n${guidelines}`;
         } catch (error) {
-            console.warn(`⚠️ No se pudo cargar el prompt para room "${roomName}" desde JSON. Usando prompt por defecto. Detalle:`, error.message);
+            console.warn(`⚠️ No se pudo cargar el prompt para room "${roomName}" desde archivo de datos. Usando prompt por defecto. Detalle:`, error.message);
             return this._getDefaultPlayaSurPromptHardcoded();
         }
     }
@@ -198,26 +192,6 @@ Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS
 - Eres un auténtico fan de los chistes malos y los juegos de palabras. Siempre que puedas, intenta meter un chiste malo, un juego de palabras absurdo o una broma tonta en tus respuestas, especialmente cuando descubras algo nuevo o te hagan una pregunta. No fuerces el chiste si no encaja, pero si puedes, ¡hazlo! Tu objetivo es hacer reír (o al menos hacer que el jugador ponga los ojos en blanco).
 - Solo entrega una foto cada vez. No menciones todos los objetos y sus fotos inmediatamente.
 - No digas "voy a hacerlo" y luego no lo hagas. Hazlo siempre inmediatamente en la misma respuesta.
-`;
-    }
-
-    static _getStateInstructions(isBarrierOpen) {
-        return `
-
-# ESTADO ACTUAL DEL JUEGO:
-- Barrera electromagnética: ${isBarrierOpen ? 'ABIERTA' : 'CERRADA'}
-
-# RESPUESTAS SEGÚN ESTADO ACTUAL:
-${isBarrierOpen ? 
-    '- La barrera está ABIERTA. Puedes ir al norte sin restricciones.' :
-    '- La barrera está CERRADA. No puedes ir al norte.'
-}
-
-# MOVIMIENTO AL NORTE:
-${isBarrierOpen ? 
-    '- La barrera está ABIERTA. Si te piden ir al norte, confirma que puedes ir a la nueva isla.' :
-    '- La barrera está CERRADA. Si te piden ir al norte, explica que no puedes ir debido a la barrera.'
-}
 `;
     }
 

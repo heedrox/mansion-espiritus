@@ -55,14 +55,12 @@ class GameStateService {
                 const data = doc.data() || {};
                 return {
                     ...data,
-                    barreraElectromagneticaAbierta: data.barreraElectromagneticaAbierta ?? false,
                     start: data.start ?? "1",
                     currentRoom: data.currentRoom ?? 'playa-sur'
                 };
             } else {
                 // Estado por defecto
                 return {
-                    barreraElectromagneticaAbierta: false,
                     start: "1",
                     currentRoom: 'playa-sur'
                 };
@@ -70,7 +68,6 @@ class GameStateService {
         } catch (error) {
             console.error('Error al obtener estado del juego:', error);
             return {
-                barreraElectromagneticaAbierta: false,
                 start: "1",
                 currentRoom: 'playa-sur'
             };

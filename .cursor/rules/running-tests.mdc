@@ -1,0 +1,6 @@
+---
+description: Running tests with node
+alwaysApply: false
+---
+
+Cuando ejecutes tests con node, hazlo con un comando "nvm use 20" antes, si tienes nvm. Sino, asegurate que usas un entorno node 20.
