@@ -23,7 +23,10 @@ class ProcessPlayerMessage {
         }
 
         // Obtener todos los mensajes ordenados por timestamp (incluyendo el recién guardado)
-        const messages = await MessageRepository.getMessagesByTimestamp(code);
+        const allMessages = await MessageRepository.getMessagesByTimestamp(code);
+        
+        // Limitar a solo los últimos 30 mensajes para ahorrar costes
+        const messages = allMessages.slice(-30);
         
         // Generar respuesta usando DroneResponseGenerator
         const droneResponse = await DroneResponseGenerator.generateResponse(messages, code);

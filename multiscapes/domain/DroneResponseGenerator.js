@@ -34,7 +34,7 @@ class DroneResponseGenerator {
         const systemPrompt = johnsonPrompt + commonInstructions + stateInstructions;
 
                     // console.log('🤖 ANTES DE LLAMAR A AI - Mensajes:', JSON.stringify(aiMessages, null, 2));
-        console.log('🔧 TOOLS CONFIGURADAS - checkCodes está disponible');
+        // console.log('🔧 TOOLS CONFIGURADAS - checkCodes está disponible');
         
         try {
             const response = await generateText({
@@ -187,15 +187,13 @@ Están disponibles para mostrar al operador durante la exploración:
 - Se aprecian estratos claramente marcados y señales de erosión.  
 - Algunas marcas o símbolos grabados pueden distinguirse, aunque están deteriorados.  
 - No se detectan accesos visibles hacia la parte superior.
-- Cuando entregues esta foto, haz alusión a que existen más símbolos que podría fotografiar si quisiera.
+- Cuando entregues esta foto, haz alusión a que existen unas muescas en el acantilado, y que podrías fotografiarlas. Eso hace referencia a la foto 4.
 
 ---
 
-📷 Foto 4: Vista alternativa del acantilado - https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado-2.jpg 
-- Perspectiva diferente de los acantilados desde otro ángulo.  
-- Se observan formaciones rocosas más pronunciadas y grietas profundas.  
-- La erosión marina es más evidente en esta vista.  
-- Se observan distintos símbolos, ¿son letras?
+📷 Foto 4: Muescas en el acantilado - https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado-2.jpg 
+- Se observan muescas en el acantilado, ¿son letras?
+- Distintas formas de erosión, y capas geológicas expuestas.
 
 ---
 
