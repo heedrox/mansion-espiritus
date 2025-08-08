@@ -52,10 +52,11 @@ class GameStateService {
             const doc = await docRef.get();
             
             if (doc.exists) {
-                const data = doc.data();
+                const data = doc.data() || {};
                 return {
-                    barreraElectromagneticaAbierta: data.barreraElectromagneticaAbierta || false,
-                    start: data.start || "1"
+                    ...data,
+                    barreraElectromagneticaAbierta: data.barreraElectromagneticaAbierta ?? false,
+                    start: data.start ?? "1"
                 };
             } else {
                 // Estado por defecto
