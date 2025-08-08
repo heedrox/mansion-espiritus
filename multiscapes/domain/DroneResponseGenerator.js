@@ -197,7 +197,15 @@ Están disponibles para mostrar al operador durante la exploración:
 
 ---
 
-🎥 Vídeo 4: Zoom al faro  - https://miniscapes.web.app/photos/twin-islands/1-playa-sur/faro-player.mp4
+📷 Foto 4: Vista alternativa del acantilado - https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado-2.jpg 
+- Perspectiva diferente de los acantilados desde otro ángulo.  
+- Se observan formaciones rocosas más pronunciadas y grietas profundas.  
+- La erosión marina es más evidente en esta vista.  
+- Se pueden apreciar diferentes capas geológicas expuestas.
+
+---
+
+🎥 Vídeo 5: Zoom al faro  - https://miniscapes.web.app/photos/twin-islands/1-playa-sur/faro-player.mp4
 - Vídeo corto con acercamiento al faro situado al sur.  
 - El faro está en funcionamiento, emitiendo una luz azul pulsante.  
 - No se detectan estructuras humanas cercanas ni rutas de acceso evidentes.
