@@ -26,11 +26,31 @@ module.exports = {
             // Ejecutar el caso de uso
             const droneResponse = await ProcessPlayerMessage.process({ code, message });
 
+            // Obtener el estado actual del juego para el currentRoom
+            const GameStateService = require('./infrastructure/GameStateService');
+            const gameStateService = new GameStateService(code);
+            const gameState = await gameStateService.getGameState();
+            const currentRoomName = gameState.currentRoom || 'playa-sur';
+
+            // Obtener el título de la habitación actual
+            let currentRoomTitle = null;
+            try {
+                const path = require('path');
+                const gamesDataDir = path.resolve(__dirname, './games-data');
+                const roomFilePath = path.join(gamesDataDir, `${currentRoomName}.js`);
+                const roomData = require(roomFilePath);
+                currentRoomTitle = roomData.title || currentRoomName;
+            } catch (error) {
+                console.error('Error al cargar datos de la habitación:', error);
+                currentRoomTitle = currentRoomName; // Fallback al nombre interno
+            }
+
             // Convertir a respuesta JSON
             response.json({
                 message: droneResponse.message,
                 photoUrls: droneResponse.photoUrls || [],
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                currentRoom: currentRoomTitle
             });
 
         } catch (error) {
@@ -129,11 +149,31 @@ async function multiscapesTest(request, response) {
         const ProcessPlayerMessage = require('./application/ProcessPlayerMessage');
         const droneResponse = await ProcessPlayerMessage.process({ code, message });
 
+        // Obtener el estado actual del juego para el currentRoom
+        const GameStateService = require('./infrastructure/GameStateService');
+        const gameStateService = new GameStateService(code);
+        const gameState = await gameStateService.getGameState();
+        const currentRoomName = gameState.currentRoom || 'playa-sur';
+
+        // Obtener el título de la habitación actual
+        let currentRoomTitle = null;
+        try {
+            const path = require('path');
+            const gamesDataDir = path.resolve(__dirname, './games-data');
+            const roomFilePath = path.join(gamesDataDir, `${currentRoomName}.js`);
+            const roomData = require(roomFilePath);
+            currentRoomTitle = roomData.title || currentRoomName;
+        } catch (error) {
+            console.error('Error al cargar datos de la habitación:', error);
+            currentRoomTitle = currentRoomName; // Fallback al nombre interno
+        }
+
         // Convertir a respuesta JSON
         response.json({
             message: droneResponse.message,
             photoUrls: droneResponse.photoUrls || [],
             timestamp: new Date().toISOString(),
+            currentRoom: currentRoomTitle,
             testInfo: {
                 receivedCode: code,
                 receivedMessage: message,

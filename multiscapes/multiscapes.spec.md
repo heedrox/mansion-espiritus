@@ -95,7 +95,8 @@ Endpoint para procesar mensajes del jugador y generar respuestas del drone usand
 {
   "message": "¡Hola operador! Veo una playa tranquila con arena dorada. Hay unos acantilados al sur y un faro con luz azul intermitente. ¡Es como estar en una película de misterio!",
   "photoUrls": [],
-  "timestamp": "2024-01-01T10:00:00.000Z"
+  "timestamp": "2024-01-01T10:00:00.000Z",
+  "currentRoom": "Playa Sur"
 }
 ```
 
@@ -125,7 +126,8 @@ Endpoint para procesar mensajes del jugador y generar respuestas del drone usand
 {
   "message": "Respuesta del drone", // String (respuesta generada por IA)
   "photoUrls": [],                 // Array (URLs de fotos opcionales)
-  "timestamp": "2024-01-01T10:00:00.000Z" // String ISO timestamp
+  "timestamp": "2024-01-01T10:00:00.000Z", // String ISO timestamp
+  "currentRoom": "Playa Sur"       // String (título de la habitación actual)
 }
 ```
 
@@ -145,6 +147,14 @@ Endpoint para procesar mensajes del jugador y generar respuestas del drone usand
 - `DroneResponseGenerator`: Generación de respuestas con IA
 - `MessageRepository`: Acceso a datos
 - `DroneDataService`: Validación del juego
+- `GameStateService`: Obtener estado actual del juego
+
+### Nuevo Campo currentRoom
+- **Propósito**: Indica el título de la habitación actual donde se encuentra el jugador
+- **Origen**: Se obtiene desde `gameState.currentRoom` y se traduce al título desde los archivos en `multiscapes/games-data/`
+- **Formato**: String con el título legible de la habitación (ej: "Playa Sur", "Playa Sur > Playa Norte")
+- **Fallback**: Si no se puede cargar el archivo de datos, usa el nombre interno de la habitación
+- **Implementación**: Se añade al endpoint después de obtener la respuesta del drone
 
 ### Configuración
 - Proyecto: `mansion-espiritus-lkgoxs`
