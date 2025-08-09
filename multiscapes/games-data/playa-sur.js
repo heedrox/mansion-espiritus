@@ -1,4 +1,5 @@
 const playaSurData = {
+  title: "Playa Sur",
   locationLabel: "la Playa Sur",
   
   availableDestinations: {

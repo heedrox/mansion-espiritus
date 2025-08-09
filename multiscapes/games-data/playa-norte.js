@@ -1,4 +1,5 @@
 const playaNorteData = {
+  title: "Playa Sur > Playa Norte",
   locationLabel: "la Playa Norte",
   
   availableDestinations: {
