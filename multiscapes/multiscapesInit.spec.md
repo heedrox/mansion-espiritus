@@ -58,7 +58,8 @@ Endpoint para obtener el estado inicial de un juego específico, incluyendo todo
 {
   "messages": [],
   "count": 0,
-  "timestamp": "2024-01-01T10:00:00.000Z"
+  "timestamp": "2024-01-01T10:00:00.000Z",
+  "currentRoom": "Playa Sur"
 }
 ```
 
@@ -82,7 +83,8 @@ Endpoint para obtener el estado inicial de un juego específico, incluyendo todo
 {
   "messages": [], // Array (puede estar vacío)
   "count": 0,     // Number (número de mensajes)
-  "timestamp": "2024-01-01T10:00:00.000Z" // String ISO timestamp
+  "timestamp": "2024-01-01T10:00:00.000Z", // String ISO timestamp
+  "currentRoom": "Playa Sur" // String (título de la habitación actual)
 }
 ```
 
@@ -111,7 +113,8 @@ Endpoint para obtener el estado inicial de un juego específico, incluyendo todo
     }
   ],
   "count": 2,
-  "timestamp": "2024-01-01T10:02:00.000Z"
+  "timestamp": "2024-01-01T10:02:00.000Z",
+  "currentRoom": "Playa Sur"
 }
 ```
 
@@ -141,7 +144,8 @@ Endpoint para obtener el estado inicial de un juego específico, incluyendo todo
     }
   ],
   "count": 3,
-  "timestamp": "2024-01-01T11:30:00.000Z"
+  "timestamp": "2024-01-01T11:30:00.000Z",
+  "currentRoom": "Playa Sur"
 }
 ```
 
@@ -159,7 +163,7 @@ Endpoint para obtener el estado inicial de un juego específico, incluyendo todo
       "message": "Mensaje con foto",
       "timestamp": "2024-01-01T10:00:00.000Z",
       "type": "game",
-      "photoUrls": ["https://example.com/photo1.jpg"],
+      "photoUrls": ["https://example.com/photo1-4815.jpg"],
       "user": "player"
     },
     {
@@ -171,7 +175,8 @@ Endpoint para obtener el estado inicial de un juego específico, incluyendo todo
     }
   ],
   "count": 2,
-  "timestamp": "2024-01-01T10:02:00.000Z"
+  "timestamp": "2024-01-01T10:02:00.000Z",
+  "currentRoom": "Playa Sur"
 }
 ```
 
@@ -185,7 +190,8 @@ Endpoint para obtener el estado inicial de un juego específico, incluyendo todo
 {
   "messages": [],
   "count": 0,
-  "timestamp": "2024-01-01T10:00:00.000Z"
+  "timestamp": "2024-01-01T10:00:00.000Z",
+  "currentRoom": "Playa Sur"
 }
 ```
 
@@ -204,5 +210,12 @@ Endpoint para obtener el estado inicial de un juego específico, incluyendo todo
 ### Dependencias
 - `GetInitialStatus`: Caso de uso principal
 - `MessageRepository`: Acceso a datos
+- `GameStateService`: Obtener estado actual del juego
 - `DatabaseConfig`: Configuración de Firestore
+
+### Nuevo Campo currentRoom
+- **Propósito**: Indica el título de la habitación actual donde se encuentra el jugador
+- **Origen**: Se obtiene desde `gameState.currentRoom` y se traduce al título desde los archivos en `multiscapes/games-data/`
+- **Formato**: String con el título legible de la habitación (ej: "Playa Sur", "Playa Sur > Playa Norte")
+- **Fallback**: Si no se puede cargar el archivo de datos, usa el nombre interno de la habitación
 
