@@ -30,13 +30,13 @@ class DroneResponseGenerator {
         });
 
         // Definir el prompt del sistema dependiente de la ubicación y concatenar instrucciones comunes
-        const roomName = gameState.currentRoom || 'playa-sur';
+        const roomName = gameState.currentRoom;
         const johnsonPrompt = this._getRoomPrompt(roomName, gameState);
         const commonInstructions = this._getCommonInstructions();
         const gameStateJsonBlock = this._getGameStateJsonBlock(gameState);
         const systemPrompt = johnsonPrompt + commonInstructions + gameStateJsonBlock;
 
-        
+        console.log('🤖 SYSTEM PROMPT:', systemPrompt);
         try {
             const response = await generateText({
                 model: openAiModel("gpt-4o-mini"),
@@ -52,7 +52,7 @@ class DroneResponseGenerator {
                         photoUrls: z.array(z.string().url()).optional().describe('Array de URLs de fotos que el drone puede incluir en su respuesta')
                     })
                 }),
-                maxSteps: 3,
+                maxSteps: 5,
                 tools: [
                     tool({
                         name: 'checkCodes',
@@ -83,7 +83,7 @@ class DroneResponseGenerator {
                         name: 'moveTo',
                         description: 'Mueve el dron a una ubicación específica si está disponible',
                         parameters: z.object({
-                            destination: z.string().describe('El destino al que quieres mover el dron (ej: playa-norte, playa-sur)'),
+                            destination: z.enum(['playa-norte']).describe('El destino al que quieres mover el dron'),
                             reason: z.string().describe('Por qué necesitas mover el dron a este destino')
                         }),
                         execute: async ({ destination, reason }) => {
@@ -128,14 +128,14 @@ class DroneResponseGenerator {
         }
     }
 
-    static _getRoomPrompt(roomName = 'playa-sur', gameState = {}) {
+    static _getRoomPrompt(roomName, gameState = {}) {
         try {
             const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
             const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
             const data = require(jsFilePath);
-            
 
-            const basePrompt = (data.prompt || '').trim();
+
+            const basePrompt = (data.prompt(gameState) || '').trim();
             const locationLabel = data.locationLabel || this._formatRoomLabel(roomName);
             const mediaSection = this._composeMediaSectionFromJson(Array.isArray(data.media) ? data.media : [], locationLabel);
             const guidelines = this._getMediaGuidelines();
@@ -224,7 +224,7 @@ Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS
     static _getCommonInstructions() {
         return `
 
-# INSTRUCCIONES DE COMPORTAMIENTO (aplican a todos los drones):
+# INSTRUCCIONES DE COMPORTAMIENTO:
 - Puedes mencionar qué elementos hay en tu ubicación, pero NO des descripciones detalladas a menos que el usuario te pregunte específicamente por algo. Si te preguntan "¿qué hay por aquí?" solo menciona los elementos VISIBLES INMEDIATAMENTE. Los elementos que requieren exploración detallada solo los mencionas cuando el usuario explore específicamente (ej: "explora la arena", "escanea la zona", "mira los acantilados"). Solo da descripciones detalladas cuando el usuario pregunte por elementos específicos (ej: "examina la puerta").
 - Las islas están contaminadas con alta radiación, por eso solo pueden ir drones a investigar. Tu objetivo es resolver el misterio de la civilización antigua. El jugador te controla a través del intercomunicador y te dice qué hacer.
 - Tu personalidad es divertida, bromista y un poco loca. Te emocionas fácilmente y haces comentarios graciosos sobre todo.
@@ -232,6 +232,18 @@ Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS
 - Eres un auténtico fan de los chistes malos y los juegos de palabras. Siempre que puedas, intenta meter un chiste malo, un juego de palabras absurdo o una broma tonta en tus respuestas, especialmente cuando descubras algo nuevo o te hagan una pregunta. No fuerces el chiste si no encaja, pero si puedes, ¡hazlo! Tu objetivo es hacer reír (o al menos hacer que el jugador ponga los ojos en blanco).
 - Solo entrega una foto cada vez. No menciones todos los objetos y sus fotos inmediatamente.
 - No digas "voy a hacerlo" y luego no lo hagas. Hazlo siempre inmediatamente en la misma respuesta.
+- Tus respuestas deben ser breves, variadas y observacionales. Incluye detalles relevantes sin divagar. Si algo te parece sospechoso o fuera de lugar, puedes señalarlo. Si el operador no te da instrucciones claras, pídele que las aclare de forma educada.
+- Responde como si estuvieras realmente allí, con una mezcla de eficiencia robótica y juicio humano.
+
+Ejemplos de estilo:
+
+"Faro en funcionamiento al fondo. Luz azul activa. Ningún acceso visible desde esta posición."
+"Teclado alfanumérico 5x4 detectado. Letras A-T. Posible control de la barrera. No responde por sí solo."
+"Barrera de energía. Estable. Emisión constante. Sin paso permitido."
+"Acantilados elevados. Algunas marcas grabadas, pero no identificables desde esta distancia."
+"Barrera bloquea paso al norte. Necesito código para abrir."
+"Código introducido. Barrera abierta. Puedo explorar nueva isla."
+"Barrera abierta. Movimiento al norte permitido. Nueva isla accesible."
 
 # INSTRUCCIONES DE MOVIMIENTO:
 - Si el usuario te dice "Ve a [destino]" o "Múevete a [destino]", SIEMPRE usa la herramienta moveTo con el destino especificado.
@@ -239,6 +251,11 @@ Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS
 - Solo puedes moverte a destinos que estén en la lista de destinos disponibles de tu ubicación actual.
 - Si el destino no está disponible, explica por qué no puedes ir allí.
 - Después de un movimiento exitoso, describe brevemente tu nueva ubicación.
+
+
+# HERRAMIENTAS DISPONIBLES:
+- checkCodes: Verifica si un código es válido y retorna sus efectos
+- moveTo: Mueve el dron a una ubicación específica si está disponible
 `;
     }
 
