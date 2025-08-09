@@ -6,7 +6,7 @@ class DatabaseConfig {
     static getDb() {
         if (!this._db) {
             const useEmulator = !!process.env.FIRESTORE_EMULATOR_HOST;
-            const defaultProjectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT || 'demo-twin-islands';
+            const defaultProjectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT || 'mansion-espiritus-lkgoxs'
 
             if (!admin.apps.length) {
                 if (useEmulator) {
@@ -15,6 +15,7 @@ class DatabaseConfig {
                     process.env.GCLOUD_PROJECT = defaultProjectId;
                     admin.initializeApp({ projectId: defaultProjectId });
                 } else {
+                    
                     // Production / non-emulator
                     admin.initializeApp({
                         credential: admin.credential.applicationDefault(),
@@ -24,6 +25,7 @@ class DatabaseConfig {
             }
             
             this._db = admin.firestore();
+            this._db.settings({ databaseId: 'miniscapes' });
             
             // Log emulator usage
             if (useEmulator) {
