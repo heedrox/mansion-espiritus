@@ -53,6 +53,7 @@ class GameResetService {
             
             const initialData = {
                 barreraElectromagneticaAbierta: false,
+                piramideAbierta: false,
                 start: "1",
                 createdAt: new Date().toISOString(),
                 resetAt: new Date().toISOString(),
