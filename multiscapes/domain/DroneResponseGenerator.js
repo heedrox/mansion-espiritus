@@ -63,7 +63,7 @@ class DroneResponseGenerator {
                         }),
                         execute: async ({ code: inputCode, reason }) => {
                             console.log(`🔍 ¡¡¡TOOL CHECKCODE INVOCADA!!! - Código: ${inputCode} - Razón: ${reason}`);
-                            const result = CheckCodes.checkCode(inputCode);
+                            const result = CheckCodes.checkCode(inputCode, roomName);
                             console.log(`📋 Resultado: ${result.isValid ? 'Válido' : 'Inválido'} - ${result.message}`);
                             console.log(`📊 StateChanges:`, result.stateChanges);
                             
@@ -103,10 +103,13 @@ class DroneResponseGenerator {
             let finalMessage = response.experimental_output?.message;
             let photoUrls = response.experimental_output?.photoUrls || [];
             
+            // Filtrar photoUrls para evitar alucinaciones - solo permitir URLs que existen en los media de la habitación
+            const filteredPhotoUrls = this._filterValidPhotoUrls(photoUrls, roomName, gameState);
+            
             // Con maxSteps: 3, el modelo debería completar la tarea en un solo paso
             // y devolver el resultado directamente en experimental_output
             
-            return DroneResponse.create(finalMessage, photoUrls);
+            return DroneResponse.create(finalMessage, filteredPhotoUrls);
         } catch (error) {
             console.error('Error al generar respuesta con AI:', error);
             return DroneResponse.create(`Hubo un error procesando tu mensaje, no te entendí bien. Inténtalo nuevamente.`);
@@ -202,13 +205,12 @@ ${description}`;
     }
 
     static _getMediaGuidelines() {
-        return `IMPORTANTE: Solo incluye la URL en photoUrls cuando el usuario explore específicamente ese objeto. NUNCA incluyas URLs en el texto del mensaje. El texto debe ser solo tu respuesta verbal.
-
-EJEMPLO: Si exploras, por ejemplo, un árbol, tu respuesta debe ser:
-- message: "¡He encontrado un árbol con un símbolo misterioso! Es fascinante. Aquí tienes la foto que acabo de tomar."
-- photoUrls: ["https://miniscapes.web.app/photos/twin-islands/simbolo-arbol.jpg"]
-
-RECUERDA: NUNCA escribas URLs en el campo message. Las URLs van SOLO en photoUrls.
+        return `
+        
+- RECUERDA: Solo envia archivos / fotos / vídeos de esos objetos.
+- Si el usuario te pide foto de un elemento que no tienes, indica que no ves relevancia a ese objeto como para tomar una foto.
+- Solo incluye la URL en photoUrls cuando el usuario explore específicamente ese objeto. NUNCA incluyas URLs en el texto del mensaje. El texto debe ser solo tu respuesta verbal.
+- NUNCA escribas URLs en el campo message. Las URLs van SOLO en photoUrls.
 
 CUANDO ENVÍES UNA FOTO:
 Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS:
@@ -257,6 +259,46 @@ Ejemplos de estilo:
 - checkCodes: Verifica si un código es válido y retorna sus efectos
 - moveTo: Mueve el dron a una ubicación específica si está disponible
 `;
+    }
+
+    static _filterValidPhotoUrls(photoUrls, roomName, gameState) {
+        if (!photoUrls || !Array.isArray(photoUrls) || photoUrls.length === 0) {
+            return [];
+        }
+
+        try {
+            // Obtener los media disponibles para la habitación actual
+            const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
+            const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
+            const data = require(jsFilePath);
+            
+            if (!data.media || !Array.isArray(data.media)) {
+                console.warn(`⚠️ No hay media definidos para la habitación "${roomName}"`);
+                return [];
+            }
+
+            // Extraer todas las URLs válidas de los media
+            const validUrls = data.media
+                .filter(item => item.url && typeof item.url === 'string')
+                .map(item => item.url);
+
+            // Filtrar las photoUrls para solo incluir las que están en validUrls
+            const filteredUrls = photoUrls.filter(url => {
+                const isValid = validUrls.includes(url);
+                if (!isValid) {
+                    console.warn(`🚫 URL filtrada (no existe en los media de la habitación): ${url}`);
+                }
+                return isValid;
+            });
+
+            console.log(`🔍 Filtrado de URLs: ${photoUrls.length} originales → ${filteredUrls.length} válidas`);
+            return filteredUrls;
+
+        } catch (error) {
+            console.error(`❌ Error al filtrar photoUrls para habitación "${roomName}":`, error.message);
+            // En caso de error, devolver array vacío para evitar alucinaciones
+            return [];
+        }
     }
 
     static _getGameStateJsonBlock(gameState) {

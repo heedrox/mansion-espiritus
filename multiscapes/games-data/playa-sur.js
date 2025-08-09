@@ -47,6 +47,17 @@ ${!gameState.barreraElectromagneticaAbierta ? "- Solo puedes moverse al norte DE
 ${!gameState.barreraElectromagneticaAbierta ? "La barrera te impide ir a la playa norte." : "La barrera está abierta, y te permite ir a la playa norte."}
 `,
 
+  validCodes: {
+    'DOTBA': {
+      isValid: true,
+      effect: 'Abre la barrera electromagnética',
+      stateChanges: {
+        barreraElectromagneticaAbierta: true
+      },
+      message: 'Código DOTBA válido. La barrera electromagnética se ha abierto.'
+    }
+  },
+
   media: [
     {
       type: "photo",

@@ -769,4 +769,103 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             console.log('🤖 Drone Response:', result.message);
         });
     });
+
+    describe('Filtrado de URLs para evitar alucinaciones', () => {
+        it('should filter photoUrls que no existen en los media de la habitación', function() {
+            // Skip if no emulator connection (API key not needed for this test)
+            if (!process.env.FIRESTORE_EMULATOR_HOST) {
+                this.skip();
+            }
+
+            // Arrange
+            const validUrl = 'https://miniscapes.web.app/photos/twin-islands/1-playa-sur/imagen-faro.jpg';
+            const invalidUrl = 'https://miniscapes.web.app/photos/twin-islands/fake-photo.jpg';
+            const photoUrls = [validUrl, invalidUrl];
+            const roomName = 'playa-sur';
+            const gameState = { barreraElectromagneticaAbierta: false };
+
+            // Act
+            const result = DroneResponseGenerator._filterValidPhotoUrls(photoUrls, roomName, gameState);
+
+            // Assert
+            expect(result).to.be.an('array');
+            expect(result).to.have.lengthOf(1);
+            expect(result[0]).to.equal(validUrl);
+            expect(result).to.not.include(invalidUrl);
+            
+            console.log('✅ URL filtering test passed');
+        });
+
+        it('should return empty array cuando no hay media definidos para la habitación', function() {
+            // Skip if no emulator connection (API key not needed for this test)
+            if (!process.env.FIRESTORE_EMULATOR_HOST) {
+                this.skip();
+            }
+
+            // Arrange
+            const photoUrls = ['https://example.com/photo.jpg'];
+            const roomName = 'habitacion-inexistente';
+            const gameState = {};
+
+            // Act
+            const result = DroneResponseGenerator._filterValidPhotoUrls(photoUrls, roomName, gameState);
+
+            // Assert
+            expect(result).to.be.an('array');
+            expect(result).to.have.lengthOf(0);
+            
+            console.log('✅ No media test passed');
+        });
+
+        it('should handle empty photoUrls array correctly', function() {
+            // Skip if no emulator connection (API key not needed for this test)
+            if (!process.env.FIRESTORE_EMULATOR_HOST) {
+                this.skip();
+            }
+
+            // Arrange
+            const photoUrls = [];
+            const roomName = 'playa-sur';
+            const gameState = {};
+
+            // Act
+            const result = DroneResponseGenerator._filterValidPhotoUrls(photoUrls, roomName, gameState);
+
+            // Assert
+            expect(result).to.be.an('array');
+            expect(result).to.have.lengthOf(0);
+            
+            console.log('✅ Empty photoUrls test passed');
+        });
+
+        it('should filter múltiples URLs y solo devolver las válidas', function() {
+            // Skip if no emulator connection (API key not needed for this test)
+            if (!process.env.FIRESTORE_EMULATOR_HOST) {
+                this.skip();
+            }
+
+            // Arrange - URLs de playa-sur según los media definidos
+            const validUrl1 = 'https://miniscapes.web.app/photos/twin-islands/1-playa-sur/imagen-faro.jpg';
+            const validUrl2 = 'https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg';
+            const invalidUrl1 = 'https://miniscapes.web.app/photos/fake1.jpg';
+            const invalidUrl2 = 'https://miniscapes.web.app/photos/fake2.jpg';
+            
+            const photoUrls = [validUrl1, invalidUrl1, validUrl2, invalidUrl2];
+            const roomName = 'playa-sur';
+            const gameState = {};
+
+            // Act
+            const result = DroneResponseGenerator._filterValidPhotoUrls(photoUrls, roomName, gameState);
+
+            // Assert
+            expect(result).to.be.an('array');
+            expect(result).to.have.lengthOf(2);
+            expect(result).to.include(validUrl1);
+            expect(result).to.include(validUrl2);
+            expect(result).to.not.include(invalidUrl1);
+            expect(result).to.not.include(invalidUrl2);
+            
+            console.log('✅ Multiple URL filtering test passed');
+        });
+    });
 }); 

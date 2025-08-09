@@ -47,11 +47,22 @@ ${!gameState.piramideAbierta ? "- Solo puedes acceder al interior DESPUÉS de in
 ${!gameState.piramideAbierta ? "La pirámide está cerrada y te impide acceder a su interior." : "La pirámide está abierta, y te permite acceder a su interior."}
 `,
 
+  validCodes: {
+    '8462': {
+      isValid: true,
+      effect: 'Abre la pirámide',
+      stateChanges: {
+        piramideAbierta: true
+      },
+      message: 'Código 8462 válido. La pirámide se abre majestuosamente, revelando los tesoros ancestrales y secretos milenarios de una civilización perdida en el tiempo. ¿Entramos?'
+    }
+  },
+
   media: [
     {
       type: "photo",
       title: "Símbolos en el árbol",
-      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/arbol-REALIDAD.jpg",
+      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/arbol.jpg",
       description: [
         "Vista detallada de los símbolos grabados en la corteza de uno de los árboles del bosque.",
         "Se observan marcas que parecen deliberadas, no naturales.",
@@ -62,7 +73,7 @@ ${!gameState.piramideAbierta ? "La pirámide está cerrada y te impide acceder a
     {
       type: "photo",
       title: "Caparazón fosilizado",
-      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/tortuga-REALIDAD.jpg",
+      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/tortuga.jpg",
       description: [
         "Caparazón antiguo semifosilizado encontrado entre la arena y las rocas.",
         "Los restos muestran signos de gran antigüedad.",
@@ -73,7 +84,7 @@ ${!gameState.piramideAbierta ? "La pirámide está cerrada y te impide acceder a
     {
       type: "photo",
       title: "Teclado de símbolos extraños",
-      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/teclado-REALIDAD.jpg",
+      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/teclado.jpg",
       description: [
         "Teclado con símbolos extraños en el pedestal inclinado junto a la pirámide.",
         "Los símbolos cambian de apariencia según la luz y la radiación de la isla.",
