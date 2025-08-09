@@ -83,7 +83,7 @@ class DroneResponseGenerator {
                         name: 'moveTo',
                         description: 'Mueve el dron a una ubicación específica si está disponible',
                         parameters: z.object({
-                            destination: z.enum(['playa-norte']).describe('El destino al que quieres mover el dron'),
+                            destination: z.enum(['playa-norte', 'interior-piramide']).describe('El destino al que quieres mover el dron'),
                             reason: z.string().describe('Por qué necesitas mover el dron a este destino')
                         }),
                         execute: async ({ destination, reason }) => {
