@@ -45,6 +45,17 @@ class DroneResponseGenerator {
 
         // console.log('🤖 SYSTEM PROMPT:', systemPrompt);
         try {
+            console.log('🚀 Iniciando llamada a GPT-4o-mini...');
+            console.log('📊 Parámetros de la llamada:');
+            console.log('   - Modelo: gpt-4o-mini');
+            console.log('   - Temperature: 0.7');
+            console.log('   - Max tokens: 2000');
+            console.log('   - Max steps: 5');
+            console.log('   - Mensajes: ', aiMessages.length);
+            console.log('   - Prompt del sistema: ', systemPrompt.length, 'caracteres');
+            
+            const startTime = Date.now();
+            
             const response = await generateText({
                 model: openAiModel("gpt-4o-mini"),
                 messages: [
@@ -101,10 +112,37 @@ class DroneResponseGenerator {
                             return result;
                         }
                     })
-                ]
+                ],
+                // Añadir callbacks para monitorear los steps
+                onStep: (step) => {
+                    console.log(`🔄 STEP ${step.step}: ${step.name || 'Sin nombre'} - ${step.type || 'Sin tipo'}`);
+                    if (step.input) {
+                        console.log(`   📥 Input del step:`, JSON.stringify(step.input, null, 2));
+                    }
+                    if (step.output) {
+                        console.log(`   📤 Output del step:`, JSON.stringify(step.output, null, 2));
+                    }
+                },
+                onFinal: (completion) => {
+                    console.log(`✅ COMPLETADO - Total de steps: ${completion.steps?.length || 'N/A'}`);
+                    if (completion.steps) {
+                        completion.steps.forEach((step, index) => {
+                            console.log(`   📋 Step ${index + 1}: ${step.name || 'Sin nombre'} - ${step.type || 'Sin tipo'}`);
+                        });
+                    }
+                }
             });
             
-            // console.log('🤖 RESPUESTA DE AI RECIBIDA:', JSON.stringify(response, null, 2));
+            const endTime = Date.now();
+            const duration = endTime - startTime;
+            
+            console.log(`🎯 Llamada a GPT completada en ${duration}ms`);
+            console.log(`📊 Respuesta recibida:`, {
+                hasMessage: !!response.experimental_output?.message,
+                messageLength: response.experimental_output?.message?.length || 0,
+                hasPhotoUrls: !!response.experimental_output?.photoUrls,
+                photoUrlsCount: response.experimental_output?.photoUrls?.length || 0
+            });
             
             // Extraer el mensaje y las URLs de fotos del resultado experimental
             let finalMessage = response.experimental_output?.message;
@@ -118,7 +156,34 @@ class DroneResponseGenerator {
             
             return DroneResponse.create(finalMessage, filteredPhotoUrls);
         } catch (error) {
-            console.error('Error al generar respuesta con AI:', error);
+            const endTime = Date.now();
+            const duration = endTime - startTime;
+            
+            console.error(`❌ Error al generar respuesta con AI después de ${duration}ms:`, error);
+            console.error(`🔍 Detalles del error:`, {
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+                code: error.code,
+                status: error.status,
+                statusText: error.statusText
+            });
+            
+            // Detectar timeouts específicos
+            if (error.message?.includes('timeout') || error.code === 'ECONNABORTED' || duration > 30000) {
+                console.error(`⏰ TIMEOUT DETECTADO - La llamada tardó ${duration}ms`);
+            }
+            
+            // Detectar errores de rate limiting
+            if (error.status === 429 || error.message?.includes('rate limit')) {
+                console.error(`🚫 RATE LIMIT DETECTADO`);
+            }
+            
+            // Detectar errores de API key
+            if (error.status === 401 || error.message?.includes('unauthorized') || error.message?.includes('invalid api key')) {
+                console.error(`🔑 ERROR DE API KEY`);
+            }
+            
             return DroneResponse.create(`Hubo un error procesando tu mensaje, no te entendí bien. Inténtalo nuevamente.`);
         }
     }

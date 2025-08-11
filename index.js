@@ -56,7 +56,19 @@ const addConversation = (text, sentence, conv) => {
 }
 
 exports.apiAi = onRequest(aiFunction)
-exports.multiscapes = onRequest(multiscapes)
-exports.multiscapesInit = onRequest(multiscapesInit)
-exports.multiscapesTest = onRequest(multiscapesTest)
-exports.multiscapesReset = onRequest(multiscapesReset)
+exports.multiscapes = onRequest({
+    timeoutSeconds: 30,
+    memory: '256MiB'
+}, multiscapes)
+exports.multiscapesInit = onRequest({
+    timeoutSeconds: 30,
+    memory: '256MiB'
+}, multiscapesInit)
+exports.multiscapesTest = onRequest({
+    timeoutSeconds: 30,
+    memory: '256MiB'
+}, multiscapesTest)
+exports.multiscapesReset = onRequest({
+    timeoutSeconds: 30,
+    memory: '256MiB'
+}, multiscapesReset)

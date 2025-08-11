@@ -4,6 +4,7 @@
         "source": "./",
         "runtime": "nodejs20",
         "codebase": "default",
+        "timeoutSeconds": 30,
         "ignore": [
           "node_modules",
           ".git",
