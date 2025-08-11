@@ -28,6 +28,28 @@ availableDestinations: {
 - El dron puede informar sobre destinos disponibles cuando se le pregunte
 - El sistema debe ser extensible para futuras ubicaciones
 
+### 4. Campo currentRoomTitle en Base de Datos
+Cuando el dron se mueve a una nueva ubicación, además de actualizar `currentRoom` con el código de la habitación, se debe actualizar también el campo `currentRoomTitle` con el valor del campo `title` del archivo de datos de la habitación.
+
+#### Estructura de actualización
+```javascript
+// En lugar de solo:
+await gameStateService.applyStateChanges({
+    currentRoom: destination
+});
+
+// Se debe hacer:
+await gameStateService.applyStateChanges({
+    currentRoom: destination,
+    currentRoomTitle: roomData.title
+});
+```
+
+#### Beneficios
+- El frontend puede usar directamente `currentRoomTitle` sin necesidad de cargar archivos de datos
+- Mejor rendimiento al evitar consultas adicionales
+- Consistencia en la presentación de la información al usuario
+
 ## Casos de Uso
 
 ### Caso 1: Barrera Cerrada
@@ -41,6 +63,7 @@ availableDestinations: {
 ### Caso 3: Comando de Movimiento
 - Usuario dice: "Ve al norte" o "Ve a playa-norte"
 - Sistema procesa el movimiento y cambia la ubicación actual
+- **Nuevo**: Se actualiza tanto `currentRoom` como `currentRoomTitle` en la base de datos
 
 ## Implementación
 
@@ -61,6 +84,11 @@ availableDestinations: {
 - ✅ Creados tests para verificar el funcionamiento del movimiento
 - ✅ Integrada la herramienta en `DroneResponseGenerator`
 - ✅ Añadidas instrucciones de movimiento al prompt del dron
+
+### ✅ Fase 4: Añadir Campo currentRoomTitle
+- ✅ Modificar `moveTo.js` para actualizar también `currentRoomTitle`
+- ✅ Cargar el título de la habitación de destino desde el archivo de datos
+- ✅ Test creado y pasando: `currentRoomTitle-update.spec.js`
 
 ## Tests
 
@@ -84,3 +112,8 @@ availableDestinations: {
 
 ### ⏳ Test 6: movement-command.spec.js
 - ⏳ Verificar que el comando de movimiento funciona correctamente con la AI (pendiente de API key)
+
+### ✅ Test 7: currentRoomTitle-update.spec.js
+- ✅ Verificar que cuando se mueve el dron, se actualiza tanto `currentRoom` como `currentRoomTitle`
+- ✅ Verificar que `currentRoomTitle` contiene el valor del campo `title` del archivo de datos
+- ✅ Verificar que el título se actualiza correctamente al moverse entre diferentes habitaciones

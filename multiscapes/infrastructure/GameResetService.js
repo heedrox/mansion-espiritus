@@ -51,13 +51,27 @@ class GameResetService {
         try {
             const docRef = this.db.collection('twin-islands').doc(code);
             
+            // Cargar el título de la habitación inicial
+            let initialRoomTitle = 'playa-sur'; // Fallback al nombre interno
+            try {
+                const path = require('path');
+                const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
+                const roomFilePath = path.join(gamesDataDir, 'playa-sur.js');
+                const roomData = require(roomFilePath);
+                initialRoomTitle = roomData.title || 'playa-sur';
+            } catch (error) {
+                console.error('Error al cargar datos de la habitación inicial:', error);
+                // Mantener el fallback al nombre interno
+            }
+            
             const initialData = {
                 barreraElectromagneticaAbierta: false,
                 piramideAbierta: false,
                 start: "1",
                 createdAt: new Date().toISOString(),
                 resetAt: new Date().toISOString(),
-                currentRoom: "playa-sur"
+                currentRoom: "playa-sur",
+                currentRoomTitle: initialRoomTitle
             };
             
             await docRef.set(initialData);

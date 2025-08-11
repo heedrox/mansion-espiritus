@@ -43,7 +43,7 @@ class DroneResponseGenerator {
             ? z.enum(allowedDestinations)
             : z.string();
 
-        console.log('🤖 SYSTEM PROMPT:', systemPrompt);
+        // console.log('🤖 SYSTEM PROMPT:', systemPrompt);
         try {
             const response = await generateText({
                 model: openAiModel("gpt-4o-mini"),

@@ -33,9 +33,21 @@ class MoveTo {
                 };
             }
 
-            // Actualizar la ubicación actual en Firestore
+            // Cargar los datos de la habitación de destino para obtener el título
+            let destinationTitle = destination; // Fallback al nombre interno
+            try {
+                const destinationFilePath = path.join(gamesDataDir, `${destination}.js`);
+                const destinationData = require(destinationFilePath);
+                destinationTitle = destinationData.title || destination;
+            } catch (error) {
+                console.error('Error al cargar datos de la habitación de destino:', error);
+                // Mantener el fallback al nombre interno
+            }
+
+            // Actualizar la ubicación actual y el título en Firestore
             await gameStateService.applyStateChanges({
-                currentRoom: destination
+                currentRoom: destination,
+                currentRoomTitle: destinationTitle
             });
 
             return {
