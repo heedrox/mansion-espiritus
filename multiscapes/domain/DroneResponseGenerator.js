@@ -44,6 +44,21 @@ class DroneResponseGenerator {
             ? z.enum(allowedDestinations)
             : z.string();
 
+        // Construir dinámicamente la lista de acciones disponibles para el schema del tool executeAction
+        let allowedActions = [];
+        try {
+            const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
+            const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
+            const roomData = require(jsFilePath);
+            allowedActions = Object.keys(roomData.actions || {});
+        } catch (err) {
+            console.warn(`⚠️ No se pudieron cargar las actions para room "${roomName}":`, err.message);
+        }
+        // Cuando no haya actions disponibles, usamos string para evitar que z.enum([]) falle
+        const actionSchema = (Array.isArray(allowedActions) && allowedActions.length > 0)
+            ? z.enum(allowedActions)
+            : z.string();
+
         // console.log('🤖 SYSTEM PROMPT:', systemPrompt);
         try {
             console.log('🚀 Iniciando llamada a GPT-4o-mini...');
@@ -117,7 +132,7 @@ class DroneResponseGenerator {
                         name: 'executeAction',
                         description: 'Ejecuta una acción del juego definida en la habitación actual y actualiza el estado del juego',
                         parameters: z.object({
-                            action: z.string().describe('El enum de la acción a ejecutar, definida en actions del juego actual'),
+                            action: actionSchema.describe('El enum de la acción a ejecutar, definida en actions del juego actual'),
                             reason: z.string().describe('Por qué ejecutas esta acción ahora')
                         }),
                         execute: async ({ action, reason }) => {
