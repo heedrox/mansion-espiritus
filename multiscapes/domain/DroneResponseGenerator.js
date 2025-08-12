@@ -6,6 +6,7 @@ const GameStateService = require('../infrastructure/GameStateService');
 const CheckCodes = require('./checkCodes');
 const MoveTo = require('./moveTo');
 const ExecuteAction = require('./executeAction');
+const PromptGenerator = require('./PromptGenerator');
 const fs = require('fs');
 const path = require('path');
 
@@ -32,7 +33,7 @@ class DroneResponseGenerator {
 
         // Definir el prompt del sistema dependiente de la ubicación y concatenar instrucciones comunes
         const roomName = gameState.currentRoom;
-        const johnsonPrompt = this._getRoomPrompt(roomName, gameState);
+        const johnsonPrompt = PromptGenerator.getRoomPrompt(roomName, gameState);
         const commonInstructions = this._getCommonInstructions();
         const gameStateJsonBlock = this._getGameStateJsonBlock(gameState);
         const systemPrompt = johnsonPrompt + commonInstructions + gameStateJsonBlock;
@@ -220,7 +221,7 @@ class DroneResponseGenerator {
 
     static _getJohnsonPrompt() {
         // Compatibilidad hacia atrás: usar playa-sur por defecto
-        return this._getRoomPrompt('playa-sur');
+        return PromptGenerator.getRoomPrompt('playa-sur');
     }
 
     static _formatRoomLabel(roomName) {
@@ -234,25 +235,7 @@ class DroneResponseGenerator {
     }
 
     static _getRoomPrompt(roomName, gameState = {}) {
-        try {
-            const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
-            const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
-            const data = require(jsFilePath);
-
-
-            const basePrompt = (data.prompt(gameState) || '').trim();
-            const locationLabel = data.locationLabel || this._formatRoomLabel(roomName);
-            const mediaSection = this._composeMediaSectionFromJson(Array.isArray(data.media) ? data.media : [], locationLabel);
-            const guidelines = this._getMediaGuidelines();
-            
-            // Añadir información de destinos disponibles si existe
-            const destinationsSection = this._composeDestinationsSection(data, gameState);
-
-            return `${basePrompt}\n\n${mediaSection}\n\n${destinationsSection}\n\n${guidelines}`;
-        } catch (error) {
-            console.warn(`⚠️ No se pudo cargar el prompt para room "${roomName}" desde archivo de datos. Usando prompt por defecto. Detalle:`, error.message);
-            return "" // this._getDefaultPlayaSurPromptHardcoded();
-        }
+        return PromptGenerator.getRoomPrompt(roomName, gameState);
     }
 
     static _composeMediaSectionFromJson(mediaItems, locationLabel = 'la zona') {
