@@ -27,12 +27,50 @@ const data = {
  },
  
  validCodes: {
- 
- },
- 
- media: [
-     
- ]
+    '2598': {
+        isValid: true,
+        effect: 'Abre la puerta al tesoro.',
+        stateChanges: {
+            tesoroAbierto: true,
+            gameOver: true
+        },
+        message: 'Código válido. La puerta que refulge luz se abre. ¿Qué tesoros habrá dentro? ¿Qué habrá detrás? Pues el juego termina aquí. ¡Felicidades! Has llegado al final.'
+    }
+    },
+    
+    media: [
+        {
+            type: "photo",
+            title: "Estatuas",
+            url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/estatuas.jpg",
+            description: "Cuatro estatuas pueden verse en una de las paredes."
+          },      
+    {
+        type: "photo", 
+        title: "Entrada con antorcha",
+        url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-entrada-antorcha.jpg",
+        description: [
+            "La entrada de la pirámide, iluminada por una antorcha. Hemos entrado por aquí, por esa claraboya."
+        ]
+    },
+    {
+        type: "photo",
+        title: "Puerta de salida",
+        url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-salida.jpg", 
+        description: [
+            "La puerta que conduce al secreto oculto de la civilización antigua. ¿un tesoro? ¿por qué refulge luz? ¡pronto lo descubiremos! Se pueden ver unas estatuas a la izquierda, pero casi no se pueden ver..."
+        ]
+    },
+    {
+        type: "photo",
+        title: "Teclado numérico",
+        url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/teclado.jpg",
+        description: [
+            "Un antiguo teclado numérico incrustado en la pared. Parece que hay que introducir un código para abrir la puerta. La radiación parece que afecta a mi capacidad de enviaros la foto."
+        ]
+    }
+    ]
+    
 }
  
 module.exports = data;
