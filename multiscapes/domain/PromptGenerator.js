@@ -9,7 +9,8 @@ class PromptGenerator {
 
       const basePrompt = (data.prompt(gameState) || '').trim();
       const locationLabel = data.locationLabel || PromptGenerator._formatRoomLabel(roomName);
-      const mediaSection = PromptGenerator._composeMediaSectionFromJson(Array.isArray(data.media) ? data.media : [], locationLabel);
+      const mediaItems = typeof data.media === 'function' ? data.media(gameState) : (Array.isArray(data.media) ? data.media : []);
+      const mediaSection = PromptGenerator._composeMediaSectionFromJson(mediaItems, locationLabel);
       const guidelines = PromptGenerator._getMediaGuidelines();
       const destinationsSection = PromptGenerator._composeDestinationsSection(data, gameState);
 

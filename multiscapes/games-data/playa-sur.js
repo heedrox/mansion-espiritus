@@ -59,63 +59,65 @@ ${!gameState.barreraElectromagneticaAbierta ? "La barrera te impide ir a la play
     }
   },
 
-  media: [
-    {
-      type: "photo",
-      title: "Mirando al sur",
-      url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/imagen-faro.jpg",
-      description: [
-        "Vista centrada en los acantilados y el faro.",
-        "Se observan los acantilados erosionados en los bordes de la imagen.",
-        "Al fondo, en el horizonte, se distingue el faro negro con su linterna azul activa.",
-        "El mar completa el encuadre en el lado derecho."
-      ]
-    },
-    {
-      type: "photo",
-      title: "Mirando al norte",
-      url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/playa-sur-mirando-norte.jpg",
-      description: [
-        "Imagen enfocada en la barrera electromagnética que bloquea el paso.",
-        "Se ve la línea vertical luminosa que atraviesa la playa de lado a lado.",
-        "La barrera parece emanar directamente del suelo.",
-        "La textura de la arena se corta bruscamente justo antes de ella."
-      ]
-    },
-    {
-      type: "photo",
-      title: "Detalle del acantilado",
-      url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg",
-      description: [
-        "Zoom sobre la superficie rocosa del acantilado.",
-        "Se aprecian estratos claramente marcados y señales de erosión.",
-        "Algunas marcas o símbolos grabados pueden distinguirse, aunque están deteriorados.",
-        "No se detectan accesos visibles hacia la parte superior.",
-        "Cuando entregues esta foto, haz alusión a que existen unas muescas en el acantilado, y que podrías fotografiarlas. Eso hace referencia a la foto 4."
-      ]
-    },
-    {
-      type: "photo",
-      title: "Vista alternativa del acantilado",
-      url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado-2.jpg",
-      description: [
-        "Se observan muescas en el acantilado, ¿son letras?",
-        "Distintas formas de erosión, y capas geológicas expuestas."
-      ]
-    },
-    {
-      type: "video",
-      title: "Zoom al faro",
-      url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/faro-player.mp4",
-      description: [
-        "Vídeo corto con acercamiento al faro situado al sur.",
-        "El faro está en funcionamiento, emitiendo una luz azul pulsante.",
-        "No se detectan estructuras humanas cercanas ni rutas de acceso evidentes.",
-        "No se puede acceder al faro.",
-        "La linterna gira con regularidad, como si aún cumpliera alguna función automatizada."
-      ]
-    }
-  ]
+  media: (gameState) => {
+    return [
+      {
+        type: "photo",
+        title: "Mirando al sur",
+        url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/imagen-faro.jpg",
+        description: [
+          "Vista centrada en los acantilados y el faro.",
+          "Se observan los acantilados erosionados en los bordes de la imagen.",
+          "Al fondo, en el horizonte, se distingue el faro negro con su linterna azul activa.",
+          "El mar completa el encuadre en el lado derecho."
+        ]
+      },
+      {
+        type: "photo",
+        title: "Mirando al norte",
+        url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/playa-sur-mirando-norte.jpg",
+        description: [
+          "Imagen enfocada en la barrera electromagnética que bloquea el paso.",
+          "Se ve la línea vertical luminosa que atraviesa la playa de lado a lado.",
+          "La barrera parece emanar directamente del suelo.",
+          "La textura de la arena se corta bruscamente justo antes de ella."
+        ]
+      },
+      {
+        type: "photo",
+        title: "Detalle del acantilado",
+        url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado.jpg",
+        description: [
+          "Zoom sobre la superficie rocosa del acantilado.",
+          "Se aprecian estratos claramente marcados y señales de erosión.",
+          "Algunas marcas o símbolos grabados pueden distinguirse, aunque están deteriorados.",
+          "No se detectan accesos visibles hacia la parte superior.",
+          "Cuando entregues esta foto, haz alusión a que existen unas muescas en el acantilado, y que podrías fotografiarlas. Eso hace referencia a la foto 4."
+        ]
+      },
+      {
+        type: "photo",
+        title: "Vista alternativa del acantilado",
+        url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado-2.jpg",
+        description: [
+          "Se observan muescas en el acantilado, ¿son letras?",
+          "Distintas formas de erosión, y capas geológicas expuestas."
+        ]
+      },
+      {
+        type: "video",
+        title: "Zoom al faro",
+        url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/faro-player.mp4",
+        description: [
+          "Vídeo corto con acercamiento al faro situado al sur.",
+          "El faro está en funcionamiento, emitiendo una luz azul pulsante.",
+          "No se detectan estructuras humanas cercanas ni rutas de acceso evidentes.",
+          "No se puede acceder al faro.",
+          "La linterna gira con regularidad, como si aún cumpliera alguna función automatizada."
+        ]
+      }
+    ];
+  }
 };
 
 module.exports = playaSurData;

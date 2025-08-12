@@ -7,7 +7,20 @@ const data = {
      description: "No hay más lugares a los que acceder."
  },
  
- prompt: (gameState) => `Te encuentras en el interior de la pirámide. El ambiente es frío y silencioso.\n\n# LO QUE VES:\n- Pasillos de piedra con inscripciones antiguas.\n- Dos estatuas a ambos lados de una sala, con marcas de quemaduras.\n- Un pedestal central con un hueco para colocar un objeto.\n\n# ACCIONES DISPONIBLES:\n- Si el usuario te dice que use la antorcha para iluminar las estatuas, ejecuta la acción 'ILUMINAR_ESTATUAS' con la herramienta executeAction.\n- Si el usuario te indica colocar el escudo en el pedestal, ejecuta la acción 'COLOCAR_ESCUDO' con la herramienta executeAction.\n\n# ESTADO ACTUAL:\n${gameState.estatuasIluminadas ? '- Las estatuas están iluminadas.' : '- Las estatuas están a oscuras.'}\n${gameState.escudoColocado ? '- El escudo está colocado en el pedestal.' : '- El pedestal está vacío.'}`,
+ prompt: (gameState) => `Te encuentras en el interior de la pirámide.
+ El ambiente es frío y silencioso.
+ 
+ # LO QUE VES:
+   - Una puerta que refulge luz, que parece cerrada.
+   - Una pared al lado de la puerta, en el que se perciben unas estatuas. Están demasiado oscuras.
+   - La claraboya de la entrada de la pirámide, que está abierta, y es por donde has entrado.
+   ${!gameState.estatuasIluminadas ? `- Una antorcha, bajo la claraboya.` : ''}
+
+ # ACCIONES DISPONIBLES:
+ ${!gameState.estatuasIluminadas? `- Si el usuario te dice que use la antorcha para iluminar las estatuas, ejecuta la acción 'ILUMINAR_ESTATUAS' con la herramienta executeAction.` : '' }
+ - Si el usuario te dice que quiere coger la antorcha, indícale, con un chiste, que no sabes para qué las necesitas, y que debe ser más explícito.
+
+ `, 
  
  actions: {
    ILUMINAR_ESTATUAS: {
@@ -16,13 +29,6 @@ const data = {
        estatuasIluminadas: true
      },
      successMessage: "Las estatuas se iluminan con un brillo tenue, revelando símbolos ocultos."
-   },
-   COLOCAR_ESCUDO: {
-     trigger: "al colocar el escudo en el pedestal",
-     gameStateUpdate: {
-       escudoColocado: true
-     },
-     successMessage: "Colocas el escudo en el pedestal. Se escucha un mecanismo activarse en el interior de la pirámide."
    }
  },
  
@@ -38,39 +44,53 @@ const data = {
     }
     },
     
-    media: [
-        {
+    media: (gameState) => {
+        const mediaItems = [];
+        
+        // Siempre mostrar las estatuas
+        mediaItems.push({
             type: "photo",
             title: "Estatuas",
             url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/estatuas.jpg",
             description: "Cuatro estatuas pueden verse en una de las paredes."
-          },      
-    {
-        type: "photo", 
-        title: "Entrada con antorcha",
-        url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-entrada-antorcha.jpg",
-        description: [
-            "La entrada de la pirámide, iluminada por una antorcha. Hemos entrado por aquí, por esa claraboya."
-        ]
-    },
-    {
-        type: "photo",
-        title: "Puerta de salida",
-        url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-salida.jpg", 
-        description: [
-            "La puerta que conduce al secreto oculto de la civilización antigua. ¿un tesoro? ¿por qué refulge luz? ¡pronto lo descubiremos! Se pueden ver unas estatuas a la izquierda, pero casi no se pueden ver..."
-        ]
-    },
-    {
-        type: "photo",
-        title: "Teclado numérico",
-        url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/teclado.jpg",
-        description: [
-            "Un antiguo teclado numérico incrustado en la pared. Parece que hay que introducir un código para abrir la puerta. La radiación parece que afecta a mi capacidad de enviaros la foto."
-        ]
+        });
+        
+        // Siempre mostrar la entrada con antorcha
+        mediaItems.push({
+            type: "photo", 
+            title: "Entrada con antorcha",
+            url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-entrada-antorcha.jpg",
+            description: [
+                "La entrada de la pirámide, iluminada por una antorcha. Hemos entrado por aquí, por esa claraboya."
+            ]
+        });
+        
+        // Solo mostrar la puerta de salida si las estatuas están iluminadas
+        if (gameState.estatuasIluminadas) {
+            mediaItems.push({
+                type: "photo",
+                title: "Puerta de salida",
+                url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-salida.jpg", 
+                description: [
+                    "La puerta que conduce al secreto oculto de la civilización antigua. ¿un tesoro? ¿por qué refulge luz? ¡pronto lo descubriremos! Se pueden ver unas estatuas a la izquierda, pero casi no se pueden ver..."
+                ]
+            });
+        }
+        
+        // Solo mostrar el teclado si las estatuas están iluminadas
+        if (gameState.estatuasIluminadas) {
+            mediaItems.push({
+                type: "photo",
+                title: "Teclado numérico",
+                url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/teclado.jpg",
+                description: [
+                    "Un antiguo teclado numérico incrustado en la pared. Parece que hay que introducir un código para abrir la puerta. La radiación parece que afecta a mi capacidad de enviaros la foto."
+                ]
+            });
+        }
+        
+        return mediaItems;
     }
-    ]
-    
 }
  
 module.exports = data;

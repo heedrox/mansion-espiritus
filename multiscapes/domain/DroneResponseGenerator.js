@@ -358,13 +358,21 @@ Ejemplos de estilo:
             const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
             const data = require(jsFilePath);
             
-            if (!data.media || !Array.isArray(data.media)) {
+            if (!data.media) {
                 console.warn(`⚠️ No hay media definidos para la habitación "${roomName}"`);
                 return [];
             }
 
+            // Obtener los media items (pueden ser función o array)
+            const mediaItems = typeof data.media === 'function' ? data.media(gameState) : data.media;
+            
+            if (!Array.isArray(mediaItems)) {
+                console.warn(`⚠️ Los media de la habitación "${roomName}" no retornan un array válido`);
+                return [];
+            }
+
             // Extraer todas las URLs válidas de los media
-            const validUrls = data.media
+            const validUrls = mediaItems
                 .filter(item => item.url && typeof item.url === 'string')
                 .map(item => item.url);
 

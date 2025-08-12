@@ -58,42 +58,44 @@ ${!gameState.piramideAbierta ? "La pirámide está cerrada y te impide acceder a
     }
   },
 
-  media: [
-    {
-      type: "photo",
-      title: "Símbolos en el árbol",
-      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/arbol.jpg",
-      description: [
-        "Vista detallada de los símbolos grabados en la corteza de uno de los árboles del bosque.",
-        "Se observan marcas que parecen deliberadas, no naturales.",
-        "Los símbolos tienen una forma geométrica específica.",
-        "Podrían ser parte de un sistema de escritura antigua o pistas para resolver el misterio."
-      ]
-    },
-    {
-      type: "photo",
-      title: "Caparazón fosilizado",
-      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/tortuga.jpg",
-      description: [
-        "Caparazón antiguo semifosilizado encontrado entre la arena y las rocas.",
-        "Los restos muestran signos de gran antigüedad.",
-        "La estructura está parcialmente preservada por la arena.",
-        "Evidencia de vida antigua en estas islas misteriosas."
-      ]
-    },
-    {
-      type: "photo",
-      title: "Teclado de símbolos extraños",
-      url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/teclado.jpg",
-      description: [
-        "Teclado con símbolos extraños en el pedestal inclinado junto a la pirámide.",
-        "Los símbolos cambian de apariencia según la luz y la radiación de la isla.",
-        "Algunas veces parecen números, otras veces símbolos desconocidos.",
-        "Probablemente sea el mecanismo para abrir la pirámide.",
-        "La superficie del teclado está desgastada pero aún funcional."
-      ]
-    }
-  ]
+  media: (gameState) => {
+    return [
+      {
+        type: "photo",
+        title: "Símbolos en el árbol",
+        url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/arbol.jpg",
+        description: [
+          "Vista detallada de los símbolos grabados en la corteza de uno de los árboles del bosque.",
+          "Se observan marcas que parecen deliberadas, no naturales.",
+          "Los símbolos tienen una forma geométrica específica.",
+          "Podrían ser parte de un sistema de escritura antigua o pistas para resolver el misterio."
+        ]
+      },
+      {
+        type: "photo",
+        title: "Caparazón fosilizado",
+        url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/tortuga.jpg",
+        description: [
+          "Caparazón antiguo semifosilizado encontrado entre la arena y las rocas.",
+          "Los restos muestran signos de gran antigüedad.",
+          "La estructura está parcialmente preservada por la arena.",
+          "Evidencia de vida antigua en estas islas misteriosas."
+        ]
+      },
+      {
+        type: "photo",
+        title: "Teclado de símbolos extraños",
+        url: "https://miniscapes.web.app/photos/twin-islands/2-playa-norte/teclado.jpg",
+        description: [
+          "Teclado con símbolos extraños en el pedestal inclinado junto a la pirámide.",
+          "Los símbolos cambian de apariencia según la luz y la radiación de la isla.",
+          "Algunas veces parecen números, otras veces símbolos desconocidos.",
+          "Probablemente sea el mecanismo para abrir la pirámide.",
+          "La superficie del teclado está desgastada pero aún funcional."
+        ]
+      }
+    ];
+  }
 };
 
 module.exports = playaNorteData;
