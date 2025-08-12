@@ -60,7 +60,7 @@ class DroneResponseGenerator {
             ? z.enum(allowedActions)
             : z.string();
 
-        // console.log('🤖 SYSTEM PROMPT:', systemPrompt);
+        console.log('🤖 SYSTEM PROMPT:', systemPrompt);
         try {
             /*console.log('🚀 Iniciando llamada a GPT-4o-mini...');
             console.log('📊 Parámetros de la llamada:');
@@ -71,6 +71,7 @@ class DroneResponseGenerator {
             console.log('   - Mensajes: ', aiMessages.length);
             console.log('   - Prompt del sistema: ', systemPrompt.length, 'caracteres');
             */
+           
             const startTime = Date.now();
             
             const response = await generateText({
@@ -187,10 +188,10 @@ class DroneResponseGenerator {
             
             return DroneResponse.create(finalMessage, filteredPhotoUrls);
         } catch (error) {
-            const endTime = Date.now();
-            const duration = endTime - startTime;
+           // const endTime = Date.now();
+            // const duration = endTime - startTime;
             
-            console.error(`❌ Error al generar respuesta con AI después de ${duration}ms:`, error);
+            console.error(`❌ Error al generar respuesta con AI`, error);
             console.error(`🔍 Detalles del error:`, {
                 name: error.name,
                 message: error.message,

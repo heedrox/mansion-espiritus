@@ -44,53 +44,38 @@ const data = {
     }
     },
     
-    media: (gameState) => {
-        const mediaItems = [];
-        
-        // Siempre mostrar las estatuas
-        mediaItems.push({
+    media: (gameState) => [
+        ...(gameState.estatuasIluminadas ? [{
             type: "photo",
-            title: "Estatuas",
+            title: "Estatuas", 
             url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/estatuas.jpg",
-            description: "Cuatro estatuas pueden verse en una de las paredes."
-        });
-        
-        // Siempre mostrar la entrada con antorcha
-        mediaItems.push({
-            type: "photo", 
+            description: "Cuatro estatuas pueden verse en una de las paredes. Tienen unos símbolos iluminados por la antorcha."
+        }] : []),
+        {
+            type: "photo",
             title: "Entrada con antorcha",
-            url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-entrada-antorcha.jpg",
+            url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-entrada-antorcha.jpg", 
             description: [
                 "La entrada de la pirámide, iluminada por una antorcha. Hemos entrado por aquí, por esa claraboya."
             ]
-        });
-        
-        // Solo mostrar la puerta de salida si las estatuas están iluminadas
-        if (gameState.estatuasIluminadas) {
-            mediaItems.push({
-                type: "photo",
-                title: "Puerta de salida",
-                url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-salida.jpg", 
-                description: [
-                    "La puerta que conduce al secreto oculto de la civilización antigua. ¿un tesoro? ¿por qué refulge luz? ¡pronto lo descubriremos! Se pueden ver unas estatuas a la izquierda, pero casi no se pueden ver..."
-                ]
-            });
+        },
+        {
+            type: "photo",
+            title: "Puerta de salida",
+            url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/puerta-salida.jpg",
+            description: [
+                "La puerta que conduce al secreto oculto de la civilización antigua. ¿un tesoro? ¿por qué refulge luz? ¡pronto lo descubriremos! Se pueden ver unas estatuas a la izquierda, pero casi no se pueden ver..."
+            ]
+        },
+        {
+            type: "photo",
+            title: "Teclado numérico",
+            url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/teclado.jpg",
+            description: [
+                "Un antiguo teclado numérico incrustado en la pared. Parece que hay que introducir un código para abrir la puerta. La radiación parece que afecta a mi capacidad de enviaros la foto."
+            ]
         }
-        
-        // Solo mostrar el teclado si las estatuas están iluminadas
-        if (gameState.estatuasIluminadas) {
-            mediaItems.push({
-                type: "photo",
-                title: "Teclado numérico",
-                url: "https://miniscapes.web.app/photos/twin-islands/3-interior-piramide/teclado.jpg",
-                description: [
-                    "Un antiguo teclado numérico incrustado en la pared. Parece que hay que introducir un código para abrir la puerta. La radiación parece que afecta a mi capacidad de enviaros la foto."
-                ]
-            });
-        }
-        
-        return mediaItems;
-    }
+    ]
 }
  
 module.exports = data;
