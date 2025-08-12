@@ -5,6 +5,7 @@ const DroneResponse = require('./DroneResponse');
 const GameStateService = require('../infrastructure/GameStateService');
 const CheckCodes = require('./checkCodes');
 const MoveTo = require('./moveTo');
+const ExecuteAction = require('./executeAction');
 const fs = require('fs');
 const path = require('path');
 
@@ -109,6 +110,20 @@ class DroneResponseGenerator {
                             const result = await MoveTo.moveTo(destination, code);
                             console.log(`📋 Resultado: ${result.success ? 'Éxito' : 'Fallo'} - ${result.message}`);
                             
+                            return result;
+                        }
+                    }),
+                    tool({
+                        name: 'executeAction',
+                        description: 'Ejecuta una acción del juego definida en la habitación actual y actualiza el estado del juego',
+                        parameters: z.object({
+                            action: z.string().describe('El enum de la acción a ejecutar, definida en actions del juego actual'),
+                            reason: z.string().describe('Por qué ejecutas esta acción ahora')
+                        }),
+                        execute: async ({ action, reason }) => {
+                            console.log(`🛠️ ¡¡¡TOOL EXECUTEACTION INVOCADA!!! - Acción: ${action} - Razón: ${reason}`);
+                            const result = await ExecuteAction.executeAction(action, code);
+                            console.log(`📋 Resultado executeAction: ${result.success ? 'Éxito' : 'Fallo'} - ${result.message}`);
                             return result;
                         }
                     })
@@ -330,6 +345,7 @@ Ejemplos de estilo:
 # HERRAMIENTAS DISPONIBLES:
 - checkCodes: Verifica si un código es válido y retorna sus efectos
 - moveTo: Mueve el dron a una ubicación específica si está disponible
+- executeAction: Ejecuta una acción del juego definida en la habitación actual (usa el enum indicado en el prompt del juego)
 `;
     }
 
