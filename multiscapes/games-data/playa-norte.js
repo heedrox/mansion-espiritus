@@ -45,8 +45,7 @@ ${!gameState.piramideAbierta ? "- Solo puedes acceder al interior DESPUÉS de in
 - EJEMPLOS de cuándo usar checkCodes: "el código es ABCD", "prueba 1234", "código XYZW"
 
 # ESTADO DE LA PIRÁMIDE ACTUAL: ${gameState.piramideAbierta ? "ABIERTA" : "CERRADA"}
-${!gameState.piramideAbierta ? "La pirámide está cerrada y te impide acceder a su interior." : "La pirámide está abierta, y te permite acceder a su interior."}
-`,
+${!gameState.piramideAbierta ? "La pirámide está cerrada y te impide acceder a su interior." : "La pirámide está abierta, y te permite acceder a su interior."}`,
 
   validCodes: {
     '8462': {

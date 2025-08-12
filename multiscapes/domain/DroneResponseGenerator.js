@@ -5,6 +5,8 @@ const DroneResponse = require('./DroneResponse');
 const GameStateService = require('../infrastructure/GameStateService');
 const CheckCodes = require('./checkCodes');
 const MoveTo = require('./moveTo');
+const ExecuteAction = require('./executeAction');
+const PromptGenerator = require('./PromptGenerator');
 const fs = require('fs');
 const path = require('path');
 
@@ -31,7 +33,7 @@ class DroneResponseGenerator {
 
         // Definir el prompt del sistema dependiente de la ubicación y concatenar instrucciones comunes
         const roomName = gameState.currentRoom;
-        const johnsonPrompt = this._getRoomPrompt(roomName, gameState);
+        const johnsonPrompt = PromptGenerator.getRoomPrompt(roomName, gameState);
         const commonInstructions = this._getCommonInstructions();
         const gameStateJsonBlock = this._getGameStateJsonBlock(gameState);
         const systemPrompt = johnsonPrompt + commonInstructions + gameStateJsonBlock;
@@ -41,6 +43,21 @@ class DroneResponseGenerator {
         // Cuando no haya destinos disponibles, usamos string para evitar que z.enum([]) falle
         const destinationSchema = (Array.isArray(allowedDestinations) && allowedDestinations.length > 0)
             ? z.enum(allowedDestinations)
+            : z.string();
+
+        // Construir dinámicamente la lista de acciones disponibles para el schema del tool executeAction
+        let allowedActions = [];
+        try {
+            const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
+            const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
+            const roomData = require(jsFilePath);
+            allowedActions = Object.keys(roomData.actions || {});
+        } catch (err) {
+            console.warn(`⚠️ No se pudieron cargar las actions para room "${roomName}":`, err.message);
+        }
+        // Cuando no haya actions disponibles, usamos string para evitar que z.enum([]) falle
+        const actionSchema = (Array.isArray(allowedActions) && allowedActions.length > 0)
+            ? z.enum(allowedActions)
             : z.string();
 
         // console.log('🤖 SYSTEM PROMPT:', systemPrompt);
@@ -109,6 +126,20 @@ class DroneResponseGenerator {
                             const result = await MoveTo.moveTo(destination, code);
                             console.log(`📋 Resultado: ${result.success ? 'Éxito' : 'Fallo'} - ${result.message}`);
                             
+                            return result;
+                        }
+                    }),
+                    tool({
+                        name: 'executeAction',
+                        description: 'Ejecuta una acción del juego definida en la habitación actual y actualiza el estado del juego',
+                        parameters: z.object({
+                            action: actionSchema.describe('El enum de la acción a ejecutar, definida en actions del juego actual'),
+                            reason: z.string().describe('Por qué ejecutas esta acción ahora')
+                        }),
+                        execute: async ({ action, reason }) => {
+                            console.log(`🛠️ ¡¡¡TOOL EXECUTEACTION INVOCADA!!! - Acción: ${action} - Razón: ${reason}`);
+                            const result = await ExecuteAction.executeAction(action, code);
+                            console.log(`📋 Resultado executeAction: ${result.success ? 'Éxito' : 'Fallo'} - ${result.message}`);
                             return result;
                         }
                     })
@@ -190,7 +221,7 @@ class DroneResponseGenerator {
 
     static _getJohnsonPrompt() {
         // Compatibilidad hacia atrás: usar playa-sur por defecto
-        return this._getRoomPrompt('playa-sur');
+        return PromptGenerator.getRoomPrompt('playa-sur');
     }
 
     static _formatRoomLabel(roomName) {
@@ -204,25 +235,7 @@ class DroneResponseGenerator {
     }
 
     static _getRoomPrompt(roomName, gameState = {}) {
-        try {
-            const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
-            const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
-            const data = require(jsFilePath);
-
-
-            const basePrompt = (data.prompt(gameState) || '').trim();
-            const locationLabel = data.locationLabel || this._formatRoomLabel(roomName);
-            const mediaSection = this._composeMediaSectionFromJson(Array.isArray(data.media) ? data.media : [], locationLabel);
-            const guidelines = this._getMediaGuidelines();
-            
-            // Añadir información de destinos disponibles si existe
-            const destinationsSection = this._composeDestinationsSection(data, gameState);
-
-            return `${basePrompt}\n\n${mediaSection}\n\n${destinationsSection}\n\n${guidelines}`;
-        } catch (error) {
-            console.warn(`⚠️ No se pudo cargar el prompt para room "${roomName}" desde archivo de datos. Usando prompt por defecto. Detalle:`, error.message);
-            return "" // this._getDefaultPlayaSurPromptHardcoded();
-        }
+        return PromptGenerator.getRoomPrompt(roomName, gameState);
     }
 
     static _composeMediaSectionFromJson(mediaItems, locationLabel = 'la zona') {
@@ -330,6 +343,7 @@ Ejemplos de estilo:
 # HERRAMIENTAS DISPONIBLES:
 - checkCodes: Verifica si un código es válido y retorna sus efectos
 - moveTo: Mueve el dron a una ubicación específica si está disponible
+- executeAction: Ejecuta una acción del juego definida en la habitación actual (usa el enum indicado en el prompt del juego)
 `;
     }
 
