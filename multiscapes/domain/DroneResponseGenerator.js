@@ -62,7 +62,7 @@ class DroneResponseGenerator {
 
         // console.log('🤖 SYSTEM PROMPT:', systemPrompt);
         try {
-            console.log('🚀 Iniciando llamada a GPT-4o-mini...');
+            /*console.log('🚀 Iniciando llamada a GPT-4o-mini...');
             console.log('📊 Parámetros de la llamada:');
             console.log('   - Modelo: gpt-4o-mini');
             console.log('   - Temperature: 0.7');
@@ -70,7 +70,7 @@ class DroneResponseGenerator {
             console.log('   - Max steps: 5');
             console.log('   - Mensajes: ', aiMessages.length);
             console.log('   - Prompt del sistema: ', systemPrompt.length, 'caracteres');
-            
+            */
             const startTime = Date.now();
             
             const response = await generateText({
@@ -168,12 +168,12 @@ class DroneResponseGenerator {
             const duration = endTime - startTime;
             
             console.log(`🎯 Llamada a GPT completada en ${duration}ms`);
-            console.log(`📊 Respuesta recibida:`, {
+            /*console.log(`📊 Respuesta recibida:`, {
                 hasMessage: !!response.experimental_output?.message,
                 messageLength: response.experimental_output?.message?.length || 0,
                 hasPhotoUrls: !!response.experimental_output?.photoUrls,
                 photoUrlsCount: response.experimental_output?.photoUrls?.length || 0
-            });
+            });*/
             
             // Extraer el mensaje y las URLs de fotos del resultado experimental
             let finalMessage = response.experimental_output?.message;
