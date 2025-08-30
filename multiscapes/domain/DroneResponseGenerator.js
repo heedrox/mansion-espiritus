@@ -1,4 +1,4 @@
-const { generateText, tool, Output } = require('ai');
+const { generateText, tool, Output, stepCountIs } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
 const { z } = require('zod');
 const DroneResponse = require('./DroneResponse');
@@ -10,8 +10,10 @@ const PromptGenerator = require('./PromptGenerator');
 const fs = require('fs');
 const path = require('path');
 
+let TIMER
 class DroneResponseGenerator {
     static async generateResponse(messages, code) {
+        const time1 = Date.now();
         if (!messages || !Array.isArray(messages)) {
             throw new Error('Messages debe ser un array');
         }
@@ -60,7 +62,10 @@ class DroneResponseGenerator {
             ? z.enum(allowedActions)
             : z.string();
 
-        console.log('🤖 SYSTEM PROMPT:', systemPrompt);
+        const time2 = Date.now();
+        const duration = time2 - time1;
+        console.log(`🤖 HASTA SYSTEM PROMPT: ${duration}ms`);
+        // console.log('🤖 SYSTEM PROMPT:', systemPrompt);
         try {
             /*console.log('🚀 Iniciando llamada a GPT-4o-mini...');
             console.log('📊 Parámetros de la llamada:');
@@ -82,18 +87,13 @@ class DroneResponseGenerator {
                 ],
                 temperature: 0.7,
                 max_tokens: 2000,
-                experimental_output: Output.object({
-                    schema: z.object({
-                        message: z.string().describe('La respuesta del drone al usuario'),
-                        photoUrls: z.array(z.string().url()).optional().describe('Array de URLs de fotos que el drone puede incluir en su respuesta')
-                    })
-                }),
-                maxSteps: 5,
+                stopWhen: stepCountIs(2),
+                // maxSteps no es un parámetro válido en AI SDK 5
                 tools: [
                     tool({
                         name: 'checkCodes',
                         description: 'Verifica si un código es válido y retorna sus efectos',
-                        parameters: z.object({
+                        inputSchema: z.object({
                             code: z.string().describe('El código a verificar'),
                             reason: z.string().describe('Por qué necesitas verificar este código')
                         }),
@@ -118,7 +118,7 @@ class DroneResponseGenerator {
                     tool({
                         name: 'moveTo',
                         description: 'Mueve el dron a una ubicación específica si está disponible',
-                        parameters: z.object({
+                        inputSchema: z.object({
                             destination: destinationSchema.describe('El destino al que quieres mover el dron. Debe ser uno de los destinos disponibles desde tu ubicación actual.'),
                             reason: z.string().describe('Por qué necesitas mover el dron a este destino')
                         }),
@@ -133,7 +133,7 @@ class DroneResponseGenerator {
                     tool({
                         name: 'executeAction',
                         description: 'Ejecuta una acción del juego definida en la habitación actual y actualiza el estado del juego',
-                        parameters: z.object({
+                        inputSchema: z.object({
                             action: actionSchema.describe('El enum de la acción a ejecutar, definida en actions del juego actual'),
                             reason: z.string().describe('Por qué ejecutas esta acción ahora')
                         }),
@@ -176,9 +176,10 @@ class DroneResponseGenerator {
                 photoUrlsCount: response.experimental_output?.photoUrls?.length || 0
             });*/
             
-            // Extraer el mensaje y las URLs de fotos del resultado experimental
-            let finalMessage = response.experimental_output?.message;
-            let photoUrls = response.experimental_output?.photoUrls || [];
+            // Extraer el mensaje y las URLs de fotos del resultado
+            let finalMessage = response.text || 
+                              'No se pudo generar respuesta ? POR CUA';
+            let photoUrls = []; // Por ahora no hay photoUrls en la nueva estructura
             
             // Filtrar photoUrls para evitar alucinaciones - solo permitir URLs que existen en los media de la habitación
             const filteredPhotoUrls = this._filterValidPhotoUrls(photoUrls, roomName, gameState);
@@ -432,6 +433,46 @@ ${json}
             console.warn(`⚠️ No se pudieron obtener destinos disponibles para "${roomName}":`, error.message);
             return [];
         }
+    }
+
+    static _generateMessageFromToolResults(steps) {
+        if (!steps || steps.length === 0) {
+            return null;
+        }
+
+        const toolSteps = steps.filter(step => step.tool_code);
+        if (toolSteps.length === 0) {
+            return null;
+        }
+
+        const toolResults = toolSteps.map(step => {
+            const toolName = step.tool_code;
+            const toolResult = step.output;
+            let message = '';
+
+            if (toolName === 'checkCodes') {
+                if (toolResult.isValid) {
+                    message = `✅ Código válido: ${toolResult.message}.`;
+                } else {
+                    message = `❌ Código inválido: ${toolResult.message}.`;
+                }
+            } else if (toolName === 'moveTo') {
+                if (toolResult.success) {
+                    message = `✅ Movido a: ${toolResult.message}.`;
+                } else {
+                    message = `❌ No se pudo mover: ${toolResult.message}.`;
+                }
+            } else if (toolName === 'executeAction') {
+                if (toolResult.success) {
+                    message = `✅ Acción ejecutada: ${toolResult.message}.`;
+                } else {
+                    message = `❌ No se pudo ejecutar la acción: ${toolResult.message}.`;
+                }
+            }
+            return message;
+        });
+
+        return toolResults.join('\n');
     }
 }
 
