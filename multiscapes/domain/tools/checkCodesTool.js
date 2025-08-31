@@ -8,11 +8,11 @@ function createCheckCodesTool({ roomName, code }) {
         name: 'checkCodes',
         description: 'Verifica si un código es válido y retorna sus efectos',
         inputSchema: z.object({
-            code: z.string().describe('El código a verificar'),
+            code: z.string().describe('Sirve para confirmar si un codigo es valido para desbloquear algo, como un teclado, una puerta, etc.r'),
             reason: z.string().describe('Por qué necesitas verificar este código')
         }),
         execute: async ({ code: inputCode, reason }) => {
-            console.log(`🔍 ¡¡¡TOOL CHECKCODE INVOCADA!!! - Código: ${inputCode} - Razón: ${reason}`);
+            console.log(`🔍 Tool checkcode - Código: ${inputCode} - Razón: ${reason}`);
             const result = CheckCodes.checkCode(inputCode, roomName);
             console.log(`📋 Resultado: ${result.isValid ? 'Válido' : 'Inválido'} - ${result.message}`);
             console.log(`📊 StateChanges:`, result.stateChanges);

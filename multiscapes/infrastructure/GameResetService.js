@@ -87,8 +87,16 @@ class GameResetService {
             const messagesRef = this.db.collection('twin-islands').doc(code).collection('messages');
             
             const introductionMessage = {
-                message: `¡Bip-bip! Aquí Dron Johnson ya aterrizado, en misión por las Islas Gemelas. 🌊✨  
-Estoy en la Playa Sur. Aquí hay una barrera electromagnética al norte y signos extraños en los acantilados. ¿Por dónde empezamos?`,
+                message: `¡Bip-bip! 🤖 Aquí Dron Johnson, en misión por las Islas Gemelas 🌴✨
+La radiación ☢️ impide que los humanos entren; por eso me enviaron a mí.
+
+<b>Vuestra misión</b>: descubrir qué esconden estas tierras prohibidas 🗿💎. Se dice que aquí vivió una civilización antiquísima y, con ella, tesoros ocultos.
+
+Puedo volar 🚁 y sacar fotos 📸, pero la radiación las distorsiona: no os fiéis de todo lo que muestre mi cámara.
+
+He aterrizado en la Playa Sur 🏖️. Al norte vibra una barrera electromagnética ⚡ que bloquea el acceso a la Playa Norte, vuestro objetivo. Primer reto: desactivarla.
+
+¿Cuál será vuestra primera orden? 🗺️`,
                 user: 'drone',
                 timestamp: new Date().toISOString()
             };

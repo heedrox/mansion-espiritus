@@ -59,7 +59,7 @@ class CheckCodes {
         return {
             isValid: false,
             code: upperCode,
-            message: `Código "${upperCode}" no reconocido. Intenta con otro código.`
+            message: `Código "${upperCode}" no reconocido. Revisa si realmente lo que el usuario quiere es introducir este código en el lugar indicado, y si lo es, explícale que debe buscar otro código, ya que ${upperCode} no es válido.`
         };
     }
 
