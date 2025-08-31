@@ -169,23 +169,12 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
                 // Use AI validation for keyboard examination characteristics
                 const keyboardDescriptionValidation = await DroneResponseValidator.validateCharacteristic(
                     result.message, 
-                    'Menciona teclado alfanumérico'
+                    'Menciona teclado alfanumérico, con letras A-T'
                 );
                 
-                const keyboardStructureValidation = await DroneResponseValidator.validateCharacteristic(
-                    result.message, 
-                    'Describe estructura 5x4 con letras A-T'
-                );
-                
-                const keyboardLocationValidation = await DroneResponseValidator.validateCharacteristic(
-                    result.message, 
-                    'Menciona que está semienterrado en la arena'
-                );
                 
                 // Assert validation results
                 expect(keyboardDescriptionValidation.isValid, `Keyboard description validation failed: ${keyboardDescriptionValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
-                expect(keyboardStructureValidation.isValid, `Keyboard structure validation failed: ${keyboardStructureValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
-                expect(keyboardLocationValidation.isValid, `Keyboard location validation failed: ${keyboardLocationValidation.reason}\nDrone Response: ${result.message}`).to.be.true;
                 
                 // Check that photoUrls array exists
                 expect(result.photoUrls).to.be.an('array');

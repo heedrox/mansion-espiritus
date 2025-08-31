@@ -1,4 +1,4 @@
-const { generateText, tool, Output, stepCountIs, zodSchema } = require('ai');
+const { generateText, Output, stepCountIs, zodSchema } = require('ai');
 const z = require('zod');
 const { createOpenAI } = require('@ai-sdk/openai');
 const DroneResponse = require('./DroneResponse');
@@ -7,6 +7,7 @@ const CheckCodes = require('./checkCodes');
 const MoveTo = require('./moveTo');
 const ExecuteAction = require('./executeAction');
 const PromptGenerator = require('./PromptGenerator');
+const { createCheckCodesTool, createMoveToTool, createExecuteActionTool } = require('./tools');
 const fs = require('fs');
 const path = require('path');
 
@@ -40,27 +41,11 @@ class DroneResponseGenerator {
         const gameStateJsonBlock = this._getGameStateJsonBlock(gameState);
         const systemPrompt = johnsonPrompt + commonInstructions + gameStateJsonBlock;
 
-        // Construir dinámicamente la lista de destinos permitidos para el schema del tool moveTo
-        const allowedDestinations = this._getAvailableDestinations(roomName, gameState);
-        // Cuando no haya destinos disponibles, usamos string para evitar que z.enum([]) falle
-        const destinationSchema = (Array.isArray(allowedDestinations) && allowedDestinations.length > 0)
-            ? z.enum(allowedDestinations)
-            : z.string();
+        const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
+        const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
+        const roomData = require(jsFilePath);
 
-        // Construir dinámicamente la lista de acciones disponibles para el schema del tool executeAction
-        let allowedActions = [];
-        try {
-            const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
-            const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
-            const roomData = require(jsFilePath);
-            allowedActions = Object.keys(roomData.actions || {});
-        } catch (err) {
-            console.warn(`⚠️ No se pudieron cargar las actions para room "${roomName}":`, err.message);
-        }
-        // Cuando no haya actions disponibles, usamos string para evitar que z.enum([]) falle
-        const actionSchema = (Array.isArray(allowedActions) && allowedActions.length > 0)
-            ? z.enum(allowedActions)
-            : z.string();
+
 
         const time2 = Date.now();
         const duration = time2 - time1;
@@ -86,79 +71,28 @@ class DroneResponseGenerator {
                     ...aiMessages
                 ],
                 temperature: 0.7,
-                max_tokens: 2000,
+                max_tokens: 3000,
                 experimental_output: Output.object({
                     schema: z.object({
                         message: z.string().describe('La respuesta del dron al usuario'),
                         photoUrls: z.array(z.string().url()).describe('Array de URLs de fotos que el dron quiere mostrar al usuario')
                     })
                 }),
-                stopWhen: stepCountIs(3),
-                /*stopWhen: (step) => {
+                // stopWhen: stepCountIs(10),
+                // maxSteps no es un parámetro válido en AI SDK 5, se sustituye por stopWhen
+                stopWhen: (step) => {
+                    console.log('🔄 GPT STEP', step.step);
                     // Si ya hemos hecho tool calls, continuar hasta generar texto
                     if (step.toolCalls && step.toolCalls.length > 0) {
                         return step.text && step.text.length > 0;
                     }
                     // Si no hemos hecho tool calls, permitir hasta 3 steps
                     return step.step >= 3;
-                },*/
-                
-                // maxSteps no es un parámetro válido en AI SDK 5
+                },        
                 tools: [
-                    tool({
-                        name: 'checkCodes',
-                        description: 'Verifica si un código es válido y retorna sus efectos',
-                        inputSchema: z.object({
-                            code: z.string().describe('El código a verificar'),
-                            reason: z.string().describe('Por qué necesitas verificar este código')
-                        }),
-                        execute: async ({ code: inputCode, reason }) => {
-                            console.log(`🔍 ¡¡¡TOOL CHECKCODE INVOCADA!!! - Código: ${inputCode} - Razón: ${reason}`);
-                            const result = CheckCodes.checkCode(inputCode, roomName);
-                            console.log(`📋 Resultado: ${result.isValid ? 'Válido' : 'Inválido'} - ${result.message}`);
-                            console.log(`📊 StateChanges:`, result.stateChanges);
-                            
-                            // Aplicar cambios de estado si el código es válido
-                            if (result.isValid && result.stateChanges) {
-                                console.log(`🔄 Aplicando cambios de estado...`);
-                                const GameStateService = require('../infrastructure/GameStateService');
-                                const gameStateService = new GameStateService(code);
-                                
-                                await gameStateService.applyStateChanges(result.stateChanges);
-                            }
-                            
-                            return result;
-                        }
-                    }),
-                    tool({
-                        name: 'moveTo',
-                        description: 'Mueve el dron a una ubicación específica si está disponible',
-                        inputSchema: z.object({
-                            destination: destinationSchema.describe('El destino al que quieres mover el dron. Debe ser uno de los destinos disponibles desde tu ubicación actual.'),
-                            reason: z.string().describe('Por qué necesitas mover el dron a este destino')
-                        }),
-                        execute: async ({ destination, reason }) => {
-                            console.log(`🚀 ¡¡¡TOOL MOVETO INVOCADA!!! - Destino: ${destination} - Razón: ${reason}`);
-                            const result = await MoveTo.moveTo(destination, code);
-                            console.log(`📋 Resultado: ${result.success ? 'Éxito' : 'Fallo'} - ${result.message}`);
-                            
-                            return result;
-                        }
-                    }),
-                    tool({
-                        name: 'executeAction',
-                        description: 'Ejecuta una acción del juego definida en la habitación actual y actualiza el estado del juego',
-                        inputSchema: z.object({
-                            action: actionSchema.describe('El enum de la acción a ejecutar, definida en actions del juego actual'),
-                            reason: z.string().describe('Por qué ejecutas esta acción ahora')
-                        }),
-                        execute: async ({ action, reason }) => {
-                            console.log(`🛠️ ¡¡¡TOOL EXECUTEACTION INVOCADA!!! - Acción: ${action} - Razón: ${reason}`);
-                            const result = await ExecuteAction.executeAction(action, code);
-                            console.log(`📋 Resultado executeAction: ${result.success ? 'Éxito' : 'Fallo'} - ${result.message}`);
-                            return result;
-                        }
-                    })
+                    ...createCheckCodesTool({ roomName, code }),
+                    ...createMoveToTool({ roomData, code, gameState }),
+                    ...createExecuteActionTool({ roomData, code })
                 ],
                 // Añadir callbacks para monitorear los steps
                 onStep: (step) => {
@@ -201,7 +135,7 @@ class DroneResponseGenerator {
             let finalMessage = response.experimental_output?.message || response.text || 
                               'No se pudo generar respuesta ? POR CUA';
             
-            console.log(`🤖 Drone Response: ${finalMessage}`);
+            console.log(`🤖 Drone Response x: ${finalMessage}`);
             // Extraer URLs de fotos del texto si no están en el output estructurado
             let photoUrls = response.experimental_output?.photoUrls || [];
             if (photoUrls.length === 0 && response.text) {
@@ -447,26 +381,6 @@ ${json}
         }
     }
 
-    static _getAvailableDestinations(roomName, gameState = {}) {
-        try {
-            const gamesDataDir = path.resolve(__dirname, '../../multiscapes/games-data');
-            const jsFilePath = path.join(gamesDataDir, `${roomName}.js`);
-            const data = require(jsFilePath);
-            if (!data.availableDestinations || typeof data.availableDestinations.getDestinations !== 'function') {
-                return [];
-            }
-            const destinations = data.availableDestinations.getDestinations(gameState);
-            if (!Array.isArray(destinations)) {
-                return [];
-            }
-            // Asegurar valores únicos y de tipo string
-            const unique = Array.from(new Set(destinations.filter(d => typeof d === 'string' && d.trim().length > 0)));
-            return unique;
-        } catch (error) {
-            console.warn(`⚠️ No se pudieron obtener destinos disponibles para "${roomName}":`, error.message);
-            return [];
-        }
-    }
 
     static _generateMessageFromToolResults(steps) {
         if (!steps || steps.length === 0) {
@@ -508,5 +422,4 @@ ${json}
         return toolResults.join('\n');
     }
 }
-
 module.exports = DroneResponseGenerator; 
