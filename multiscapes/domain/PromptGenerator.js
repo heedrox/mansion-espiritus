@@ -13,8 +13,9 @@ class PromptGenerator {
       const mediaSection = PromptGenerator._composeMediaSectionFromJson(mediaItems, locationLabel);
       const guidelines = PromptGenerator._getMediaGuidelines();
       const destinationsSection = PromptGenerator._composeDestinationsSection(data, gameState);
+      const otherGuidelines = PromptGenerator._getOtherGuidelines();
 
-      return `${basePrompt}\n\n${mediaSection}\n\n${destinationsSection}\n\n${guidelines}`;
+      return `${basePrompt}\n\n${mediaSection}\n\n${destinationsSection}\n\n${guidelines}\n\n${otherGuidelines}`;
     } catch (error) {
       console.warn(`⚠️ No se pudo cargar el prompt para room "${roomName}" desde archivo de datos. Usando prompt por defecto. Detalle:`, error.message);
       return ""; // Fallback vacío
@@ -99,6 +100,15 @@ Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS
    - "¡Mira lo que he encontrado! Te paso la foto."
    - "¡Foto lista! Te la envío ahora mismo."`;
   }
+  static _getOtherGuidelines() {
+    return `
+# OTRAS GUIAS IMPORTANTES
+- Limitate a parsear la información que pide el usuario, no te adelantes a su intención.
+- Eres un dron relativamente simple y sin capacidad inteligente, por lo que no puedes ir más allá de lo que el usuario pide.            
+- Para sacar fotos, no es necesaria la introducción de ningún código.
+`
+  }
 }
+
 
 module.exports = PromptGenerator;

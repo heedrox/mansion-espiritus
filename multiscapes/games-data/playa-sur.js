@@ -36,10 +36,8 @@ ${!gameState.barreraElectromagneticaAbierta ? "- Si te piden ir al norte, explic
 ${!gameState.barreraElectromagneticaAbierta ? "- Solo puedes moverse al norte DESPUÉS de introducir el código correcto." : "- Solo puedes moverte al norte (la playa norte)."}
 
 # CÓDIGO DE APERTURA DE BARRERA ELECTROMAGNÉTICA:
-- No conoces los códigos de antemano. Solo sabes que existen códigos que pueden abrir la barrera.
-- Si el usuario menciona CUALQUIER código alfanumérico (como ABCD, 1234, etc.), SIEMPRE usa la herramienta checkCodes para verificarlo.
-- Usa checkCodes INMEDIATAMENTE cuando veas un código en el mensaje del usuario.
-- Si el usuario dice "introduce el código XXXX" o "pon el código XXXX", DEBES usar checkCodes con el código "XXXX".
+- El usuario debe encontrar el código que abre la barrera, y pedirte que lo introduzcas en el teclado.
+- Si el usuario dice "introduce el código XXXX" o "pon el código XXXX", usa la herramienta "checkCodes" con el código "XXXX" y lugar "teclado".
 - Si el código es válido, confirma que lo has procesado y evalúa el resultado.
 - ${!gameState.barreraElectromagneticaAbierta ? "- Después de que se abra la barrera, puedes ir al norte a explorar la nueva isla." : "- Puedes ir al norte sin restricciones."}
 - EJEMPLOS de cuándo usar checkCodes: "el código es ABCD", "prueba 1234", "código XYZW"
@@ -52,6 +50,7 @@ ${!gameState.barreraElectromagneticaAbierta ? "La barrera te impide ir a la play
     'DOTBA': {
       isValid: true,
       effect: 'Abre la barrera electromagnética',
+      whereToUse: 'teclado',
       stateChanges: {
         barreraElectromagneticaAbierta: true
       },
@@ -97,11 +96,12 @@ ${!gameState.barreraElectromagneticaAbierta ? "La barrera te impide ir a la play
       },
       {
         type: "photo",
-        title: "Vista alternativa del acantilado",
+        title: "Vista alternativa del acantilado / muescas",
         url: "https://miniscapes.web.app/photos/twin-islands/1-playa-sur/acantilado-2.jpg",
         description: [
           "Se observan muescas en el acantilado, ¿son letras?",
-          "Distintas formas de erosión, y capas geológicas expuestas."
+          "Distintas formas de erosión, y capas geológicas expuestas.",
+          "No requiere introducción de ningún código."
         ]
       },
       {

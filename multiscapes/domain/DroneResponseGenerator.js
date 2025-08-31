@@ -81,28 +81,23 @@ class DroneResponseGenerator {
                 stopWhen: stepCountIs(2),
                 // maxSteps no es un parámetro válido en AI SDK 5, se sustituye por stopWhen     
                 tools: [
-                    ...createCheckCodesTool({ roomName, code }),
+                    ...createCheckCodesTool({ roomName, code, roomData }),
                     ...createMoveToTool({ roomData, code, gameState }),
                     ...createExecuteActionTool({ roomData, code })
                 ],
                 // Añadir callbacks para monitorear los steps
-                onStep: (step) => {
-                    console.log(`🔄 STEP ${step.step}: ${step.name || 'Sin nombre'} - ${step.type || 'Sin tipo'}`);
-                    if (step.input) {
-                        console.log(`   📥 Input del step:`, JSON.stringify(step.input, null, 2));
-                    }
-                    if (step.output) {
-                        console.log(`   📤 Output del step:`, JSON.stringify(step.output, null, 2));
-                    }
-                },
-                onFinal: (completion) => {
-                    console.log(`✅ COMPLETADO - Total de steps: ${completion.steps?.length || 'N/A'}`);
-                    if (completion.steps) {
-                        completion.steps.forEach((step, index) => {
-                            console.log(`   📋 Step ${index + 1}: ${step.name || 'Sin nombre'} - ${step.type || 'Sin tipo'}`);
-                        });
+                prepareStep: async ({ model, stepNumber, steps, messages }) => {
+                    // console.log(` 📊 STEP`, stepNumber, stepNumber > 0 ? JSON.stringify(steps[stepNumber-1], null, 2) : '');
+                    if (stepNumber > 0 && steps[stepNumber - 1].finishReason === 'tool-calls') {
+                        return {
+                            activeTools: [
+                                ...createMoveToTool({ roomData, code, gameState }),
+                                ...createExecuteActionTool({ roomData, code })
+                            ]
+                        }
                     }
                 }
+
             });
             
             const endTime = Date.now();
