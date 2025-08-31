@@ -6,7 +6,7 @@ const GameStateService = require('../../infrastructure/GameStateService');
 function createCheckCodesTool({ roomName, code }) {
     return [ tool({
         name: 'checkCodes',
-        description: 'Verifica si un código es válido y retorna sus efectos',
+        description: 'Verifica si un código alfanumerico es válido para desbloquear puertas, teclados, etc. y retorna sus efectos',
         inputSchema: z.object({
             code: z.string().describe('Sirve para confirmar si un codigo es valido para desbloquear algo, como un teclado, una puerta, etc.r'),
             reason: z.string().describe('Por qué necesitas verificar este código')

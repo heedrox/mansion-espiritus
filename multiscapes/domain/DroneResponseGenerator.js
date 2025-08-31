@@ -78,17 +78,8 @@ class DroneResponseGenerator {
                         photoUrls: z.array(z.string().url()).describe('Array de URLs de fotos que el dron quiere mostrar al usuario')
                     })
                 }),
-                // stopWhen: stepCountIs(10),
-                // maxSteps no es un parámetro válido en AI SDK 5, se sustituye por stopWhen
-                stopWhen: (step) => {
-                    console.log('🔄 GPT STEP', step.step);
-                    // Si ya hemos hecho tool calls, continuar hasta generar texto
-                    if (step.toolCalls && step.toolCalls.length > 0) {
-                        return step.text && step.text.length > 0;
-                    }
-                    // Si no hemos hecho tool calls, permitir hasta 3 steps
-                    return step.step >= 3;
-                },        
+                stopWhen: stepCountIs(2),
+                // maxSteps no es un parámetro válido en AI SDK 5, se sustituye por stopWhen     
                 tools: [
                     ...createCheckCodesTool({ roomName, code }),
                     ...createMoveToTool({ roomData, code, gameState }),
