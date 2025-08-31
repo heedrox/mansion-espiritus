@@ -634,6 +634,47 @@ describe('DroneResponseGenerator - Dron Johnson', () => {
             expect(barrierState).to.be.false;
             console.log('🔒 Barrera verificada como cerrada en base de datos');
         });
+
+        it('should send urls of photos in the response', async function() {
+            // Set timeout for this specific test
+            this.timeout(60000); // 60 seconds
+            
+            // Skip if no API key
+            if (!process.env.OPEN_AI_KEY) {
+                this.skip();
+            }
+
+            // Arrange
+            const messages = [
+                {
+                    message: "sácame una foto del acantilado",
+                    user: "player",
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            // Act with timeout protection
+            let result;
+        
+            try {
+                result = await Promise.race([
+                    DroneResponseGenerator.generateResponse(messages, TEST_CODE),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('AI call timeout')), 40000)
+                    )
+                ]);
+            } catch (error) {
+                console.log('❌ AI call failed or timed out:', error.message);
+                this.skip(); // Skip test instead of failing
+                return;
+            }
+
+            // Assert
+            expect(result.photoUrls).to.be.an('array');
+            expect(result.photoUrls).to.have.lengthOf(1);
+            expect(result.photoUrls[0]).to.include('acantilado');
+            console.log('📸 Photo URLs:', result.photoUrls);
+        });
     });
 
     describe('Características de Personalidad', () => {

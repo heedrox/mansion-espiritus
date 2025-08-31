@@ -84,6 +84,11 @@ class PromptGenerator {
 - Solo incluye la URL en photoUrls cuando el usuario explore específicamente ese objeto. NUNCA incluyas URLs en el texto del mensaje. El texto debe ser solo tu respuesta verbal.
 - NUNCA escribas URLs en el campo message. Las URLs van SOLO en photoUrls.
 
+IMPORTANTE - USO DEL OUTPUT ESTRUCTURADO:
+Debes usar SIEMPRE el output estructurado con dos campos:
+1. "message": Tu respuesta verbal al usuario (sin URLs)
+2. "photoUrls": Array de URLs de fotos (solo URLs, sin texto)
+
 CUANDO ENVÍES UNA FOTO:
 Si incluyes una foto en photoUrls, tu mensaje DEBE tener dos partes OBLIGATORIAS:
 1. Primero, describe lo que ves o has encontrado, con tu personalidad habitual.

@@ -1,6 +1,6 @@
-const { generateText, tool, Output, stepCountIs } = require('ai');
+const { generateText, tool, Output, stepCountIs, zodSchema } = require('ai');
+const z = require('zod');
 const { createOpenAI } = require('@ai-sdk/openai');
-const { z } = require('zod');
 const DroneResponse = require('./DroneResponse');
 const GameStateService = require('../infrastructure/GameStateService');
 const CheckCodes = require('./checkCodes');
@@ -87,7 +87,22 @@ class DroneResponseGenerator {
                 ],
                 temperature: 0.7,
                 max_tokens: 2000,
-                stopWhen: stepCountIs(2),
+                experimental_output: Output.object({
+                    schema: z.object({
+                        message: z.string().describe('La respuesta del dron al usuario'),
+                        photoUrls: z.array(z.string().url()).describe('Array de URLs de fotos que el dron quiere mostrar al usuario')
+                    })
+                }),
+                stopWhen: stepCountIs(3),
+                /*stopWhen: (step) => {
+                    // Si ya hemos hecho tool calls, continuar hasta generar texto
+                    if (step.toolCalls && step.toolCalls.length > 0) {
+                        return step.text && step.text.length > 0;
+                    }
+                    // Si no hemos hecho tool calls, permitir hasta 3 steps
+                    return step.step >= 3;
+                },*/
+                
                 // maxSteps no es un parámetro válido en AI SDK 5
                 tools: [
                     tool({
@@ -169,17 +184,35 @@ class DroneResponseGenerator {
             const duration = endTime - startTime;
             
             console.log(`🎯 Llamada a GPT completada en ${duration}ms`);
-            /*console.log(`📊 Respuesta recibida:`, {
-                hasMessage: !!response.experimental_output?.message,
+            console.log(`📊 Respuesta recibida:`, {
+               hasMessage: !!response.experimental_output?.message,
                 messageLength: response.experimental_output?.message?.length || 0,
                 hasPhotoUrls: !!response.experimental_output?.photoUrls,
-                photoUrlsCount: response.experimental_output?.photoUrls?.length || 0
-            });*/
+                photoUrlsCount: response.experimental_output?.photoUrls?.length || 0,
+                hasText: !!response.text,
+                textLength: response.text?.length || 0,
+                finishReason: response.finishReason,
+                steps: response.steps?.length || 0
+            });
+            
+            console.log(`📸 Photo URLs: ${JSON.stringify(response.experimental_output?.photoUrls || [])}`);
             
             // Extraer el mensaje y las URLs de fotos del resultado
-            let finalMessage = response.text || 
+            let finalMessage = response.experimental_output?.message || response.text || 
                               'No se pudo generar respuesta ? POR CUA';
-            let photoUrls = []; // Por ahora no hay photoUrls en la nueva estructura
+            
+            console.log(`🤖 Drone Response: ${finalMessage}`);
+            // Extraer URLs de fotos del texto si no están en el output estructurado
+            let photoUrls = response.experimental_output?.photoUrls || [];
+            if (photoUrls.length === 0 && response.text) {
+                // Buscar URLs de fotos en el texto usando regex
+                const urlRegex = /https:\/\/[^\s\)\]]+/g;
+                const foundUrls = response.text.match(urlRegex) || [];
+                photoUrls = foundUrls.filter(url => 
+                    url.includes('miniscapes.web.app') && 
+                    (url.includes('.jpg') || url.includes('.png') || url.includes('.mp4'))
+                );
+            }
             
             // Filtrar photoUrls para evitar alucinaciones - solo permitir URLs que existen en los media de la habitación
             const filteredPhotoUrls = this._filterValidPhotoUrls(photoUrls, roomName, gameState);
